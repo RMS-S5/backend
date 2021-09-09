@@ -111,7 +111,7 @@ CREATE TABLE "cart"(
 );
 
 CREATE TABLE "cart_item"(
-	id UUID PRIMARY KEY,
+	cart_item_id UUID PRIMARY KEY,
 	food_item_id UUID,
 	variant_id UUID,
 	price NUMERIC(10,2),
@@ -164,7 +164,7 @@ CREATE TABLE "order_status"(
 );
 
 CREATE TABLE "order"(
-	id UUID PRIMARY KEY,
+	order_id UUID PRIMARY KEY,
 	customer_id UUID,
 	total_amount NUMERIC(10,2),
 	table_number INTEGER,
@@ -181,8 +181,8 @@ CREATE TABLE "order_food_item"(
 	cart_item_id UUID,
 
 	PRIMARY KEY ("order_id", "cart_item_id"),
-	CONSTRAINT fk_ofi_order_id_contraint FOREIGN KEY (order_id) REFERENCES "order"("id") ON UPDATE CASCADE,
-	CONSTRAINT fk_ofi_cart_item_id_contraint FOREIGN KEY (cart_item_id) REFERENCES "cart_item"("id") ON UPDATE CASCADE
+	CONSTRAINT fk_ofi_order_id_contraint FOREIGN KEY (order_id) REFERENCES "order"("order_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_ofi_cart_item_id_contraint FOREIGN KEY (cart_item_id) REFERENCES "cart_item"("cart_item_id") ON UPDATE CASCADE
 );
 
 -- Room
