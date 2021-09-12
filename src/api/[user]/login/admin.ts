@@ -20,7 +20,7 @@ const validateCredentials: Handler = async (req, res, next) => {
     const {r} = res;
     const {username, password} = req.body;
 
-    const [error, account] = await model.user.get_AdminAccount(username);
+    const [error, account] = await model.user.get_CustomerAccountByEmail(username);
 
     if (error.code === MErr.NO_ERROR) {
 

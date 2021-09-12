@@ -24,7 +24,7 @@ const validateCredentials: Handler = async (req, res, next) => {
     const userId = req.params.userId || req.user.userId
     const {currentPassword} = req.body;
 
-    const [error, account] = await model.user.get_LocalAccount_byUserId(userId);
+    const [error, account] = await model.user.get_UserAccountByUserId(userId);
 
     if (error.code === MErr.NO_ERROR) {
         // password verification

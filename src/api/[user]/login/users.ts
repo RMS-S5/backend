@@ -8,25 +8,25 @@ import {inspectBuilder, body} from "../../../utils/inspect";
  * Validate Request
  */
 const inspector = inspectBuilder(
-    body("username").exists().withMessage("username is required"),
+    body("email").exists().withMessage("email is required"),
     body("password").exists().withMessage("password is required")
 )
 
 /**
  * :: STEP 2
- * Validate username + password
+ * Validate email + password
  */
 const validateCredentials: Handler = async (req, res, next) => {
     const {r} = res;
-    const {username, password} = req.body;
+    const {email, password} = req.body;
 
-    const [error, account] = await model.user.get_LocalAccount(username);
+    const [error, account] = await model.user.get_UserAccountByEmail(email);
 
     if (error.code === MErr.NO_ERROR) {
         // password verification
         if (!await compare(password, account.password)) {
             r.status.UN_AUTH()
-                .message("Incorrect username or password")
+                .message("Incorrect email or password")
                 .send();
             return;
         }

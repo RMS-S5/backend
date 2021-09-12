@@ -6,25 +6,28 @@
  ░▀▀▀ ▀▀▀ ▀▀▀ ▀░▀▀ 　 ▀░░░▀ ▀▀▀▀ ▀▀▀░ ░▀▀▀ ▀▀▀ ▀▀▀
  */
 
-export interface UserData {
+export interface UserAccount {
     userId: string;
     firstName: string;
     lastName?: string;
     email?: string;
-    telephone?: string;
-    avatar?: string
     accountType: string
-}
-
-export interface AdminAccount {
-    userId: string
-    username: string
     password: string
 }
 
-export interface LocalAccount {
-    userId: string
-    username: string
-    password: string
+export interface Customer {
+    userId: string;
+    mobileNumber? : number
+    accountLevel?: string
 }
+
+export interface Staff {
+    userId: string;
+    mobileNumber? : number
+    nic?: string
+    role?: string
+    branch_id?: string
+    birthday?: typeof Date
+}
+
 
