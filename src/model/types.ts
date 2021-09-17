@@ -1,11 +1,7 @@
 
-
 /**
- █░░█ █▀▀ █▀▀ █▀▀█ 　 █▀▄▀█ █▀▀█ █▀▀▄ █░░█ █░░ █▀▀
- █░░█ ▀▀█ █▀▀ █▄▄▀ 　 █░▀░█ █░░█ █░░█ █░░█ █░░ █▀▀
- ░▀▀▀ ▀▀▀ ▀▀▀ ▀░▀▀ 　 ▀░░░▀ ▀▀▀▀ ▀▀▀░ ░▀▀▀ ▀▀▀ ▀▀▀
+ * User Model
  */
-
 export interface UserAccount {
     userId: string;
     firstName: string;
@@ -30,4 +26,48 @@ export interface Staff {
     birthday?: typeof Date
 }
 
+/**
+ * Product Model
+ */
+export interface Category{
+    categoryId: string,
+    categoryName: string,
+    description: string,
+    imageUrl: string,
+    active : boolean
+}
+
+/**
+ * Cart Model
+ */
+export interface Cart{
+    cartId : string,
+    customerId? : string
+}
+
+export interface CartItem{
+    cartItemId : string,
+    foodItemId : string,
+    price : number,
+    cartId : string,
+    quantity : number,
+    active? : boolean
+}
+
+/**
+ * Order Model
+ */
+export interface Order{
+    orderId : string,
+    customerId?: string,
+    totalAmount : number,
+    tableNumber : number,
+    branchId : string,
+    orderStatus : string,
+    placedTime? : typeof Date,
+    waiterId? : string,
+    kitchenStaffId : string,
+    active? : boolean
+
+}
 

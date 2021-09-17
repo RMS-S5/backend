@@ -18,10 +18,10 @@ export abstract class UserModel {
     private static TB_customer = "customer";
     private static TB_staff = "staff";
 
-        static $add_UserData(userData: UserAccount): TransactionBuilder {
-        return async trx => {
-            return trx(this.TB_userAccount).insert(userData);
-        };
+    static $add_UserData(userData: UserAccount): TransactionBuilder {
+    return async trx => {
+        return trx(this.TB_userAccount).insert(userData);
+    };
     };
 
     static accountTypes = {
@@ -94,21 +94,4 @@ export abstract class UserModel {
         )
     }
 
-    // static get_LocalAccount_byUserId(userId: string): Promise<[MError, LocalAccount]> {
-    //     return runQuery<LocalAccount>(
-    //         knex => knex(this.TB_localAccount).where({userId}),
-    //         {
-    //             single: true
-    //         }
-    //     )
-    // }
-
-    // static get_UserData(userId: string): Promise<[MError, UserData]> {
-    //     return runQuery<UserData>(
-    //         knex => knex(this.TB_userData).where({userId}),
-    //         {
-    //             single: true
-    //         }
-    //     )
-    // }
 }

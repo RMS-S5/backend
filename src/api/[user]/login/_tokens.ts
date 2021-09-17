@@ -24,13 +24,14 @@ const ServeTokenPair: Handler = async (req, res) => {
         email: userData.email,
         accountType: userData.accountType,
     }
+    const {password, ...data} = userData;
 
     // add token
     const refreshToken = TokenMan.getRefreshToken(userId);
     const accessToken = TokenMan.getAccessToken(payload);
 
     r.status.OK()
-        .data(userData)
+        .data(data)
         .tokenPair(accessToken, refreshToken)
         .message("Success")
         .send();

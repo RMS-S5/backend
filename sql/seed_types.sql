@@ -13,7 +13,7 @@ insert into account_type values
 	('Manager');
 	
 --insert user accounts
-insert into user_account values
+insert into user_account("user_id", "first_name", "last_name", "email", "account_type", "password") values
 	(uuid_generate_v4(), 'John', 'Doe', 'johndoe@gmail.com', 'Customer' , '123456'),
 	(uuid_generate_v4(), 'Darshana', 'Fernando', 'darshana@gmail.com','Kitchen Staff', '123456' ),
 	(uuid_generate_v4(), 'Nuwan', 'Pranandu', 'nuwan@gmail.com',  'Waiter' , '123456');
@@ -46,7 +46,7 @@ declare
 	foodItem9 uuid := uuid_generate_v4();
 	foodItem10 uuid := uuid_generate_v4();
 begin
-	insert into category values
+	insert into category("category_id", "category_name" , "description") values
 		(category1, 'Kottu', 'Delicious Kottu'),
 		(category2, 'Fried Rice', 'Delicious Fried Rice'),
 		(category3, 'Burger', 'Delicious Burger'),

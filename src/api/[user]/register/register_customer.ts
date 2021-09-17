@@ -11,7 +11,7 @@ import {TokenMan} from "../../../utils/tokenMan";
  */
 const inspector = inspectBuilder(
     body("password").exists().withMessage("Password is required"),
-    body("firstName").exists().withMessage("FirstName is required"),
+    body("firstName").exists().withMessage("First Name is required"),
     body("lastName").exists().withMessage("LastName is is required"),
     body("email").exists().isEmail().withMessage("Email is required"),
     body("mobileNumber").exists().isMobilePhone("any").withMessage("Mobile Number is required"),
@@ -36,7 +36,11 @@ const registerCustomer: Handler = async (req, res) => {
     const userId = UUID()
     const {email, password, firstName, lastName, mobileNumber} = req.body;
     const userAccountData = {
-        userId, email, password, firstName, lastName, accountType : model.user.accountTypes.customer
+        userId,
+        email,
+        password: await encrypt_password(password),
+        firstName, lastName,
+        accountType : model.user.accountTypes.customer
     };
     const customerData = {
         userId, mobileNumber
