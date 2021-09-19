@@ -1,11 +1,19 @@
-import { runQuery, runTrx, TransactionBuilder } from "../utils/dbMan";
+import {cleanQuery, runQuery, runTrx, TransactionBuilder} from "../utils/dbMan";
 import { MError } from "../utils/dbMan/merror";
 import {Order} from "./types";
 
 export abstract class OrderModel {
   private static VIEW_orderWithCartItems = "ordersWithCartItems";
-  private static TB_cart = "cart";
   private static TB_order = "order";
+
+  public static orderStatus = {
+    placed : "Placed",
+    preparing : "Preparing",
+    prepared : "Prepared",
+    waiterAssigned : "Waiter Assigned",
+    rejected : "Rejected",
+    served : "Served"
+  }
 
 
   /**
@@ -22,9 +30,9 @@ export abstract class OrderModel {
   /**
    * Update
    */
-  static update_CartItem(orderId : string, orderData : any) {
+  static update_Order(orderId : string, orderData : any) {
   return runQuery(
-      knex => knex(this.TB_cart).update(orderId).where(orderData)
+      knex => knex(this.TB_order).update(orderData).where({orderId})
   )
   }
 
@@ -32,9 +40,18 @@ export abstract class OrderModel {
    * Getters
    */
 
-  static get_AllOrders(): Promise<[MError, any[]]> {
-    return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems));
+  static get_AllActiveOrders(): Promise<[MError, any[]]> {
+    return runQuery<any[]>((knex) =>
+        knex(this.VIEW_orderWithCartItems)
+            .whereNot({orderStatus : this.orderStatus.served}));
   }
+
+  static get_AllOrders(query : any): Promise<[MError, any[]]> {
+    const q = cleanQuery(query, ["orderStatus"])
+    return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems).where(q));
+  }
+
+
     
 
 
