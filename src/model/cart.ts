@@ -44,10 +44,11 @@ export abstract class CartModel {
         knex(this.VIEW_cartItemDetailed).where(q).select(),{required : true});
   }
 
-  static get_Cart(cartId : string): Promise<[MError,Cart]> {
+  static get_Cart(query : any): Promise<[MError,Cart]> {
+    const q = cleanQuery(query, ['cartId', 'customerId'])
     return runQuery<Cart>(
         (knex) => knex(this.TB_cart)
-        .where({cartId}).select(), {single : true});
+        .where(q).select(), {single : true, required : true});
   }
     
 

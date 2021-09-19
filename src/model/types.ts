@@ -66,8 +66,18 @@ export interface Order{
     orderStatus : string,
     placedTime? : typeof Date,
     waiterId? : string,
-    kitchenStaffId : string,
+    kitchenStaffId? : string,
     active? : boolean
+}
 
+/**
+ * Branch Model
+ */
+export interface Table{
+    tableNumber : number,
+    branchId : string,
+    verificationCode? : string,
+    lastUpdateTime? : typeof Date,
+    active? : boolean
 }
 

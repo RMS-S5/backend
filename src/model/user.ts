@@ -27,6 +27,7 @@ export abstract class UserModel {
     static accountTypes = {
         customer: "Customer",
         manager: "Manager",
+        branchManager : "Branch Manager",
         waiter: "Waiter",
         kitchenStaff : "Kitchen Staff"
     }

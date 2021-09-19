@@ -4,15 +4,18 @@ import {inspectBuilder, param} from "../../../utils/inspect";
 import {MErrorCode} from "../../../utils/dbMan/merror";
 
 
-const inspector = inspectBuilder(
+const cartIdInspector = inspectBuilder(
     param("cartId").exists().withMessage("Cart id should not be empty")
 )
+const customerIdInspector = inspectBuilder(
+    param("customerId").exists().withMessage("Customer id should not be empty")
+)
 
-const getCart: Handler = async (req, res) => {
+const getCartByCartId: Handler = async (req, res) => {
     const {r} = res;
     const cartId = req.params.cartId;
 
-    const [error, cartData] = await model.cart.get_Cart(cartId);
+    const [error, cartData] = await model.cart.get_Cart({cartId});
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
             .message("Cart not found")
@@ -29,15 +32,16 @@ const getCart: Handler = async (req, res) => {
         .send();
 };
 
-const getAllCartItems: Handler = async (req, res) => {
+const getCartByCustomerId: Handler = async (req, res) => {
     const {r} = res;
-    const cartId = req.params.cartId;
+    const customerId = req.params.customerId;
 
-    const [error, cartData] = await model.cart.get_AllCartItems({cartId});
-    if (error.code == MErrorCode.NOT_FOUND) {
+    const [error, cartData] = await model.cart.get_Cart({customerId});
+    if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
             .message("Cart not found")
             .send();
+        return;
     }else if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
@@ -54,7 +58,7 @@ const getAllCartItems: Handler = async (req, res) => {
  * Export Handler
  */
 const getCartHandlers = {
-    getCart : [<EHandler>getCart],
-    getCartItems : [inspector, <EHandler>getAllCartItems]
+    getCartByCartId : [cartIdInspector, <EHandler> getCartByCartId],
+    getCartByCustomerId : [customerIdInspector, <EHandler> getCartByCustomerId],
 }
 export default getCartHandlers;

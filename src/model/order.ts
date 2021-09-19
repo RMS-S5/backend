@@ -12,14 +12,15 @@ export abstract class OrderModel {
     prepared : "Prepared",
     waiterAssigned : "Waiter Assigned",
     rejected : "Rejected",
-    served : "Served"
+    served: "Served",
+    closed : "Closed"
   }
 
 
   /**
    * Creators
    */
-  static add_Order(orderId: string, orderData : Order , cartItems : any) {
+  static add_Order(orderId: string, orderData : any , cartItems : any) {
     return runTrx(async trx =>  {
       await trx(this.TB_order).insert(orderData);
       return trx.raw(`call set_order_items(?,?)`, [orderId, cartItems])
@@ -43,12 +44,18 @@ export abstract class OrderModel {
   static get_AllActiveOrders(): Promise<[MError, any[]]> {
     return runQuery<any[]>((knex) =>
         knex(this.VIEW_orderWithCartItems)
-            .whereNot({orderStatus : this.orderStatus.served}));
+            .whereNot({orderStatus : this.orderStatus.closed}));
   }
 
   static get_AllOrders(query : any): Promise<[MError, any[]]> {
-    const q = cleanQuery(query, ["orderStatus"])
+    const q = cleanQuery(query, ["orderStatus, tableNumber, branchId"])
     return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems).where(q));
+  }
+
+  static get_OrderByOrderId(orderId : string): Promise<[MError, any[]]> {
+    return runQuery<any[]>((knex) =>
+        knex(this.VIEW_orderWithCartItems)
+            .where({orderId}), {single : true, required : true});
   }
 
 

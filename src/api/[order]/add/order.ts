@@ -1,42 +1,47 @@
-// import {EHandler, Handler} from "../../../utils/types";
-// import model, {MErr} from "../../../model";
-// import {v4 as UUID} from "uuid";
-// import {body, inspectBuilder} from "../../../utils/inspect";
-//
-// /**
-//  * Validate Request
-//  */
-// const inspector = inspectBuilder(
-//     body("foodItemId").exists().withMessage("Food item id is required"),
-//     body("variantId").exists().withMessage("Variant id is required"),
-//     body("price").exists().withMessage("Price is is required")
-//         .isNumeric().withMessage("Price should be a number"),
-//     body("quantity").exists().withMessage("Quantity is is required")
-//         .isNumeric().withMessage("Quantity should be a number"),
-//     body("cartId").exists().withMessage("Cart id is required"),
-// )
-//
-// const addOrder: Handler = async (req, res) => {
-//     const {r} = res;
-//     const cartId = UUID();
-//     let cartData ;
-//
-//     if(req.user?.userId != null){
-//         cartData = {cartId, customerId : req.user.userId};
-//     }else{
-//         cartData = {cartId};
-//     }
-//
-//     const [error, response] = await model.cart.add_Cart(cartData);
-//     if (error.code !== MErr.NO_ERROR) {
-//         r.pb.ISE();
-//         return;
-//     }
-//
-//     r.status.OK()
-//         .data({cartId})
-//         .message("Success")
-//         .send();
-// };
-//
-// export default [<EHandler> addOrder];
+import {EHandler, Handler} from "../../../utils/types";
+import model, {MErr} from "../../../model";
+import {v4 as UUID} from "uuid";
+import {body, inspectBuilder} from "../../../utils/inspect";
+import order from "../get/order";
+
+/**
+ * Validate Request
+ */
+
+const inspector = inspectBuilder(
+    body("totalAmount")
+        .exists().withMessage("Total amount is required")
+        .isNumeric().withMessage("Total amount should be a number"),
+    body("tableNumber")
+        .exists().withMessage("Table Number is required")
+        .isNumeric().withMessage("Table Number should be a number"),
+    body('branchId').exists().withMessage("Branch Id is required"),
+    body('cartItems').exists().withMessage("Cart Items are required"),
+)
+
+const addOrder: Handler = async (req, res) => {
+    const {r} = res;
+    const orderId = UUID();
+    const {totalAmount, tableNumber, branchId , cartItems } = req.body;
+    let orderData = {
+        orderId, totalAmount, tableNumber, branchId , cartItems,
+        placedTime : new Date(), orderStatus : model.order.orderStatus.placed
+    };
+
+    if(req.user?.userId != null) { // @ts-ignore
+        orderData = {...orderData, customerId : req.user.userId}
+    }
+
+    const [error, response] = await model.order.add_Order(orderId, orderData, cartItems );
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data({orderId})
+        .message("Success")
+        .send();
+};
+
+export default [<EHandler> addOrder];

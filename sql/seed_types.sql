@@ -24,7 +24,8 @@ insert into order_status values
 	('Prepared'),
 	('Waiter Assigned'),
 	('Rejected'),
-	('Served');
+	('Served'),
+	('Closed');
 
 
 do $$
