@@ -41,9 +41,11 @@ export abstract class OrderModel {
    * Getters
    */
 
-  static get_AllActiveOrders(): Promise<[MError, any[]]> {
+  static get_AllActiveOrders(query : any): Promise<[MError, any[]]> {
+    const q = cleanQuery(query, ["orderStatus, tableNumber, branchId"])
     return runQuery<any[]>((knex) =>
         knex(this.VIEW_orderWithCartItems)
+            .where(q)
             .whereNot({orderStatus : this.orderStatus.closed}));
   }
 

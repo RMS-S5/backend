@@ -13,7 +13,7 @@ const tableOrderInspector = inspectBuilder(
 const getActiveOrders: Handler = async (req, res) => {
     const {r} = res;
 
-    const [error, ordersData] = await model.order.get_AllActiveOrders();
+    const [error, ordersData] = await model.order.get_AllActiveOrders({branchId : req.user?.branchId});
 
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
@@ -29,7 +29,9 @@ const getActiveOrders: Handler = async (req, res) => {
 const getAllServedOrders: Handler = async (req, res) => {
     const {r} = res;
 
-    const [error, ordersData] = await model.order.get_AllOrders({orderStatus : model.order.orderStatus.served});
+    const [error, ordersData] = await
+        model.order.get_AllOrders({orderStatus : model.order.orderStatus.served,
+        branchId : req.user?.branchId});
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;

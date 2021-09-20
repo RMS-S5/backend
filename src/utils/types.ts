@@ -9,6 +9,7 @@ export interface Request extends ERequest {
         firstName: string,
         lastName: string,
         email: string,
+        branchId? : string
     }
 }
 
