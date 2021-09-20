@@ -23,8 +23,9 @@ const ServeTokenPair: Handler = async (req, res) => {
         userId: userData.userId,
         email: userData.email,
         accountType: userData.accountType,
+        branchId : userData.branchId
     }
-    const {password, ...data} = userData;
+    const {password,active, ...data } = userData;
 
     // add token
     const refreshToken = TokenMan.getRefreshToken(userId);

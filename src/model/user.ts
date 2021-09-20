@@ -17,6 +17,7 @@ export abstract class UserModel {
     private static TB_userAccount = "userAccount";
     private static TB_customer = "customer";
     private static TB_staff = "staff";
+    private static VIEW_userFullData = "userFullData";
 
     static $add_UserData(userData: UserAccount): TransactionBuilder {
     return async trx => {
@@ -77,18 +78,18 @@ export abstract class UserModel {
     //     )
     // }
 
-    static get_UserAccountByEmail(email: string): Promise<[MError, UserAccount]> {
-        return runQuery<UserAccount>(
-            knex => knex(this.TB_userAccount).where({email}),
+    static get_UserAccountByEmail(email: string): Promise<[MError, any]> {
+        return runQuery<any>(
+            knex => knex(this.VIEW_userFullData).where({email, active : true}),
             {
                 single: true
             }
         )
     }
 
-    static get_UserAccountByUserId(userId: string): Promise<[MError, UserAccount]> {
-        return runQuery<UserAccount>(
-            knex => knex(this.TB_userAccount).where({userId}),
+    static get_UserAccountByUserId(userId: string): Promise<[MError, any]> {
+        return runQuery<any>(
+            knex => knex(this.VIEW_userFullData).where({userId, active : true}),
             {
                 single: true
             }
