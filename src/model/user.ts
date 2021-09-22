@@ -30,7 +30,8 @@ export abstract class UserModel {
         manager: "Manager",
         branchManager : "Branch Manager",
         waiter: "Waiter",
-        kitchenStaff : "Kitchen Staff"
+        kitchenStaff: "Kitchen Staff",
+        receptionist : "Receptionist"
     }
 
     /**

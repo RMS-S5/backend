@@ -80,7 +80,8 @@ export default {
     branchManager:[...ip, <EHandler>filter(model.user.accountTypes.branchManager)],
     customer:[...ip, <EHandler>filter(model.user.accountTypes.customer)],
     waiter:[...ip, <EHandler>filter(model.user.accountTypes.waiter)],
-    kitchenStaff:[...ip, <EHandler>filter(model.user.accountTypes.kitchenStaff)],
+    kitchenStaff: [...ip, <EHandler>filter(model.user.accountTypes.kitchenStaff)],
+    receptionist:[...ip, <EHandler>filter(model.user.accountTypes.receptionist)],
     staffMember:[...ip, <EHandler>filter(...staffMembers)],
     management:[...ip, <EHandler>filter(model.user.accountTypes.manager, model.user.accountTypes.branchManager)],
 }
