@@ -70,7 +70,7 @@ const registerCustomer: Handler = async (req, res) => {
     if (code === MErr.DUPLICATE_ENTRY) {
         const message =
             (constraint === "user_account_email_unique") ?
-                "Email address is associated with another account. try, login into your account"
+                "Email address is associated with another account."
                 : "user name is already taken";
         r.status.BAD_REQ()
             .message(message)
