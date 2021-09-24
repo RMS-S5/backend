@@ -37,7 +37,7 @@ export abstract class CartModel {
    */
 
   static get_AllCartItems(query : any): Promise<[MError, any[]]> {
-    const q = {...cleanQuery(query, ["orderId", "cartId"]), active : true}
+    const q = {...cleanQuery(query, ["orderId", "cartId", "active"]), active : true}
 
     return runQuery<any[]>(
         (knex) =>
@@ -50,9 +50,16 @@ export abstract class CartModel {
         (knex) => knex(this.TB_cart)
         .where(q).select(), {single : true, required : true});
   }
+
+  /**
+   * Update
+   */
+  // Change active to false
+   static delete_CartItem(cartItemId : string): Promise<[MError,any]> {
+    return runQuery<Cart>(
+        (knex) => knex(this.TB_cart).update({active : false}).where({cartItemId}));
+  }
     
 
-
-  
     
 }

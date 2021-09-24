@@ -16,7 +16,7 @@ rOrder.post('/add-order', addOrder);
  */
 rOrder.get('/active-orders',auth.staffMember, getOrdersHandler.getActiveOrders);
 rOrder.get('/served-orders',auth.staffMember, getOrdersHandler.getAllServedOrders);
-rOrder.get('/table-order/:verificationCode', getOrdersHandler.getTableOrder);
+rOrder.get('/table-order', getOrdersHandler.getTableOrder);
 rOrder.get('/:orderId', auth.staffMember,getOrdersHandler.getOrderById);
 
 

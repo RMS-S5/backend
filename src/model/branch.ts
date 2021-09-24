@@ -4,6 +4,8 @@ import { Table} from "./types";
 
 export abstract class BranchModel {
     private static TB_table = "table";
+    private static TB_branch = "branch";
+    private static VIEW_tableBranch = "table_branch";
 
 
     /**
@@ -26,7 +28,7 @@ export abstract class BranchModel {
 
     static get_TableByVerificationCode(verificationCode : string): Promise<[MError,Table]> {
         return runQuery<Table>(
-            (knex) => knex(this.TB_table)
+            (knex) => knex(this.VIEW_tableBranch)
                 .where({verificationCode}).select(), {single : true, required : true});
     }
 

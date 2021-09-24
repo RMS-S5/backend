@@ -12,7 +12,7 @@ const getTableByVerificationCode: Handler = async (req, res) => {
     const {r} = res;
     const {verificationCode} = req.params;
 
-    const [error, cartData] = await model.branch.get_TableByVerificationCode(verificationCode);
+    const [error, tableData] = await model.branch.get_TableByVerificationCode(verificationCode);
 
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
@@ -25,7 +25,7 @@ const getTableByVerificationCode: Handler = async (req, res) => {
     }
 
     r.status.OK()
-        .data(cartData)
+        .data(tableData)
         .message("Success")
         .send();
 };

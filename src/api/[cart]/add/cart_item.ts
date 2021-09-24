@@ -8,7 +8,7 @@ import {body, inspectBuilder} from "../../../utils/inspect";
  */
 const inspector = inspectBuilder(
     body("foodItemId").exists().withMessage("Food item id is required"),
-    body("variantId").exists().withMessage("Variant id is required"),
+    body("variantId").optional(),
     body("price").exists().withMessage("Price is is required")
         .isNumeric().withMessage("Price should be a number"),
     body("quantity").exists().withMessage("Quantity is is required")
@@ -19,6 +19,7 @@ const inspector = inspectBuilder(
 const addCartItem: Handler = async (req, res) => {
     const {r} = res;
     const cartItemId = UUID();
+    console.log(req.body);
 
     const cartItemData  = {
         cartItemId,
@@ -50,4 +51,5 @@ const addCartItem: Handler = async (req, res) => {
         .send();
 };
 
-export default [inspector,<EHandler> addCartItem];
+export default [inspector,<EHandler>addCartItem];
+

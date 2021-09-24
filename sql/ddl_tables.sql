@@ -2,7 +2,7 @@
 -- Hotel and Restaurant Management System Database
 -- ###############################################
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
---drop
+--drop 
 drop procedure if exists set_order_items ;
 drop procedure if exists set_food_variants ;
 
@@ -31,6 +31,7 @@ drop view if exists "user_full_data";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "staff_role";
 
+drop view if exists "table_branch";
 DROP TABLE IF EXISTS "table";
 DROP TABLE IF EXISTS "branch";
 
@@ -110,6 +111,11 @@ CREATE TABLE "table"(
 	CONSTRAINT fk_t_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
 );
 
+create or replace view table_branch as
+	select "table".*, "branch".branch_name 
+	from "table" left join "branch" 
+	using(branch_id);
+
 -- Staff
 --CREATE TABLE "staff_role"(
 --	role VARCHAR(100) PRIMARY KEY,
@@ -130,16 +136,19 @@ CREATE TABLE "staff"(
 );
 
 create view user_full_data as select
-	user_account.*,
+	"user_account".*,
 	customer.mobile_number ,
 	staff.branch_id,
 	staff.nic,
-	staff.birthday
+	staff.birthday,
+	branch.branch_name 
 from user_account
 	left join customer
 	on user_account.user_id = customer.user_id
 	left join staff
-	on  user_account.user_id = staff.user_id;
+	on  user_account.user_id = staff.user_id
+	left join branch 
+	on "staff".branch_id= "branch".branch_id;
 
 -- Food item
 CREATE TABLE "category"(
@@ -171,15 +180,17 @@ CREATE TABLE "food_variant"(
 );
 
 --view food items with variants
-create view food_items_with_variants as select
+create or replace view food_items_with_variants as select
 	food_item.* ,
 	json_agg(json_build_object(
 	'foodVariantId', food_variant_id,
-	'foodItemId', food_item_id,
+	'foodItemId', food_variant.food_item_id,
 	'variantName', variant_name,
-	'price', price
+	'price', food_variant.price::numeric(10,2)
 	)) as food_variants
-	from food_item natural join food_variant where food_item.active = true group by food_item_id ;
+	from food_item left join 
+food_variant on food_item.food_item_id = food_variant.food_item_id 
+where food_item.active = true group by food_item.food_item_id ;
 
 
 
@@ -204,7 +215,7 @@ CREATE TABLE "cart_item"(
 );
 
 --Cart items with food item names and variant names
-create view cart_items_detailed as select
+create or replace view cart_items_detailed as select
 	cart_item.* ,
 	food_item."name",
 	food_item."image_url",
@@ -213,7 +224,7 @@ create view cart_items_detailed as select
 	food_variant."variant_name"
 	from cart_item join food_item
 		on cart_item.food_item_id = food_item.food_item_id
-	join food_variant
+	left join food_variant
 	on cart_item.variant_id = food_variant.food_variant_id;
 
 
@@ -343,4 +354,5 @@ AS $pn$
 		END loop ;
 	END ;
 $pn$;
+
 

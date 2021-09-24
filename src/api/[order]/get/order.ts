@@ -52,7 +52,7 @@ const getAllServedOrders: Handler = async (req, res) => {
 
 const getTableOrder: Handler = async (req, res) => {
     const {r} = res;
-    const [error, ordersData] = await model.order.get_AllOrders(req.query);
+    const [error, ordersData] = await model.order.get_TableOrder(req.query);
 
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();

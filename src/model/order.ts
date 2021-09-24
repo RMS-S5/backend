@@ -46,12 +46,19 @@ export abstract class OrderModel {
     return runQuery<any[]>((knex) =>
         knex(this.VIEW_orderWithCartItems)
             .where(q)
-            .whereNot({orderStatus : this.orderStatus.closed}));
+            .andWhereNot({orderStatus : this.orderStatus.closed}));
   }
 
   static get_AllOrders(query : any): Promise<[MError, any[]]> {
     const q = cleanQuery(query, ["orderStatus, tableNumber, branchId"])
     return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems).where(q));
+  }
+
+  static get_TableOrder(query : any): Promise<[MError, any[]]> {
+    const q = cleanQuery(query, ["tableNumber, branchId"])
+    return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems)
+      .where(q).andWhereNot({ orderStatus: this.orderStatus.closed })
+      .andWhereNot({ orderStatus: this.orderStatus.rejected }));
   }
 
   static get_OrderByOrderId(orderId : string): Promise<[MError, any[]]> {
