@@ -1,6 +1,8 @@
 import {EHandler, Handler} from "../types";
 import {TokenMan} from "../tokenMan";
 import {inspectBuilder, header} from "../inspect";
+import model from './../../model/index';
+import about from './../../api/about';
 
 /**
  * :: STEP 1
@@ -45,13 +47,11 @@ const parsePayload: Handler = (req, res, next) => {
 };
 
 
-type AccountType = "Local Account" | "Admin Account"
-
 /**
  * :: STEP 3 Builder
  * @param types
  */
-function filter(...types: AccountType[]): Handler {
+function filter(...types: typeof model.user.accountTypes.manager[]): Handler {
     return (req, res, next) => {
         const {r} = res;
 
@@ -70,10 +70,18 @@ function filter(...types: AccountType[]): Handler {
 /**
  * Request Handler Chain
  */
+const staffMembers = [model.user.accountTypes.kitchenStaff, model.user.accountTypes.manager,
+    model.user.accountTypes.branchManager, model.user.accountTypes.waiter ]
 
 const ip = [inspectAuthHeader, <EHandler>parsePayload]
 export default {
     any: [...ip],
-    regular: [...ip, <EHandler>filter("Local Account")],
-    admin: [...ip, <EHandler>filter("Admin Account")],
+    manager:[...ip, <EHandler>filter(model.user.accountTypes.manager)],
+    branchManager:[...ip, <EHandler>filter(model.user.accountTypes.branchManager)],
+    customer:[...ip, <EHandler>filter(model.user.accountTypes.customer)],
+    waiter:[...ip, <EHandler>filter(model.user.accountTypes.waiter)],
+    kitchenStaff: [...ip, <EHandler>filter(model.user.accountTypes.kitchenStaff)],
+    receptionist:[...ip, <EHandler>filter(model.user.accountTypes.receptionist)],
+    staffMember:[...ip, <EHandler>filter(...staffMembers)],
+    management:[...ip, <EHandler>filter(model.user.accountTypes.manager, model.user.accountTypes.branchManager)],
 }

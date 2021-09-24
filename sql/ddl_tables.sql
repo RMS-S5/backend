@@ -1,293 +1,358 @@
+-- ###############################################
+-- Hotel and Restaurant Management System Database
+-- ###############################################
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+--drop 
+drop procedure if exists set_order_items ;
+drop procedure if exists set_food_variants ;
 
---                    _
---     _ __ ___   ___| |_ __ _
---    | '_ ` _ \ / _ \ __/ _` |
---    | | | | | |  __/ || (_| |
---    |_| |_| |_|\___|\__\__,_|
+-- Drop existing tables
+DROP TABLE IF EXISTS "booked_room";
+DROP TABLE IF EXISTS "booking";
 
--- DROP TABLE province;
-CREATE TABLE province (
-	id INTEGER NOT NULL,
-	"name" VARCHAR(45) NULL,
-	CONSTRAINT province_pkey PRIMARY KEY (id)
+DROP TABLE IF EXISTS "room";
+DROP TABLE IF EXISTS "room_type";
+
+drop view if exists "orders_with_cart_items";
+DROP TABLE IF EXISTS "order_food_item";
+DROP TABLE IF EXISTS "order";
+DROP TABLE IF EXISTS "order_status";
+
+drop view if exists "cart_items_detailed";
+DROP TABLE IF EXISTS "cart_item";
+DROP TABLE IF EXISTS "cart";
+
+drop view if exists food_items_with_variants;
+DROP TABLE IF EXISTS "food_variant";
+DROP TABLE IF EXISTS "food_item";
+DROP TABLE IF EXISTS "category";
+
+drop view if exists "user_full_data";
+DROP TABLE IF EXISTS "staff";
+DROP TABLE IF EXISTS "staff_role";
+
+drop view if exists "table_branch";
+DROP TABLE IF EXISTS "table";
+DROP TABLE IF EXISTS "branch";
+
+DROP TABLE IF EXISTS "customer_report";
+DROP TABLE IF EXISTS "customer_review";
+DROP TABLE IF EXISTS "customer";
+
+
+DROP TABLE IF EXISTS "user_account";
+DROP TABLE IF EXISTS "account_type";
+
+--
+-- Tables
+--
+-- User account
+CREATE TABLE "account_type"(
+	account_type VARCHAR(100) PRIMARY KEY
 );
 
--- DROP TABLE district;
-CREATE TABLE district (
-	id INTEGER NOT NULL,
-	province_id INTEGER NULL,
-	"name" VARCHAR(45) NULL,
-	CONSTRAINT district_pkey PRIMARY KEY (id),
-	CONSTRAINT district_province_id_foreign FOREIGN KEY (province_id) REFERENCES province(id)
+-- User account
+CREATE TABLE "user_account"(
+	user_id UUID PRIMARY KEY,
+	first_name VARCHAR(100),
+	last_name VARCHAR(100),
+	email VARCHAR(100),
+	account_type VARCHAR(100),
+	"password" VARCHAR(100),
+	active BOOLEAN default true,
+	CONSTRAINT user_account_email_unique UNIQUE (email),
+	CONSTRAINT fk_c_user_type_constraint FOREIGN KEY (account_type) REFERENCES "account_type"("account_type") ON UPDATE CASCADE
 );
 
--- DROP TABLE city;
-CREATE TABLE city (
-	id INTEGER NOT NULL,
-	district_id INTEGER NULL,
-	"name" VARCHAR(45) NULL,
-	CONSTRAINT city_pkey PRIMARY KEY (id),
-	CONSTRAINT city_district_id_foreign FOREIGN KEY (district_id) REFERENCES district(id)
+-- Customer
+CREATE TABLE "customer"(
+	user_id UUID PRIMARY KEY,
+	mobile_number VARCHAR(20),
+	account_level SMALLINT,
+	active BOOLEAN default true,
+	CONSTRAINT fk_c_user_id_constraint FOREIGN KEY (user_id) REFERENCES "user_account"("user_id") ON UPDATE CASCADE
 );
 
-
---DROP MATERIALIZED VIEW district_cities;
---REFRESH MATERIALIZED VIEW district_cities;
-CREATE MATERIALIZED VIEW district_cities AS
-	SELECT d.name, d.province_id, jsonb_agg(c.name) AS cities
-		FROM district d
-		JOIN city c ON c.district_id = d.id
-			GROUP BY d.id;
-
---DROP MATERIALIZED VIEW province_districts_cities;
---REFRESH MATERIALIZED VIEW province_districts_cities;
-CREATE MATERIALIZED VIEW province_districts_cities AS
-	SELECT p.name, jsonb_agg(json_build_object('name', dc.name, 'cities', dc.cities)) AS districts
-		FROM province p
-		JOIN district_cities dc ON dc.province_id = p.id
-			GROUP BY p.id;
-
-
--- -----------------------------------------------------------------------------------------------------------------
---                                     _
---      __ _  ___ ___ ___  _   _ _ __ | |_
---     / _` |/ __/ __/ _ \| | | | '_ \| __|
---    | (_| | (_| (_| (_) | |_| | | | | |_
---     \__,_|\___\___\___/ \__,_|_| |_|\__|
-
--- DROP TABLE account_type;
-CREATE TABLE account_type (
-	"type" VARCHAR(50) NOT NULL,
-	PRIMARY KEY (type)
+CREATE TABLE "customer_review"(
+	customer_review_id UUID PRIMARY KEY,
+	customer_id UUID,
+	rating SMALLINT,
+	"description" VARCHAR(250),
+	recommendation VARCHAR(250),
+	active BOOLEAN default true,
+	CONSTRAINT fk_crw_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
 );
 
--- DROP TABLE user_data;
-CREATE TABLE user_data (
-	user_id UUID NOT NULL,
-	first_name VARCHAR(50) NOT NULL,
-	last_name VARCHAR(50)  NOT NULL,
-	email VARCHAR(100)  NOT NULL,
-	telephone VARCHAR(15),
-	avatar VARCHAR(255),
-	account_type VARCHAR(20) NOT NULL,
-	PRIMARY KEY (user_id),
-	CONSTRAINT user_data_email_unique UNIQUE (email),
-	CONSTRAINT user_data_account_type_foreign FOREIGN KEY (account_type) REFERENCES account_type(type)
-);
-
--- DROP TABLE user_email;
-CREATE TABLE user_email (
-	email VARCHAR(100) NOT NULL,
-	user_id UUID NULL,
-	verified_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY (email, user_id),
-	CONSTRAINT user_email_user_id FOREIGN KEY (user_id) REFERENCES user_data(user_id)
-);
-
--- DROP TABLE admin_account;
-CREATE TABLE admin_account (
-	user_id UUID NULL,
-	username VARCHAR(100) NULL,
-	"password" VARCHAR(100) NULL,
-	CONSTRAINT admin_account_username_unique UNIQUE (username),
-	CONSTRAINT admin_account_user_id_foreign FOREIGN KEY (user_id) REFERENCES user_data(user_id)
-);
-
--- DROP TABLE facebook_account;
-CREATE TABLE facebook_account (
-	user_id UUID NULL,
-	social_user_id VARCHAR(100) NULL,
-	CONSTRAINT facebook_account_social_user_id_unique UNIQUE (social_user_id),
-	CONSTRAINT facebook_account_user_id_foreign FOREIGN KEY (user_id) REFERENCES user_data(user_id)
-);
-
--- DROP TABLE google_account;
-CREATE TABLE google_account (
-	user_id UUID NULL,
-	social_user_id VARCHAR(100) NULL,
-	CONSTRAINT google_account_social_user_id_unique UNIQUE (social_user_id),
-	CONSTRAINT google_account_user_id_foreign FOREIGN KEY (user_id) REFERENCES user_data(user_id)
-);
-
--- DROP TABLE local_account;
-CREATE TABLE local_account (
-	user_id UUID NULL,
-	username VARCHAR(50) NULL,
-	"password" VARCHAR(100) NULL,
-	CONSTRAINT local_account_username_unique UNIQUE (username),
-	CONSTRAINT local_account_user_id_foreign FOREIGN KEY (user_id) REFERENCES user_data(user_id)
-);
-
--- -----------------------------------------------------------------------------------------------------------------
-
---     ____           _
---    |  _ \ ___  ___| |_ ___
---    | |_) / _ \/ __| __/ __|
---    |  __/ (_) \__ \ |_\__ \
---    |_|   \___/|___/\__|___/
-
--- DROP TABLE post_status;
-CREATE TABLE post_status (
-	status VARCHAR(20) NOT NULL,
-	CONSTRAINT post_status_pkey PRIMARY KEY (status)
-);
-
--- DROP TABLE post_type;
-CREATE TABLE post_type (
-	"type" VARCHAR(50),
-	PRIMARY KEY (type)
-);
-
--- DROP TABLE property_type;
-CREATE TABLE property_type (
-	"type" VARCHAR(50),
-	PRIMARY KEY (type)
-);
-
--- DROP TABLE post;
-CREATE TABLE post (
-	post_id UUID,
-	user_id UUID NOT NULL,
-
-	post_type VARCHAR(50) NOT NULL,
-	property_type VARCHAR(50) NOT NULL,
-
-	status VARCHAR(20) NOT NULL,
-	agent_ref VARCHAR(50),
-
-	person_name VARCHAR(20),
-	person_type VARCHAR(20),
-	person_contact JSONB,
-	person_email VARCHAR(100),
-
-	heading VARCHAR(255),
-	description TEXT,
-	availability_tag VARCHAR(255) NULL,
-
-	price numeric(14,2) NULL,
-	price_currency VARCHAR(20) NULL,
-	price_tag VARCHAR(20) NULL,
-
-	a_province VARCHAR(255) NULL,
-	a_district VARCHAR(255) NULL,
-	a_city VARCHAR(255) NULL,
-	a_street VARCHAR(255) NULL,
-	m_latitude VARCHAR(255) NULL,
-	m_longitude VARCHAR(255) NULL,
-	m_zoom_level VARCHAR(255) NULL,
-
-	"size" JSONB NULL,
-	nearest_bus_stop NUMERIC(8,2) NULL,
-	nearest_train_station NUMERIC(8,2) NULL,
-
-	features JSONB NULL,
-	extra_details JSONB NULL,
-
-	youtube_link VARCHAR(255) NULL,
-
-	posted_date DATE NULL DEFAULT CURRENT_TIMESTAMP,
-	updated_date DATE NULL DEFAULT CURRENT_TIMESTAMP,
-	published_date DATE NULL,
-
-	PRIMARY KEY (post_id),
-	CONSTRAINT fk_post_user_id FOREIGN KEY (user_id) REFERENCES user_data(user_id),
-	CONSTRAINT fk_post_post_type FOREIGN KEY (post_type) REFERENCES post_type("type"),
-	CONSTRAINT fk_post_property_type FOREIGN KEY (property_type) REFERENCES property_type("type")
-);
-
---DROP TABLE post_photos;
-CREATE TABLE post_photos (
-	post_id UUID,
-	url VARCHAR(255),
-	PRIMARY KEY (post_id, url),
-	CONSTRAINT fk_post_photos_post_id FOREIGN KEY(post_id) REFERENCES post(post_id)
-);
-
---DROP TABLE post_plans;
-CREATE TABLE post_plans (
-	post_id UUID,
-	url VARCHAR(255),
-	PRIMARY KEY (post_id, url),
-	CONSTRAINT fk_post_plans_post_id FOREIGN KEY(post_id) REFERENCES post(post_id)
+CREATE TABLE "customer_report"(
+	customer_report_id UUID PRIMARY KEY,
+	user_id UUID,
+	mobile_number VARCHAR(15),
+	"description" VARCHAR(250),
+	customer_name VARCHAR(100),
+	active BOOLEAN default true,
+	CONSTRAINT fk_crp_user_id_constraint FOREIGN KEY (user_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
 );
 
 
-
--- DROP TABLE featured_property;
-CREATE TABLE featured_property (
-	post_id UUID PRIMARY KEY,
-	created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT featured_property_post_id_foreign FOREIGN KEY (post_id) REFERENCES post(post_id)
+-- Branch
+CREATE TABLE "branch"(
+	branch_id UUID PRIMARY KEY,
+	branch_name VARCHAR(100),
+	active BOOLEAN default true
 );
 
--- DROP TABLE favorite_property;
-CREATE TABLE favorite_property (
-	user_id UUID NOT NULL,
-	post_id UUID NOT NULL,
-	added_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT favorite_property_pkey PRIMARY KEY (user_id, post_id),
-	CONSTRAINT favorite_property_post_id_foreign FOREIGN KEY (post_id) REFERENCES post(post_id)
+CREATE TABLE "table"(
+	table_number INTEGER,
+	branch_id UUID,
+	verification_code VARCHAR(90),
+	last_update_time TIMESTAMP,
+	active BOOLEAN default true,
+	PRIMARY KEY("table_number", "branch_id"),
+	CONSTRAINT fk_t_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
 );
 
--- DROP VIEW post_brief;
-CREATE VIEW post_brief AS
-	SELECT post_id, post_type, property_type, status, availability_tag,
-		   heading, description, price, price_tag, price_currency,
-		   a_district, a_city, a_street, m_latitude, m_longitude,
-		   nearest_bus_stop, nearest_train_station,
-		   "size", features, extra_details,
-		   user_id, person_name,
-		   COALESCE(pp.photos, '{}') as photos,
-		   exists(SELECT post_id FROM featured_property fp WHERE fp.post_id = p.post_id) featured
-		  		FROM post p
-		  		LEFT JOIN
-		  		    (SELECT post_id, array_agg(pp.url) photos FROM post_photos pp GROUP BY post_id) pp USING(post_id);
+create or replace view table_branch as
+	select "table".*, "branch".branch_name 
+	from "table" left join "branch" 
+	using(branch_id);
 
--- DROP VIEW post_full;
-CREATE VIEW post_full AS
-    SELECT p.post_id, post_type, property_type, status, availability_tag,
-		   heading, description, price, price_tag, price_currency,
-		   a_province, a_district, a_city, a_street, m_latitude, m_longitude,
-		   nearest_bus_stop, nearest_train_station,
-		   "size", features, extra_details,
-		   user_id, person_name, person_type, person_contact, agent_ref,
-		   COALESCE(pp.photos, '{}') as photos, COALESCE(pp2.plns, '{}') as plans,
-		   youtube_link,
-		   posted_date, updated_date, published_date,
-		   exists(SELECT post_id FROM featured_property fp WHERE fp.post_id = p.post_id) featured
-		  		FROM post p
-		  		LEFT JOIN
-		  			(SELECT post_id, array_agg(pp.url) photos FROM post_photos pp GROUP BY post_id) pp
-		  				ON p.post_id = pp.post_id
-		  		LEFT JOIN
-		  			(SELECT post_id, array_agg(pp2.url) plns FROM post_plans pp2 GROUP BY post_id) pp2
-		  				ON p.post_id = pp2.post_id;
+-- Staff
+--CREATE TABLE "staff_role"(
+--	role VARCHAR(100) PRIMARY KEY,
+--	"description" VARCHAR(250)
+--);
+
+CREATE TABLE "staff"(
+	user_id UUID PRIMARY KEY,
+--	"role" VARCHAR(100),
+	branch_id UUID,
+	birthday TIMESTAMP,
+	mobile_number VARCHAR(15),
+	nic VARCHAR(15),
+	active BOOLEAN default true,
+	constraint fk_s_user_id_constraint FOREIGN key ("user_id") references "user_account"(user_id) on update cascade,
+--	CONSTRAINT fk_s_role_constraint FOREIGN KEY (role) REFERENCES "staff_role"("role") ON UPDATE CASCADE,
+	CONSTRAINT fk_s_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
+);
+
+create view user_full_data as select
+	"user_account".*,
+	customer.mobile_number ,
+	staff.branch_id,
+	staff.nic,
+	staff.birthday,
+	branch.branch_name 
+from user_account
+	left join customer
+	on user_account.user_id = customer.user_id
+	left join staff
+	on  user_account.user_id = staff.user_id
+	left join branch 
+	on "staff".branch_id= "branch".branch_id;
+
+-- Food item
+CREATE TABLE "category"(
+	category_id UUID PRIMARY KEY,
+	category_name VARCHAR(75),
+	"description" VARCHAR(250),
+	image_url VARCHAR(150) default null,
+	active BOOLEAN default true
+);
+
+CREATE TABLE "food_item"(
+	food_item_id UUID PRIMARY KEY,
+	"name" VARCHAR(75),
+	category_id UUID,
+	"description" VARCHAR(250),
+	image_url VARCHAR(150),
+	price NUMERIC(10,2),
+	active BOOLEAN default true,
+	CONSTRAINT fk_fi_category_id_constraint FOREIGN KEY (category_id) REFERENCES "category"("category_id") ON UPDATE CASCADE
+);
+
+CREATE TABLE "food_variant"(
+	food_variant_id UUID PRIMARY KEY,
+	food_item_id UUID,
+	variant_name VARCHAR(75),
+	price NUMERIC(10,2),
+	active BOOLEAN default true,
+	CONSTRAINT fk_fV_food_item_id_constraint FOREIGN KEY (food_item_id) REFERENCES "food_item"("food_item_id") ON UPDATE CASCADE
+);
+
+--view food items with variants
+create or replace view food_items_with_variants as select
+	food_item.* ,
+	json_agg(json_build_object(
+	'foodVariantId', food_variant_id,
+	'foodItemId', food_variant.food_item_id,
+	'variantName', variant_name,
+	'price', food_variant.price::numeric(10,2)
+	)) as food_variants
+	from food_item left join 
+food_variant on food_item.food_item_id = food_variant.food_item_id 
+where food_item.active = true group by food_item.food_item_id ;
 
 
--- DROP VIEW featured_property_brief;
-CREATE VIEW featured_property_brief AS
-	SELECT p.* FROM featured_property fp
-		JOIN post_brief p USING(post_id);
 
--- DROP VIEW favorite_property_brief;
-CREATE VIEW favorite_property_brief AS
-	SELECT p.*, fp.user_id as viewer_user_id FROM favorite_property fp
-		JOIN post_brief p USING (post_id);
+-- Cart
+CREATE TABLE "cart"(
+	cart_id UUID PRIMARY KEY,
+	customer_id UUID,
+	CONSTRAINT fk_c_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
+);
+
+CREATE TABLE "cart_item"(
+	cart_item_id UUID PRIMARY KEY,
+	food_item_id UUID,
+	variant_id UUID,
+	price NUMERIC(10,2),
+	cart_id UUID,
+	quantity INTEGER,
+	active BOOLEAN default true,
+	CONSTRAINT fk_ci_food_item_id_constraint FOREIGN KEY (food_item_id) REFERENCES "food_item"("food_item_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_ci_variant_id_constraint FOREIGN KEY (variant_id) REFERENCES "food_variant"("food_variant_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_ci_cart_id_constraint FOREIGN KEY (cart_id) REFERENCES "cart"("cart_id") ON UPDATE CASCADE
+);
+
+--Cart items with food item names and variant names
+create or replace view cart_items_detailed as select
+	cart_item.* ,
+	food_item."name",
+	food_item."image_url",
+	food_item."category_id",
+	food_item."description",
+	food_variant."variant_name"
+	from cart_item join food_item
+		on cart_item.food_item_id = food_item.food_item_id
+	left join food_variant
+	on cart_item.variant_id = food_variant.food_variant_id;
 
 
---     _        _                          __                  _   _
---    | |_ _ __(_) __ _  __ _  ___ _ __   / _|_   _ _ __   ___| |_(_) ___  _ __  ___
---    | __| '__| |/ _` |/ _` |/ _ \ '__| | |_| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
---    | |_| |  | | (_| | (_| |  __/ |    |  _| |_| | | | | (__| |_| | (_) | | | \__ \
---     \__|_|  |_|\__, |\__, |\___|_|    |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
---                |___/ |___/
+-- Order
+CREATE TABLE "order_status"(
+	order_status VARCHAR(100) PRIMARY KEY,
+	"description" VARCHAR(250)
+);
 
-CREATE OR REPLACE FUNCTION update_updated_date_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.updated_date IS NULL THEN
-        NEW.updated_date = NOW();
-    END IF;
-    RETURN NEW;
-END;
-$$ language 'plpgsql';
+CREATE TABLE "order"(
+	order_id UUID PRIMARY KEY,
+	customer_id UUID,
+	total_amount NUMERIC(10,2),
+	table_number INTEGER,
+	branch_id UUID,
+	order_status VARCHAR(100),
+	placed_time TIMESTAMP,
+	waiter_id UUID,
+	kitchen_staff_id UUID,
+	active BOOLEAN default true,
+	CONSTRAINT fk_o_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_o_tn_bi_constraint FOREIGN KEY (table_number, branch_id) REFERENCES "table"("table_number", "branch_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_o_order_status_constraint FOREIGN KEY (order_status) REFERENCES "order_status"("order_status") ON UPDATE cascade,
+	CONSTRAINT fk_o_waiter_id_constraint FOREIGN KEY (waiter_id) REFERENCES "staff"("user_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_o_kitchen_staff_id_constraint FOREIGN KEY (kitchen_staff_id) REFERENCES "staff"("user_id") ON UPDATE CASCADE
+);
+
+CREATE TABLE "order_food_item"(
+	order_id UUID,
+	cart_item_id UUID,
+
+	PRIMARY KEY ("order_id", "cart_item_id"),
+	CONSTRAINT fk_ofi_order_id_constraint FOREIGN KEY (order_id) REFERENCES "order"("order_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_ofi_cart_item_id_constraint FOREIGN KEY (cart_item_id) REFERENCES "cart_item"("cart_item_id") ON UPDATE CASCADE
+);
+
+--view orders with cart items
+create view orders_with_cart_items as select
+	"order".*,
+	json_agg(json_build_object(
+	'cartItemId', cart_items_detailed.cart_item_id,
+	'foodItemId', cart_items_detailed.food_item_id,
+	'variantId' , cart_items_detailed.variant_id,
+	'price' , cart_items_detailed.price,
+	'cartId' , cart_items_detailed.cart_id,
+	'image_url' , cart_items_detailed.image_url,
+	'description' , cart_items_detailed.description,
+	'quantity' , cart_items_detailed.quantity,
+	'name' , cart_items_detailed."name",
+	'categoryId' , cart_items_detailed.category_id,
+	'variantName' , cart_items_detailed.variant_name
+	)) as cart_items
+	from "order"
+	left join "order_food_item"
+		on "order".order_id  = order_food_item.order_id
+	left join cart_items_detailed
+		on "order_food_item".cart_item_id = cart_items_detailed.cart_item_id
+	group by "order".order_id ;
+
+-- Room
+CREATE TABLE "room_type"(
+	room_type VARCHAR(100) PRIMARY KEY,
+	"description" VARCHAR(250)
+);
+
+CREATE TABLE "room"(
+	room_number INTEGER,
+	branch_id UUID,
+	capacity smallint,
+	room_type VARCHAR(100),
+	price NUMERIC(10,2),
+	active BOOLEAN default true,
+	PRIMARY KEY("room_number", "branch_id"),
+	CONSTRAINT fk_r_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_r_room_type_constraint FOREIGN KEY (room_type) REFERENCES "room_type"("room_type") ON UPDATE CASCADE
+);
+
+-- Booking
+CREATE TABLE "booking"(
+	booking_id UUID PRIMARY KEY,
+	customer_id UUID,
+	arrival TIMESTAMP,
+	departure TIMESTAMP,
+	active BOOLEAN default true,
+	CONSTRAINT fk_b_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
+);
+
+CREATE TABLE "booked_room"(
+	booking_id UUID,
+	room_number INTEGER,
+	branch_id UUID,
+	active BOOLEAN default true,
+	PRIMARY KEY ("booking_id","room_number","branch_id"),
+	CONSTRAINT fk_br_booking_id_constraint FOREIGN KEY (booking_id) REFERENCES "booking"("booking_id") ON UPDATE CASCADE,
+	CONSTRAINT fk_br_rn_bi_constraint FOREIGN KEY (room_number, branch_id) REFERENCES "room"("room_number", "branch_id") ON UPDATE CASCADE
+);
+
+
+--Insert food variants
+create or replace PROCEDURE set_food_variants(f_id uuid, food_variants JSON)
+LANGUAGE plpgsql
+AS $pn$
+	DECLARE
+		_variant json;
+	begin
+		DELETE FROM food_variant WHERE food_item_id = f_id;
+		FOR _variant IN SELECT * FROM (SELECT json_array_elements (food_variants)) ci
+		loop
+			insert into food_variant values(uuid_generate_v4(), f_id, _variant::json->>'variant_name', cast(_variant::json->>'price' as numeric(10,2)));
+		END loop ;
+	END ;
+$pn$;
+
+
+
+--Insert order items
+create or replace PROCEDURE set_order_items(o_id uuid, order_items JSON)
+LANGUAGE plpgsql
+AS $pn$
+	DECLARE
+		_order_item uuid;
+	begin
+		DELETE FROM order_food_item WHERE order_id = o_id;
+		FOR _order_item IN SELECT * FROM (SELECT json_array_elements_text(order_items)) ci
+		loop
+			insert into order_food_item values(o_id, _order_item);
+		END loop ;
+	END ;
+$pn$;
+
+

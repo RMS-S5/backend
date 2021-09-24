@@ -13,7 +13,7 @@ const ServeTokenPair: Handler = async (req, res) => {
     const {userId} = req.body;
 
     // creating payload model
-    const [error, userData] = await model.user.get_UserData(userId);
+    const [error, userData] = await model.user.get_UserAccountByUserId(userId);
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
@@ -23,14 +23,16 @@ const ServeTokenPair: Handler = async (req, res) => {
         userId: userData.userId,
         email: userData.email,
         accountType: userData.accountType,
+        branchId : userData.branchId
     }
+    const {password,active, ...data } = userData;
 
     // add token
     const refreshToken = TokenMan.getRefreshToken(userId);
     const accessToken = TokenMan.getAccessToken(payload);
 
     r.status.OK()
-        .data(userData)
+        .data(data)
         .tokenPair(accessToken, refreshToken)
         .message("Success")
         .send();

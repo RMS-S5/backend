@@ -15,7 +15,7 @@ const getPersonalDetails: Handler = async (req, res) => {
     const userId = req.user.userId
 
     // creating payload model
-    const [error, userData] = await model.user.get_UserData(userId);
+    const [error, userData] = await model.user.get_UserAccountByUserId(userId);
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;

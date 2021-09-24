@@ -1,13 +1,15 @@
 import {Response as EResponse, Request as ERequest, NextFunction} from "express";
-import {ResponseBuilder} from "./resp/res-builder";
+import { ResponseBuilder } from "./resp/res-builder";
+import model from "../model/index";
 
 export interface Request extends ERequest {
     user: {
         userId: string,
-        accountType: "Local Account" | "Admin Account"
+        accountType: typeof model.user.accountTypes.manager,
         firstName: string,
         lastName: string,
         email: string,
+        branchId? : string
     }
 }
 
