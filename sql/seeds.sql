@@ -125,11 +125,10 @@ begin
 		(branchId1, 8, uuid_generate_v4());
 	
 
-	
 		
 end $$;
 
-update "table" set "verification_code" = uuid_generate_v4() where table_number = 6;
+
 
 
 
