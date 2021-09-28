@@ -3,6 +3,7 @@ import {OrderModel} from "./order";
 import {FoodItemModel} from "./food_item";
 import {CartModel} from "./cart";
 import {BranchModel} from "./branch";
+import {RoomModel} from "./room";
 
 export {MErr} from "../utils/dbMan";
 export const model = {
@@ -10,7 +11,8 @@ export const model = {
     foodItem : FoodItemModel,
     cart : CartModel,
     order : OrderModel,
-    branch : BranchModel
+    branch : BranchModel,
+    room : RoomModel
 };
 
 export default model;

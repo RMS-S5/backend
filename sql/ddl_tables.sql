@@ -129,7 +129,8 @@ CREATE TABLE "staff"(
 	birthday TIMESTAMP,
 	mobile_number VARCHAR(15),
 	nic VARCHAR(15),
-	active BOOLEAN default true,
+	"status" VARCHAR(50) DEFAULT 'Employed' CHECK ("status" in ('Employed', 'Available', 'Unavailable', 'Resigned')),
+	active BOOLEAN DEFAULT true,
 	constraint fk_s_user_id_constraint FOREIGN key ("user_id") references "user_account"(user_id) on update cascade,
 --	CONSTRAINT fk_s_role_constraint FOREIGN KEY (role) REFERENCES "staff_role"("role") ON UPDATE CASCADE,
 	CONSTRAINT fk_s_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
@@ -166,6 +167,7 @@ CREATE TABLE "food_item"(
 	"description" VARCHAR(250),
 	image_url VARCHAR(150),
 	price NUMERIC(10,2),
+	is_available BOOLEAN default true,
 	active BOOLEAN default true,
 	CONSTRAINT fk_fi_category_id_constraint FOREIGN KEY (category_id) REFERENCES "category"("category_id") ON UPDATE CASCADE
 );
@@ -308,6 +310,8 @@ CREATE TABLE "booking"(
 	customer_id UUID,
 	arrival TIMESTAMP,
 	departure TIMESTAMP,
+	placed_time TIMESTAMP,
+	"status" VARCHAR(50) DEFAULT 'Placed' CHECK ("status" in ('Placed', 'Accepted', 'Lodged', 'Completed', 'Rejected', 'Expired')),
 	active BOOLEAN default true,
 	CONSTRAINT fk_b_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
 );

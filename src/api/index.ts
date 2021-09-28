@@ -8,6 +8,7 @@ import rFoodItem from "./[food_items]";
 import rCart from "./[cart]";
 import rOrder from "./[order]";
 import rBranch from "./[branch]";
+import rRoom from "./[rooms]";
 
 export const rApi = Router();
 
@@ -24,6 +25,7 @@ rApi.use("/cart", rCart);
 rApi.use("/order", rOrder);
 rApi.use("/branch", rBranch);
 rApi.use("/meta", rMeta);
+rApi.use("/room", rRoom);
 
 // Router
 export default rApi
