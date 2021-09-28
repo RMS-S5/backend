@@ -5,6 +5,8 @@ import {} from "./types";
 export abstract class FoodItemModel {
   private static View_foodItemsWithVariants = "foodItemsWithVariants";
   private static TB_categories = "category";
+  private static TB_foodItem = "foodItem";
+  private static TB_foodVariant = "foodVariant";
 
   /**
    * Getters
@@ -19,5 +21,16 @@ export abstract class FoodItemModel {
   }
 
 
-    
+  static update_FoodItem(foodItemId: string, foodData : any, foodVariantData : any) {
+    return runTrx(
+      async trx => {
+         await trx(this.TB_foodItem).update(foodData).where({ foodItemId })
+        return trx.raw(`call set_order_items(?,?)`, [foodItemId, foodVariantData]);
+      })
+      }
+  
 }
+
+
+    
+

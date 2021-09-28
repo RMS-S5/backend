@@ -26,7 +26,11 @@ const validateCredentials: Handler = async (req, res, next) => {
 
     const [error, account] = await model.user.get_UserAccountByUserId(userId);
 
-    if (error.code === MErr.NO_ERROR) {
+    if (error.code == MErr.NOT_FOUND) {
+        r.status.NOT_FOUND()
+            .message("User not Found")
+            .send();
+    }else if (error.code === MErr.NO_ERROR) {
         // password verification
         if (!await compare(currentPassword, account.password)) {
             r.status.UN_AUTH()
@@ -34,19 +38,10 @@ const validateCredentials: Handler = async (req, res, next) => {
                 .send();
             return;
         }
-
         req.body.userId = account.userId; // bind userId to request
         next() // send pair of tokens
         return;
     }
-
-    if (error.code === MErr.NOT_FOUND) {
-        r.status.NOT_FOUND()
-            .message("User doesn't exists")
-            .send();
-        return;
-    }
-
     r.pb.ISE()
         .send();
 };
@@ -67,7 +62,7 @@ const updateUserData: Handler = async (req, res) => {
     };
 
     // Sync model to database
-    const [{code}] = await model.user.update_LocalAccount(userId, userAccount)
+    const [{code}] = await model.user.update_UserAccount(userId, userAccount)
 
     if (code === MErr.NO_ERROR) {
         r.status.OK()
@@ -83,4 +78,8 @@ const updateUserData: Handler = async (req, res) => {
 /**
  * Request Handler Chain
  */
-export default [inspector, <EHandler>validateCredentials, <EHandler>updateUserData]
+
+const updatePassword = {
+    updatePasswordByUserId : [inspector, <EHandler>validateCredentials, <EHandler>updateUserData]
+}
+export default updatePassword;

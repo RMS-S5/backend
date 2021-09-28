@@ -10,7 +10,8 @@ const rBranch = Router();
 /**
  * Getters
  */
-rBranch.get("/get-table-by-verification/:verificationCode", getTableHandler.getTableByVerificationCode)
+rBranch.get("/table-by-verification/:verificationCode", getTableHandler.getTableByVerificationCode)
+rBranch.get("/branch-tables", auth.staffMember,getTableHandler.getBranchTables)
 
 
 

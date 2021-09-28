@@ -19,7 +19,6 @@ const inspector = inspectBuilder(
 const addCartItem: Handler = async (req, res) => {
     const {r} = res;
     const cartItemId = UUID();
-    console.log(req.body);
 
     const cartItemData  = {
         cartItemId,

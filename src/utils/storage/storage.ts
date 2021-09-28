@@ -28,7 +28,7 @@ export const s3StoragePhotos = multerS3({
     key: function (_, file, cb) {
         const uKey = UUID()
         const ext = path.extname(file.originalname)
-        cb(null, path.join("photos", `${uKey}${ext}`)) //use Date.now() for unique file keys
+        cb(null, path.join("photos", `${uKey}${ext}`)) 
     },
 
 })
@@ -39,7 +39,7 @@ export const s3StorageAvatars = multerS3({
     key: function (_, file, cb) {
         const uKey = UUID()
         const ext = path.extname(file.originalname)
-        cb(null, path.join("avatars", `${uKey}${ext}`)) //use Date.now() for unique file keys
+        cb(null, path.join("avatars", `${uKey}${ext}`)) 
     },
 
 })

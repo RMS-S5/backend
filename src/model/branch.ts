@@ -32,12 +32,12 @@ export abstract class BranchModel {
                 .where({verificationCode}).select(), {single : true, required : true});
     }
 
-    // static get_Cart(query : any): Promise<[MError,Cart]> {
-    //     const q = cleanQuery(query, ['cartId', 'customerId'])
-    //     return runQuery<Cart>(
-    //         (knex) => knex(this.TB_cart)
-    //             .where(q).select(), {single : true, required : true});
-    // }
+    static get_Tables(query : any): Promise<[MError,any]> {
+        const q = cleanQuery(query, ['branchId'])
+        return runQuery<any>(
+            (knex) => knex(this.TB_table)
+                .where(q).select());
+    }
 
 
 
