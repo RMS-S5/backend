@@ -3,6 +3,7 @@ import auth from "../../utils/auth"
 
 import getOrdersHandler from "./get/order";
 import addOrder from "./add/order";
+import updateOrder from "./update/order";
 
 const rOrder = Router();
 
@@ -10,6 +11,12 @@ const rOrder = Router();
  * Adders
  */
 rOrder.post('/add-order', addOrder);
+
+/**
+ * Update
+ */
+ rOrder.put('/order/:orderId', updateOrder);
+
 
 /**
  * Getters

@@ -55,13 +55,31 @@ export abstract class UserModel {
      * Update
      * TODO: update functions not set
      */
-    static update_UserDetails(userId: string, data: any) {
-        return runQuery(
-            knex => knex(this.TB_userAccount).update(data).where({userId})
-        )
-    }
+    static update_StaffAccount(userId: string, accountData: any, staffData: any) {
+        return runTrx(async trx => {
+            if (Object.keys(accountData).length != 0) {
+                await trx(this.TB_userAccount).update(accountData).where({userId});
+            }
+            if (Object.keys(staffData).length != 0) {
+                await trx(this.TB_staff).update(staffData).where({ userId });
+            }
+                return trx();
+        });
+    };
 
-    static update_LocalAccount(userId: string, data: any) {
+    static update_CustomerAccount(userId : string, accountData: any, customerData: any) {
+        return runTrx(async trx =>  {
+            if (Object.keys(accountData).length != 0) {
+                await trx(this.TB_userAccount).update(accountData).where({userId});
+            }
+            if (Object.keys(customerData).length != 0) {
+                await trx(this.TB_customer).update(customerData).where({ userId });
+            }
+                return trx();
+        });
+    };
+
+    static update_UserAccount(userId: string, data: any) {
         return runQuery(
             knex => knex(this.TB_userAccount).update(data).where({userId})
         )

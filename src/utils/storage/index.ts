@@ -29,3 +29,17 @@ export const uploadAvatar = multer({
         cb(null, false)
     }
 }).single("avatar")
+
+export const uploadSingleImage = multer({
+    storage: s3StoragePhotos,
+    limits: {
+        fieldSize: 1024*1024*10
+    },
+    fileFilter: (_, file, cb) => {
+        if (["image/jpeg", "image/jpg", "image/png"].includes(file.mimetype)) {
+            cb(null, true)
+            return
+        }
+        cb(null, false)
+    }
+}).single("image")
