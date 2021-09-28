@@ -13,13 +13,13 @@ export interface UserAccount {
 
 export interface Customer {
     userId: string;
-    mobileNumber? : number
+    mobileNumber?: number
     accountLevel?: string
 }
 
 export interface Staff {
     userId: string;
-    mobileNumber? : number
+    mobileNumber?: number
     nic?: string
     role?: string
     branch_id?: string
@@ -29,55 +29,71 @@ export interface Staff {
 /**
  * Product Model
  */
-export interface Category{
+export interface Category {
     categoryId: string,
     categoryName: string,
     description: string,
     imageUrl: string,
-    active : boolean
+    active: boolean
 }
 
 /**
  * Cart Model
  */
-export interface Cart{
-    cartId : string,
-    customerId? : string
+export interface Cart {
+    cartId: string,
+    customerId?: string
 }
 
-export interface CartItem{
-    cartItemId : string,
-    foodItemId : string,
-    price : number,
-    cartId : string,
-    quantity : number,
-    active? : boolean
+export interface CartItem {
+    cartItemId: string,
+    foodItemId: string,
+    price: number,
+    cartId: string,
+    quantity: number,
+    active?: boolean
 }
 
 /**
  * Order Model
  */
-export interface Order{
-    orderId : string,
+export interface Order {
+    orderId: string,
     customerId?: string,
-    totalAmount : number,
-    tableNumber : number,
-    branchId : string,
-    orderStatus : string,
-    placedTime? : typeof Date,
-    waiterId? : string,
-    kitchenStaffId? : string,
-    active? : boolean
+    totalAmount: number,
+    tableNumber: number,
+    branchId: string,
+    orderStatus: string,
+    placedTime?: typeof Date,
+    waiterId?: string,
+    kitchenStaffId?: string,
+    active?: boolean
 }
 
 /**
  * Branch Model
  */
-export interface Table{
-    tableNumber : number,
-    branchId : string,
-    verificationCode? : string,
-    lastUpdateTime? : typeof Date,
-    active? : boolean
+export interface Table {
+    tableNumber: number,
+    branchId: string,
+    verificationCode?: string,
+    lastUpdateTime?: typeof Date,
+    active?: boolean
+}
+
+/**
+ * Room Model
+ */
+export interface Room {
+    roomNumber: number,
+    branchId: string,
+    capacity: number,
+    roomType: string,
+    price: number,
+}
+
+export interface RoomType {
+    roomType: string,
+    description: string,
 }
 
