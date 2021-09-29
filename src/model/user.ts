@@ -1,6 +1,7 @@
 import {runQuery, runTrx, TransactionBuilder} from "../utils/dbMan";
 import {MError} from "../utils/dbMan/merror";
 import {UserAccount, Customer, Staff} from "./types";
+import { cleanQuery } from './../utils/dbMan/resolver';
 
 /**
  * Transaction Pieces
@@ -55,13 +56,14 @@ export abstract class UserModel {
      * Update
      * TODO: update functions not set
      */
-    static update_StaffAccount(userId: string, accountData: any, staffData: any) {
+    static update_StaffAccount(filter: any, accountData: any, staffData: any) {
+        const filterData = cleanQuery(filter);
         return runTrx(async trx => {
             if (Object.keys(accountData).length != 0) {
-                await trx(this.TB_userAccount).update(accountData).where({userId});
+                await trx(this.TB_userAccount).update(accountData).where(filterData['userId']);
             }
             if (Object.keys(staffData).length != 0) {
-                await trx(this.TB_staff).update(staffData).where({ userId });
+                await trx(this.TB_staff).update(staffData).where(filterData);
             }
                 return trx();
         });

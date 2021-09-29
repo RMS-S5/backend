@@ -74,10 +74,15 @@ const updateCustomerProfile: Handler = async (req, res) => {
 
     const staffData = {
         mobileNumber : req.body.mobileNumber
-    }
+     }
+     
+     const filter = {
+         userId,
+         branchId : req.user?.branchId
+     }
 
     // Sync model to database
-    const [{ code }] = await model.user.update_StaffAccount(userId, userData, staffData);
+    const [{ code }] = await model.user.update_StaffAccount(filter, userData, staffData);
 
     if (code === MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
