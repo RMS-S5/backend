@@ -9,21 +9,15 @@ import {uploadSingleImage  } from "../../../utils/storage/index";
  */
 
 const inspector = inspectBuilder(
-    param('foodItemId').exists().withMessage("Food item id is required"),
-    body("price")
-        .optional()
-        .isNumeric().withMessage("Total amount should be a number"),
-    body('name').optional(),
-    body('categoryId').optional(),
+    body('categoryName').optional(),
     body('description').optional(),
-    body('foodVariants').optional(),
 );
 
 const updateFoodItem: Handler = async (req, res) => {
     const { r } = res;
-    const foodItemId = req.params.foodItemId;
-    const { price, name, categoryId, description,foodVariants } = req.body;
-    const temp = { price, name, categoryId, description };
+    const categoryId = req.params.categoryId;
+    const { categoryName, description} = req.body;
+    const temp = { categoryName, description};
 
     // Check files
     let data;
@@ -34,7 +28,7 @@ const updateFoodItem: Handler = async (req, res) => {
     }
 
     const [error, response] =
-        await model.foodItem.update_FoodItem(foodItemId, data, foodVariants);
+        await model.foodItem.update_Category(categoryId, data);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
             .message("Category is not found")
