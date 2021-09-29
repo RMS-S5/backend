@@ -26,22 +26,22 @@ const getActiveOrders: Handler = async (req, res) => {
         .send();
 };
 
-const getAllServedOrders: Handler = async (req, res) => {
-    const {r} = res;
+// const getAllServedOrders: Handler = async (req, res) => {
+//     const {r} = res;
 
-    const [error, ordersData] = await
-        model.order.get_AllOrders({orderStatus : model.order.orderStatus.served,
-        branchId : req.user?.branchId});
-    if (error.code !== MErr.NO_ERROR) {
-        r.pb.ISE();
-        return;
-    }
+//     const [error, ordersData] = await
+//         model.order.get_AllOrders({orderStatus : model.order.orderStatus.served,
+//         branchId : req.user?.branchId});
+//     if (error.code !== MErr.NO_ERROR) {
+//         r.pb.ISE();
+//         return;
+//     }
 
-    r.status.OK()
-        .data(ordersData)
-        .message("Success")
-        .send();
-};
+//     r.status.OK()
+//         .data(ordersData)
+//         .message("Success")
+//         .send();
+// };
 
 /**
  * Table order
@@ -100,7 +100,7 @@ const getOrderById: Handler = async (req, res) => {
  */
 const getOrdersHandler = {
     getActiveOrders : [<EHandler>getActiveOrders],
-    getAllServedOrders : [ <EHandler>getAllServedOrders],
+    // getAllServedOrders : [ <EHandler>getAllServedOrders],
     getOrderById : [ <EHandler>getOrderById],
     getTableOrder : [tableOrderInspector,  <EHandler>getTableOrder]
 }
