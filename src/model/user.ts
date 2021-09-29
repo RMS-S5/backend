@@ -65,7 +65,7 @@ export abstract class UserModel {
             if (Object.keys(staffData).length != 0) {
                 await trx(this.TB_staff).update(staffData).where(filterData);
             }
-                return trx();
+                return trx(this.TB_customer);
         });
     };
 
@@ -77,7 +77,7 @@ export abstract class UserModel {
             if (Object.keys(customerData).length != 0) {
                 await trx(this.TB_customer).update(customerData).where({ userId });
             }
-                return trx();
+                return trx(this.TB_customer);
         });
     };
 

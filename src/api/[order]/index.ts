@@ -15,7 +15,7 @@ rOrder.post('/add-order', addOrder);
 /**
  * Update
  */
- rOrder.put('/order/:orderId', updateOrder);
+ rOrder.put('/order/:orderId',auth.staffMember, updateOrder);
 
 
 /**

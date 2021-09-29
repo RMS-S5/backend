@@ -25,13 +25,12 @@ const updateCustomerProfile: Handler = async (req, res) => {
     const userData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        mobileNumber : req.body.mobileNumber
     };
 
     const customerData = {
-        mobileNumber : req.body.mobileNumber
     }
     const staffData = {
-        mobileNumber : req.body.mobileNumber
     }
 
     let code;
@@ -70,10 +69,11 @@ const updateCustomerProfile: Handler = async (req, res) => {
     const userData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        mobileNumber : req.body.mobileNumber
     };
 
     const staffData = {
-        mobileNumber : req.body.mobileNumber
+        
      }
      
      const filter = {

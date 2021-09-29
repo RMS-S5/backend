@@ -74,23 +74,23 @@ begin
 		(branchId1, 'Horana'),
 		(branchId2, 'Maharagam');
 	
-	insert into user_account("user_id", "first_name", "last_name", "email", "account_type", "password") values
-	(userId1, 'John', 'Doe', 'johndoe@gmail.com', 'Customer' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId2, 'Darshana', 'Fernando', 'darshana@gmail.com','Kitchen Staff', '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m' ),
-	(userId3, 'Nuwan', 'Pranandu', 'nuwan@gmail.com',  'Waiter' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId4, 'Nagitha', 'Jayasekara', 'nagitha@gmail.com',  'Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId5, 'Dumindu', 'Silva', 'dumindu@gmail.com',  'Branch Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId6, 'Harsha', 'Perera', 'harsha@gmail.com',  'Receptionist' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m');
+	insert into user_account("user_id", "first_name", "last_name", "email","mobile_number" ,"account_type", "password") values
+	(userId1, 'John', 'Doe', 'johndoe@gmail.com', 0774531987,'Customer' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId2, 'Darshana', 'Fernando', 'darshana@gmail.com',0745879632,'Kitchen Staff', '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m' ),
+	(userId3, 'Nuwan', 'Pranandu', 'nuwan@gmail.com',  0775826478,'Waiter' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId4, 'Nagitha', 'Jayasekara', 'nagitha@gmail.com',  0758641985,'Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId5, 'Dumindu', 'Silva', 'dumindu@gmail.com',  0724685129,'Branch Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId6, 'Harsha', 'Perera', 'harsha@gmail.com',  0786421596,'Receptionist' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m');
 
-	insert into customer("user_id", "mobile_number") values
-		(userId1, 0784539687);
+	insert into customer("user_id") values
+		(userId1);
 	
-	insert into staff("user_id", "branch_id", "mobile_number", "nic") values
-		(userId2 , branchId1 , 0746597284, '197854628887V'),
-		(userId3 , branchId1 , 0776597225, '199954628887V'),
-		(userId4 , null, 0786597236, '199754628887V'),
-		(userId5 , branchId1 , 0756597251, '200154628887V'),
-		(userId6 , branchId1 , 0783597222, '200154628257V');
+	insert into staff("user_id", "branch_id",  "nic") values
+		(userId2 , branchId1 ,  '197854628887V'),
+		(userId3 , branchId1 ,  '199954628887V'),
+		(userId4 , null, '199754628887V'),
+		(userId5 , branchId1 ,  '200154628887V'),
+		(userId6 , branchId1 , '200154628257V');
 
 	insert into category("category_id", "category_name" , "description") values
 		(category1, 'Kottu', 'Delicious Kottu'),

@@ -35,7 +35,7 @@ export abstract class FoodItemModel {
         if (Object.keys(foodVariantData).length != 0) {
           return trx.raw(`call set_order_items(?,?)`, [foodItemId, foodVariantData]);
         }
-        return trx();
+        return trx(this.TB_foodItem);
       })
   }
   
@@ -60,7 +60,7 @@ export abstract class FoodItemModel {
         if (Object.keys(foodVariantData).length != 0) {
           await trx.raw(`call set_order_items(?,?)`, [foodItemId, foodVariantData]);
         }
-                return trx();
+                return trx(this.TB_foodItem);
       })
   }
   

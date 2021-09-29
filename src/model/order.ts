@@ -33,7 +33,7 @@ export abstract class OrderModel {
    * Update
    */
   static update_Order(orderId: string, orderData: any) {
-    const data = cleanQuery(orderData, ['orderStatus', 'price']);
+    const data = cleanQuery(orderData, ['orderStatus', 'price', 'waiterId', 'kitchenStaffId']);
   return runQuery(
       knex => knex(this.TB_order).update(data).where({orderId})
   )

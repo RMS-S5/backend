@@ -38,12 +38,13 @@ const registerCustomer: Handler = async (req, res) => {
     const userAccountData = {
         userId,
         email,
+        mobileNumber,
         password: await encrypt_password(password),
         firstName, lastName,
         accountType : model.user.accountTypes.customer
     };
     const customerData = {
-        userId, mobileNumber
+        userId, 
     }
 
     // Sync model to database
