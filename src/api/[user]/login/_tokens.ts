@@ -23,7 +23,8 @@ const ServeTokenPair: Handler = async (req, res) => {
         userId: userData.userId,
         email: userData.email,
         accountType: userData.accountType,
-        branchId : userData.branchId
+        branchId: userData.branchId,
+        firstName : userData.firstName
     }
     const {password,active, ...data } = userData;
 
