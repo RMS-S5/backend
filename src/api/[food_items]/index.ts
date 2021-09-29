@@ -8,8 +8,8 @@ import addFoodItem from "./add/food_item";
 import addCategory from "./add/category";
 import updateFoodItem from "./update/food_item";
 import updateCategory from "./update/update_category";
-import deleteFoodItem from "./update/delete_food_item";
-import deleteCategory from "./update/delete_category";
+import removeFoodItem from "./update/delete_food_item";
+import removeCategory from "./update/delete_category";
 
 const rFoodItem = Router();
 
@@ -34,8 +34,8 @@ rFoodItem.put('/update-category/:categoryId', updateCategory);
 /**
  * Delete
  */
-rFoodItem.delete('/delete-food-item/:foodItemId', deleteFoodItem);
-rFoodItem.delete('/delete-category/:categoryId', deleteCategory);
+rFoodItem.delete('/remove-food-item/:foodItemId', removeFoodItem);
+rFoodItem.delete('/remove-category/:categoryId', removeCategory);
 
 
 export default rFoodItem;
