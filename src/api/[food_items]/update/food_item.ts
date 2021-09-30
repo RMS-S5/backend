@@ -34,7 +34,7 @@ const updateFoodItem: Handler = async (req, res) => {
     }
 
     const [error, response] =
-        await model.foodItem.update_FoodItem(foodItemId, data, foodVariants);
+        await model.foodItem.update_FoodItem(foodItemId, data, JSON.stringify(foodVariants));
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
             .message("Category is not found")
