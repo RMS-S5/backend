@@ -56,20 +56,24 @@ export abstract class UserModel {
      * Update
      * TODO: update functions not set
      */
-    static update_StaffAccount(filter: any, accountData: any, staffData: any) {
+    static update_StaffAccount(filter: any, accountD: any, staffD: any) {
         const filterData = cleanQuery(filter);
+        const accountData = cleanQuery(accountD);
+        const staffData = cleanQuery(staffD);
         return runTrx(async trx => {
-            if (Object.keys(accountData).length != 0) {
-                await trx(this.TB_userAccount).update(accountData).where(filterData['userId']);
+            if (Object.keys(accountData).length != 0) { 
+                await trx(this.TB_userAccount).update(accountData).where({userId :filterData['userId']});
             }
             if (Object.keys(staffData).length != 0) {
                 await trx(this.TB_staff).update(staffData).where(filterData);
             }
-                return trx(this.TB_customer);
+                return trx(this.TB_staff);
         });
     };
 
-    static update_CustomerAccount(userId : string, accountData: any, customerData: any) {
+    static update_CustomerAccount(userId: string, accountD: any, customerD: any) {
+        const accountData = cleanQuery(accountD);
+        const customerData = cleanQuery(customerD);
         return runTrx(async trx =>  {
             if (Object.keys(accountData).length != 0) {
                 await trx(this.TB_userAccount).update(accountData).where({userId});

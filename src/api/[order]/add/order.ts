@@ -30,11 +30,22 @@ const addOrder: Handler = async (req, res) => {
     };
 
     if(req.user?.userId != null) { // @ts-ignore
-        orderData = {...orderData, customerId : req.user.userId}
+        orderData = {...orderData, customerId : req.user?.userId}
     }
 
     const [error, response] = await model.order.add_Order(orderId, orderData, cartItems );
-    if (error.code !== MErr.NO_ERROR) {
+    if (error.code === MErr.FOREIGN_KEY) {
+        if (error.constraint == 'fk_o_tn_bi_constraint') {
+            r.status.BAD_REQ()
+        .message("Table not verified")
+                .send();
+            return;
+        }
+        r.status.BAD_REQ()
+        .message("Bad request!")
+        .send();
+        return;
+    }else if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
     }

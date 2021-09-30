@@ -9,8 +9,8 @@ import {compare} from "bcrypt";
  * Validate Request
  */
 const inspector = inspectBuilder(
-    body("currentPassword").exists().withMessage("current password is required"),
-    body("password").exists().withMessage("password is required"),
+    body("currentPassword").exists().isString().withMessage("current password is required"),
+    body("password").exists().isString().withMessage("password is required"),
     param("userId").optional().isUUID().withMessage("invalid user id")
 )
 
@@ -23,13 +23,13 @@ const validateCredentials: Handler = async (req, res, next) => {
 
     const userId = req.params.userId || req.user.userId
     const {currentPassword} = req.body;
-
     const [error, account] = await model.user.get_UserAccountByUserId(userId);
 
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
             .message("User not Found")
             .send();
+        return;
     }else if (error.code === MErr.NO_ERROR) {
         // password verification
         if (!await compare(currentPassword, account.password)) {
@@ -41,9 +41,11 @@ const validateCredentials: Handler = async (req, res, next) => {
         req.body.userId = account.userId; // bind userId to request
         next() // send pair of tokens
         return;
-    }
-    r.pb.ISE()
+    } else {
+        r.pb.ISE()
         .send();
+    }
+    
 };
 
 
@@ -55,7 +57,7 @@ const updateUserData: Handler = async (req, res) => {
     const {r} = res;
 
     // Setup Data
-    const userId = req.body.userId
+    const userId = req.params.userId || req.user.userId;
 
     const userAccount = {
         password: await encrypt_password(req.body.password)
@@ -70,8 +72,11 @@ const updateUserData: Handler = async (req, res) => {
             .send();
         return;
     }
+    else {
+        
+        r.pb.ISE();
+    }
 
-    r.pb.ISE();
 };
 
 
