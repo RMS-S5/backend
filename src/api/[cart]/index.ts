@@ -13,14 +13,14 @@ const rCart = Router();
 /**
  * Post
  */
-rCart.post('/add-cart', addCart);
+rCart.post('/add-cart', auth.authOrNoAuth, addCart);
 rCart.post('/add-cart-item', addCartItem);
 
 
 /**
  * Getters
  */
-rCart.get('/cart-data/:cartId', getCartHandlers.getCartByCartId);
+rCart.get('/cart-data/:cartId',getCartHandlers.getCartByCartId);
 rCart.get('/customer-cart/:customerId', getCartHandlers.getCartByCustomerId);
 rCart.get('/cart-items/:cartId', getCartItems);
 

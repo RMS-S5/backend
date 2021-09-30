@@ -21,7 +21,8 @@ export abstract class OrderModel {
   /**
    * Creators
    */
-  static add_Order(orderId: string, orderData : any , cartItems : any) {
+  static add_Order(orderId: string, orderData: any, cartItems: any) {
+    console.log(cartItems);
     return runTrx(async trx =>  {
       await trx(this.TB_order).insert(orderData);
       return trx.raw(`call set_order_items(?,?)`, [orderId, cartItems])

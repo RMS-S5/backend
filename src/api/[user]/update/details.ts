@@ -7,16 +7,16 @@ import model, {MErr} from "../../../model";
  * Validate Request
  */
 const inspector = inspectBuilder(
-    body("firstName").optional().isString().withMessage("firstName is required"),
-    body("lastName").optional().isString().withMessage("lastName is is required"),
-    body("mobileNumber").optional().isMobilePhone("any").withMessage("mobile phone is required"),
+    body("firstName").optional(),
+    body("lastName").optional(),
+    body("mobileNumber").optional(),
 )
 
 /**
  * :: STEP 2
  * Update customer profile
  */
-const updateCustomerProfile: Handler = async (req, res) => {
+const updateUserProfile: Handler = async (req, res) => {
     const {r} = res;
 
     // Setup Data
@@ -38,7 +38,7 @@ const updateCustomerProfile: Handler = async (req, res) => {
     if (req.user.accountType == model.user.accountTypes.customer) {
         [{ code }] = await model.user.update_CustomerAccount(userId, userData, customerData);    
     } else {
-        [{ code }] = await model.user.update_StaffAccount(userId, userData, staffData);    
+        [{ code }] = await model.user.update_StaffAccount({userId}, userData, staffData);    
     }
     
 
@@ -105,7 +105,7 @@ const updateCustomerProfile: Handler = async (req, res) => {
 
 
 const updateProfile = {
-    userProfile : [inspector,<EHandler> <EHandler> updateCustomerProfile],
+    userProfile : [inspector,<EHandler> <EHandler> updateUserProfile],
     staffMember : [inspector, <EHandler> updateStaffProfile],
 }
 export default updateProfile;
