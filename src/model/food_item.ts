@@ -33,7 +33,7 @@ export abstract class FoodItemModel {
           await trx(this.TB_foodItem).insert(foodData);
         }
         if (Object.keys(foodVariantData).length != 0) {
-          return trx.raw(`call set_order_items(?,?)`, [foodItemId, foodVariantData]);
+          return trx.raw(`call set_food_variants(?,?)`, [foodItemId, foodVariantData]);
         }
         return trx(this.TB_foodItem);
       })
@@ -58,7 +58,7 @@ export abstract class FoodItemModel {
           await trx(this.TB_foodItem).update(foodData).where({ foodItemId })
         }
         if (Object.keys(foodVariantData).length != 0) {
-          await trx.raw(`call set_order_items(?,?)`, [foodItemId, foodVariantData]);
+          await trx.raw(`call set_food_variants(?,?)`, [foodItemId, foodVariantData]);
         }
                 return trx(this.TB_foodItem);
       })
