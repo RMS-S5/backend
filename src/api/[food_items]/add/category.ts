@@ -17,7 +17,7 @@ const updateFoodItem: Handler = async (req, res) => {
     const { r } = res;
     const categoryId = UUID();
     const { categoryName , description } = req.body;
-    const temp = { categoryName , description  };
+    const temp = { categoryId, categoryName , description  };
 
     // Check files
     let data;

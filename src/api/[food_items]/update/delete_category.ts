@@ -14,7 +14,7 @@ const inspector = inspectBuilder(
 
 const deleteFoodItem: Handler = async (req, res) => {
     const { r } = res;
-    const categoryId = req.params.foodItemId;
+    const categoryId = req.params.categoryId;
     const [error, response] =
         await model.foodItem.update_Category(categoryId, {active : false});
     if (error.code == MErr.NOT_FOUND) {

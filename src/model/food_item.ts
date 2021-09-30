@@ -14,11 +14,11 @@ export abstract class FoodItemModel {
    */
 
   static get_AllFoodItemsWithVariants(): Promise<[MError, any[]]> {
-    return runQuery<any[]>((knex) => knex(this.View_foodItemsWithVariants));
+    return runQuery<any[]>((knex) => knex(this.View_foodItemsWithVariants).where({active : true}));
   }
     
   static get_AllCategories(): Promise<[MError, any[]]> {
-    return runQuery<any[]>((knex) => knex(this.TB_categories));
+    return runQuery<any[]>((knex) => knex(this.TB_categories).where({active : true}));
   }
 
   /**
