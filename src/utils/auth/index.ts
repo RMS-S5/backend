@@ -32,7 +32,7 @@ const inspectAuthHeaderAuthorNotAuth = inspectBuilder(
  * @param next
  */
 const parsePayload: Handler = (req, res, next) => {
-    const {r} = res;
+    const { r } = res;
 
     const token = req.headers["authorization"] || '';
 
@@ -44,9 +44,7 @@ const parsePayload: Handler = (req, res, next) => {
             .send();
         return;
     } else if (error === "ERROR") {
-        r.status.UN_AUTH()
-            .message("Authentication token is invalid")
-            .send();
+        next();
         return;
     }
 

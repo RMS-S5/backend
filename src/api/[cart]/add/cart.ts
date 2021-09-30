@@ -21,7 +21,7 @@ const addCart: Handler = async (req, res) => {
     }else{
         cartData = {cartId};
     }
-    const [error, response] = await model.cart.add_Cart({cartId : ''});
+    const [error, response] = await model.cart.add_Cart(cartData);
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;

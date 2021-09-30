@@ -30,7 +30,7 @@ const addOrder: Handler = async (req, res) => {
     };
 
     if(req.user?.userId != null) { // @ts-ignore
-        orderData = {...orderData, customerId : req.user.userId}
+        orderData = {...orderData, customerId : req.user?.userId}
     }
 
     const [error, response] = await model.order.add_Order(orderId, orderData, cartItems );

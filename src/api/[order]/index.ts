@@ -10,7 +10,7 @@ const rOrder = Router();
 /**
  * Adders
  */
-rOrder.post('/add-order', addOrder);
+rOrder.post('/add-order',auth.authOrNoAuth, addOrder);
 
 /**
  * Update
