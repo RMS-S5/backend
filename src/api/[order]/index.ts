@@ -26,7 +26,7 @@ rOrder.get('/active-orders',auth.staffMember, getOrdersHandler.getActiveOrders);
 // rOrder.get('/served-orders',auth.waiter, getOrdersHandler.getAllServedOrders);
 rOrder.get('/table-order', getOrdersHandler.getTableOrder);
 rOrder.get('/:orderId', auth.staffMember,getOrdersHandler.getOrderById);
-rOrder.get('/orders-monthly-completed', <EHandler> (req, res, next):Handler =>{console.log(req.body);} ,getOrdersHandler.getMonthlyCompletedOrders);
+rOrder.get('/orders-monthly-completed',getOrdersHandler.getMonthlyCompletedOrders);
 
 
 export default rOrder
