@@ -94,6 +94,25 @@ const getOrderById: Handler = async (req, res) => {
         .send();
 };
 
+const getMonthlyCompletedOrders: Handler = async (req, res) => {
+    const {r} = res;
+
+    let branchId = "";//req.user?.branchId; //todo:if manager dont filter else filter by branchId
+    console.log("##################################")
+
+    const [error, ordersData] = await model.order.get_MonthlyCompletedOrders({branchId : branchId, orderStatus: "Served"});
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(ordersData)
+        .message("Success")
+        .send();
+};
+
 
 /**
  * Export Handler
@@ -102,6 +121,7 @@ const getOrdersHandler = {
     getActiveOrders : [<EHandler>getActiveOrders],
     // getAllServedOrders : [ <EHandler>getAllServedOrders],
     getOrderById : [ <EHandler>getOrderById],
-    getTableOrder : [tableOrderInspector,  <EHandler>getTableOrder]
+    getTableOrder : [tableOrderInspector,  <EHandler>getTableOrder],
+    getMonthlyCompletedOrders : [<EHandler>getMonthlyCompletedOrders],
 }
 export default getOrdersHandler;

@@ -19,6 +19,7 @@ export abstract class UserModel {
     private static TB_customer = "customer";
     private static TB_staff = "staff";
     private static VIEW_userFullData = "userFullData";
+    private static VIEW_staffFullFata = "staff_full_data"; //todo:clarify
 
     static $add_UserData(userData: UserAccount): TransactionBuilder {
     return async trx => {
@@ -42,6 +43,13 @@ export abstract class UserModel {
         return runTrx(async trx =>  {
             await this.$add_UserData(accountData)(trx);
             return trx(this.TB_customer).insert(customerData);
+        });
+    };
+
+    static add_StaffMemberAccount(accountData: UserAccount, staffMemberData: any) {
+        return runTrx(async trx =>  {
+            await this.$add_UserData(accountData)(trx);
+            return trx(this.TB_staff).insert(staffMemberData);
         });
     };
 
@@ -102,6 +110,9 @@ export abstract class UserModel {
     //         }
     //     )
     // }
+    static get_StaffMembers(query: any): Promise<[MError, any[]]> {
+        return runQuery<any[]>((knex) => knex(this.VIEW_userFullData).where({...query, active : true}));
+      }
 
     static get_UserAccountByEmail(email: string): Promise<[MError, any]> {
         return runQuery<any>(

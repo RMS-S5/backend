@@ -69,6 +69,17 @@ declare
 	branchId1 uuid := uuid_generate_v4();
 	branchId2 uuid := uuid_generate_v4();
 
+	order1 uuid := uuid_generate_v4();
+	order2 uuid := uuid_generate_v4();
+	order3 uuid := uuid_generate_v4();
+	order4 uuid := uuid_generate_v4();
+	order5 uuid := uuid_generate_v4();
+	order6 uuid := uuid_generate_v4();
+	order7 uuid := uuid_generate_v4();
+	order8 uuid := uuid_generate_v4();
+	order9 uuid := uuid_generate_v4();
+	order10 uuid := uuid_generate_v4();
+
 begin
 	insert into branch("branch_id", "branch_name") values
 		(branchId1, 'Horana'),
@@ -153,7 +164,17 @@ begin
 		('1', branchId2, '2', 'Deluxe', '42000'),
 		('2', branchId2, '3', 'Suite', '32000');
 
-	
+	insert into "order" ("order_id", "customer_id", "total_amount", "table_number", "branch_id", "order_status", "placed_time", "waiter_id", "kitchen_staff_id") values
+		(order1, userId1, 20000, 1, branchId1, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
+		(order2, userId1, 3000, 1, branchId1, 'Served', '2021-10-11 08:00:00.000', userId3, userId2),
+		(order3, userId1, 4000, 1, branchId1, 'Served', '2021-10-16 08:00:00.000', userId3, userId2),
+		(order4, userId1, 23000, 1, branchId1, 'Served', '2021-10-21 08:00:00.000', userId3, userId2),
+		(order5, userId1, 2200, 1, branchId1, 'Served', '2021-10-26 08:00:00.000', userId3, userId2),
+		(order6, userId1, 20100, 1, branchId1, 'Served', '2021-10-27 08:00:00.000', userId3, userId2),
+		(order7, userId1, 5000, 1, branchId1, 'Served', '2021-10-01 04:00:00.000', userId3, userId2),
+		(order8, userId1, 6000, 1, branchId1, 'Served', '2021-10-01 12:00:00.000', userId3, userId2),
+		(order9, userId1, 7000, 1, branchId1, 'Served', '2021-10-01 20:00:00.000', userId3, userId2),
+		(order10, userId1, 24000, 1, branchId1, 'Served', '2021-10-01 23:00:00.000', userId3, userId2);
 
 		
 end $$;
