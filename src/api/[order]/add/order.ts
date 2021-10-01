@@ -10,21 +10,22 @@ import order from "../get/order";
 
 const inspector = inspectBuilder(
     body("totalAmount")
-        .exists().withMessage("Total amount is required")
+        .exists({checkNull: true}).withMessage("Total amount is required")
         .isNumeric().withMessage("Total amount should be a number"),
     body("tableNumber")
-        .exists().withMessage("Table Number is required")
+        .exists({checkNull: true}).withMessage("Table Number is required")
         .isNumeric().withMessage("Table Number should be a number"),
-    body('branchId').exists().withMessage("Branch Id is required"),
-    body('cartItems').exists().withMessage("Cart Items are required"),
+    body('branchId').exists({checkNull: true}).withMessage("Branch Id is required")
+        .isString().withMessage("Branch Id should not be empty."),
+    body('cartItems').exists({checkNull: true}).withMessage("Cart Items are required"),
 )
 
 const addOrder: Handler = async (req, res) => {
     const {r} = res;
     const orderId = UUID();
-    const {totalAmount, tableNumber, branchId , cartItems } = req.body;
+    const { totalAmount, tableNumber, branchId, cartItems } = req.body;
     let orderData = {
-        orderId, totalAmount, tableNumber, branchId , cartItems,
+        orderId, totalAmount, tableNumber, branchId ,
         placedTime : new Date(), orderStatus : model.order.orderStatus.placed
     };
 
@@ -44,4 +45,4 @@ const addOrder: Handler = async (req, res) => {
         .send();
 };
 
-export default [<EHandler> addOrder];
+export default [inspector,<EHandler> addOrder];

@@ -123,13 +123,25 @@ begin
 		(branchId1, 6, uuid_generate_v4()),
 		(branchId1, 7, uuid_generate_v4()),
 		(branchId1, 8, uuid_generate_v4());
-	
+
+	insert into "room_type" ("room_type", "description") values
+		('Suite', 'Suite Room'),
+		('Deluxe', 'Deluxe Room'),
+		('Vip', 'Vip Room');
+
+	insert into "room" ("room_number", "branch_id", "capacity", "room_type", "price") values
+		('1', branchId1, '2', 'Suite', '22000'),
+		('2', branchId1, '3', 'Suite', '32000'),
+		('3', branchId1, '1', 'Vip', '20000'),
+		('1', branchId2, '2', 'Deluxe', '42000'),
+		('2', branchId2, '3', 'Suite', '32000');
 
 	
+
 		
 end $$;
 
-update "table" set "verification_code" = uuid_generate_v4() where table_number = 6;
+
 
 
 

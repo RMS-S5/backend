@@ -5,6 +5,7 @@ import {Order} from "./types";
 export abstract class OrderModel {
   private static VIEW_orderWithCartItems = "ordersWithCartItems";
   private static TB_order = "order";
+  private static FN_latestTableOrder = "latestTableOrder";
 
   public static orderStatus = {
     placed : "Placed",
@@ -54,11 +55,19 @@ export abstract class OrderModel {
     return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems).where(q));
   }
 
-  static get_TableOrder(query : any): Promise<[MError, any[]]> {
-    const q = cleanQuery(query, ["tableNumber, branchId"])
-    return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems)
-      .where(q).andWhereNot({ orderStatus: this.orderStatus.closed })
-      .andWhereNot({ orderStatus: this.orderStatus.rejected }));
+  // static get_TableOrder(tableNumber : number, branchId : string): Promise<[MError, any]> {
+  //   // const q = cleanQuery(query, ["tableNumber, branchId"])
+  //   return runQuery<any>(
+  //     (knex) =>
+  //       knex.raw(`select * from latest_table_order(?, ?)`, [tableNumber, branchId]));
+  // }
+  static get_TableOrder(tableNumber : any, branchId : any): Promise<[MError, any]> {
+    // const q = cleanQuery(query, ["tableNumber, branchId"])
+    console.log(parseInt(tableNumber), branchId);
+    return runTrx<any>(
+      (trx) =>
+        trx.raw(`select * from latest_table_order(?, ?)`, [parseInt(tableNumber), branchId]),
+      );
   }
 
   static get_OrderByOrderId(orderId : string): Promise<[MError, any[]]> {

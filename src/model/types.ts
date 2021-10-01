@@ -81,6 +81,22 @@ export interface Table {
 }
 
 /**
+ * Room Model
+ */
+export interface Room {
+  roomNumber: number;
+  branchId: string;
+  capacity: number;
+  roomType: string;
+  price: number;
+}
+
+export interface RoomType {
+  roomType: string;
+  description: string;
+}
+
+/**
  * Booking Model
  */
 export interface Booking {

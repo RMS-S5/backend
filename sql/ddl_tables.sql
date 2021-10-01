@@ -5,6 +5,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --drop 
 drop procedure if exists set_order_items ;
 drop procedure if exists set_food_variants ;
+drop function if exists latest_table_order;
 
 -- Drop existing tables
 DROP TABLE IF EXISTS "booked_room";
@@ -129,7 +130,8 @@ CREATE TABLE "staff"(
 	birthday TIMESTAMP,
 	mobile_number VARCHAR(15),
 	nic VARCHAR(15),
-	active BOOLEAN default true,
+	"status" VARCHAR(50) DEFAULT 'Employed' CHECK ("status" in ('Employed', 'Available', 'Unavailable', 'Resigned')),
+	active BOOLEAN DEFAULT true,
 	constraint fk_s_user_id_constraint FOREIGN key ("user_id") references "user_account"(user_id) on update cascade,
 --	CONSTRAINT fk_s_role_constraint FOREIGN KEY (role) REFERENCES "staff_role"("role") ON UPDATE CASCADE,
 	CONSTRAINT fk_s_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
@@ -166,6 +168,7 @@ CREATE TABLE "food_item"(
 	"description" VARCHAR(250),
 	image_url VARCHAR(150),
 	price NUMERIC(10,2),
+	is_available BOOLEAN default true,
 	active BOOLEAN default true,
 	CONSTRAINT fk_fi_category_id_constraint FOREIGN KEY (category_id) REFERENCES "category"("category_id") ON UPDATE CASCADE
 );
@@ -262,7 +265,7 @@ CREATE TABLE "order_food_item"(
 );
 
 --view orders with cart items
-create view orders_with_cart_items as select
+create or replace view orders_with_cart_items as select
 	"order".*,
 	json_agg(json_build_object(
 	'cartItemId', cart_items_detailed.cart_item_id,
@@ -270,7 +273,7 @@ create view orders_with_cart_items as select
 	'variantId' , cart_items_detailed.variant_id,
 	'price' , cart_items_detailed.price,
 	'cartId' , cart_items_detailed.cart_id,
-	'image_url' , cart_items_detailed.image_url,
+	'imageUrl' , cart_items_detailed.image_url,
 	'description' , cart_items_detailed.description,
 	'quantity' , cart_items_detailed.quantity,
 	'name' , cart_items_detailed."name",
@@ -287,7 +290,8 @@ create view orders_with_cart_items as select
 -- Room
 CREATE TABLE "room_type"(
 	room_type VARCHAR(100) PRIMARY KEY,
-	"description" VARCHAR(250)
+	"description" VARCHAR(250),
+	active BOOLEAN default true
 );
 
 CREATE TABLE "room"(
@@ -308,6 +312,8 @@ CREATE TABLE "booking"(
 	customer_id UUID,
 	arrival TIMESTAMP,
 	departure TIMESTAMP,
+	placed_time TIMESTAMP,
+	"status" VARCHAR(50) DEFAULT 'Placed' CHECK ("status" in ('Placed', 'Accepted', 'Lodged', 'Completed', 'Rejected', 'Expired')),
 	active BOOLEAN default true,
 	CONSTRAINT fk_b_customer_id_constraint FOREIGN KEY (customer_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
 );
@@ -345,14 +351,54 @@ create or replace PROCEDURE set_order_items(o_id uuid, order_items JSON)
 LANGUAGE plpgsql
 AS $pn$
 	DECLARE
-		_order_item uuid;
+		_order_item uuid; 
 	begin
 		DELETE FROM order_food_item WHERE order_id = o_id;
 		FOR _order_item IN SELECT * FROM (SELECT json_array_elements_text(order_items)) ci
 		loop
 			insert into order_food_item values(o_id, _order_item);
+			update cart_item set active = false where cart_item_id = _order_item;
 		END loop ;
 	END ;
 $pn$;
 
+
+--get latest table order
+create or replace function latest_table_order (
+	_tn INT,
+    _bn uuid
+) 
+	returns table (
+		"ordeId" uuid, 
+		"customerId" uuid,
+		"totalAmount" numeric,
+		"tableNumber" int, 
+		"branchId" uuid,
+		"orderStatus" varchar,
+		"placedTime" timestamp,
+		"waiterId" uuid,
+		"kitchenStaffId" uuid,
+		"active" bool,
+		"cartItems" json
+	)
+	language plpgsql
+as $$
+begin
+	return query 
+	select 
+		"order_id" as "orderId", 
+		"customer_id" as "customerId" ,
+		"total_amount" as "totalAmount" ,
+		"table_number" as "tableNumber", 
+		"branch_id" as "branchId",
+		"order_status" as "orderStatus",
+		"placed_time" as "placedTime",
+		"waiter_id" as "waiterId",
+		"kitchen_staff_id" as "kitchenStaffId",
+		"orders_with_cart_items"."active" as "active",
+		"cart_items" as "cartItems" 
+	 from "orders_with_cart_items"
+	where "orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
+	where "order"."table_number" = _tn and "order"."branch_id" = _bn);
+end;$$
 

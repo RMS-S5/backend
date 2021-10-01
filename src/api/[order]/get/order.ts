@@ -51,16 +51,19 @@ const getAllServedOrders: Handler = async (req, res) => {
  */
 
 const getTableOrder: Handler = async (req, res) => {
-    const {r} = res;
-    const [error, ordersData] = await model.order.get_TableOrder(req.query);
+    const { r } = res;
 
+    const branchId = req.query.branchId;
+    const tableNumber = req.query.tableNumber;
+
+    const [error, ordersData] = await model.order.get_TableOrder( tableNumber, branchId);
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
     }
 
     r.status.OK()
-        .data(ordersData)
+        .data(ordersData['rows'][0] || {})
         .message("Success")
         .send();
 };

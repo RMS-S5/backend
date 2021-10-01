@@ -57,7 +57,7 @@ export abstract class CartModel {
   // Change active to false
    static delete_CartItem(cartItemId : string): Promise<[MError,any]> {
     return runQuery<Cart>(
-        (knex) => knex(this.TB_cart).update({active : false}).where({cartItemId}));
+        (knex) => knex(this.TB_cartItem).update({active : false}).where({cartItemId}));
   }
     
 
