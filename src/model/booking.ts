@@ -60,7 +60,7 @@ export abstract class BookingModel {
           .select("*")
           .from(this.TB_room)
           .leftJoin("room_type", "room.room_type", "room_type.room_type")
-          .where({ branchId: branchId, active: false }),
+          .where({ branchId: branchId, "room.active": false }),
       { required: true }
     );
   }

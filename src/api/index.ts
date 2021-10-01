@@ -10,6 +10,8 @@ import rOrder from "./[order]";
 import rBranch from "./[branch]";
 import rBooking from "./[booking]";
 import rRoom from "./[rooms]";
+import rReport from "./[report]";
+import rQuestion from "./[question]";
 
 export const rApi = Router();
 console.log("come to this");
@@ -28,6 +30,7 @@ rApi.use("/branch", rBranch);
 rApi.use("/meta", rMeta);
 rApi.use("/booking", rBooking);
 rApi.use("/room", rRoom);
-
+rApi.use("/report", rReport);
+rApi.use("/question", rQuestion);
 // Router
 export default rApi;
