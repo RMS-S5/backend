@@ -70,6 +70,10 @@ const registerCustomer: Handler = async (req, res) => {
       .message("Success")
       .data({
         userId,
+        email,
+        accountType: userAccountData.accountType,
+        firstName,
+        lastName,
       })
       .send();
     return;
