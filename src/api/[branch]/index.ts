@@ -20,15 +20,15 @@ const rBranch = Router();
  * Getters
  */
 rBranch.get("/table-by-verification/:verificationCode", getTableHandler.getTableByVerificationCode)
-rBranch.get("/branch-tables", auth.staffMember,getTableHandler.getBranchTables)
+rBranch.get("/branch-tables", getTableHandler.getBranchTables)
 rBranch.get("/branches", getTableHandler.getBranches)
 
 
 /**
 * Delete
 */
-rBranch.put('/remove-room/:roomNumber', removeBranch);
-rBranch.put('/remove-room-type/:roomType', removeTable);
+rBranch.put('/remove-branch/:branchId', removeBranch);
+rBranch.put('/remove-table/:tableNumber', removeTable);
 
 export default rBranch;
 

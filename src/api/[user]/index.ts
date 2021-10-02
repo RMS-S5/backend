@@ -6,6 +6,7 @@ import registerCustomer from "./register/register_customer";
 import registerStaffMember from "./register/register_staff_member";
 import get_details from "./get_details";
 import getStaffMembers from "./get/staff_members";
+import getAccountTypes from "./get/account_types"
 import updateUser from "./update/details";
 import updatePassword from "./update/password";
 import deleteStaffMember from "./update/delete_staff_member";
@@ -30,6 +31,7 @@ rUser.post("/register/staff-member", registerStaffMember)
  * Getters
  */
  rUser.get("/staff-members", getStaffMembers)
+ rUser.get("/account-types", getAccountTypes)
 
 /**
  * Update

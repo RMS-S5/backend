@@ -80,6 +80,22 @@ declare
 	order9 uuid := uuid_generate_v4();
 	order10 uuid := uuid_generate_v4();
 
+	booking1 uuid := uuid_generate_v4();
+	booking2 uuid := uuid_generate_v4();
+	booking3 uuid := uuid_generate_v4();
+	booking4 uuid := uuid_generate_v4();
+	booking5 uuid := uuid_generate_v4();
+	booking6 uuid := uuid_generate_v4();
+	booking7 uuid := uuid_generate_v4();
+	booking8 uuid := uuid_generate_v4();
+	booking9 uuid := uuid_generate_v4();
+	booking10 uuid := uuid_generate_v4();
+	booking11 uuid := uuid_generate_v4();
+	booking12 uuid := uuid_generate_v4();
+	booking13 uuid := uuid_generate_v4();
+	booking14 uuid := uuid_generate_v4();
+	booking15 uuid := uuid_generate_v4();
+
 begin
 	insert into branch("branch_id", "branch_name") values
 		(branchId1, 'Horana'),
@@ -176,7 +192,42 @@ begin
 		(order9, userId1, 7000, 1, branchId1, 'Served', '2021-10-01 20:00:00.000', userId3, userId2),
 		(order10, userId1, 24000, 1, branchId1, 'Served', '2021-10-01 23:00:00.000', userId3, userId2);
 
+	insert into "booking" ("booking_id", "customer_id", "arrival", "departure", "placed_time", "status") values
+		(booking11, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
+		(booking12, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
+		(booking13, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Accepted'),
+		(booking14, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Lodged'),
+		(booking1, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Completed'),
+		(booking2, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 08:00:00.000', 'Completed'),
+		(booking3, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-16 08:00:00.000', 'Completed'),
+		(booking4, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-21 08:00:00.000', 'Completed'),
+		(booking5, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-26 08:00:00.000', 'Completed'),
+		(booking6, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-27 08:00:00.000', 'Completed'),
+		(booking7, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 04:00:00.000', 'Completed'),
+		(booking8, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 12:00:00.000', 'Completed'),
+		(booking9, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 20:00:00.000', 'Completed'),
+		(booking10, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 23:00:00.000', 'Completed');
 		
+	insert into "booked_room" ("booking_id", "branch_id", "room_number") values
+		(booking1, branchId1, '1'),
+		(booking1, branchId1, '2'),
+		(booking1, branchId1, '3'),
+		(booking2, branchId1, '1'),
+		(booking2, branchId1, '2'),
+		(booking3, branchId1, '3'),
+		(booking4, branchId1, '1'),
+		(booking5, branchId1, '2'),
+		(booking6, branchId1, '3'),
+		(booking6, branchId1, '1'),
+		(booking6, branchId1, '2'),
+		(booking7, branchId1, '3'),
+		(booking7, branchId1, '1'),
+		(booking8, branchId1, '2'),
+		(booking8, branchId1, '3'),
+		(booking9, branchId1, '1'),
+		(booking10, branchId1, '2'),
+		(booking10, branchId1, '3');
+
 end $$;
 
 

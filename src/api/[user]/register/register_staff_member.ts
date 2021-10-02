@@ -35,7 +35,7 @@ const registerStaffMember: Handler = async (req, res) => {
     // Setup Data
     const userId = UUID()
     const { email, password, firstName, lastName, mobileNumber, accountType, birthday, nic } = req.body;
-    let branchId;
+    let branchId;//="de741275-70dd-46a2-b39c-e42755530a51";
     if (req.user.accountType === model.user.accountTypes.manager) {
         branchId = req.body.branchId;
         if (accountType !== model.user.accountTypes.branchManager) {
@@ -73,6 +73,9 @@ const registerStaffMember: Handler = async (req, res) => {
         birthday,
         nic,
     }
+
+    console.log("userAccountData:", userAccountData)
+    console.log("staffMemberData:", staffMemberData)
 
     // Sync model to database
     const [{ code, constraint }] = await model.user.add_StaffMemberAccount(

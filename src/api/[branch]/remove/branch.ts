@@ -14,6 +14,7 @@ const removeBranch: Handler = async (req, res) => {
     const { r } = res;
     const { branchId } = req.params;   
 
+    console.log(branchId);
     const [error, response] = await model.branch.remove_Branch(branchId);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND().message("Branch not found").send();

@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS "food_variant";
 DROP TABLE IF EXISTS "food_item";
 DROP TABLE IF EXISTS "category";
 
+drop view if exists "staff_full_data";
 drop view if exists "user_full_data";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "staff_role";
@@ -362,7 +363,8 @@ CREATE TABLE "booked_room"(
 create or replace view bookings_with_names_and_amount as select
 	"b".*,
 	concat("cu".first_name, ' ', "cu".last_name) AS customer_name,
-	sum("r".price) AS total_amount
+	sum("r".price) AS total_amount,
+	"br".branch_id AS branch_id
 	from "booking" "b"
 	left join "user_account" "cu"
 		on "b".customer_id  = "cu".user_id
@@ -370,7 +372,7 @@ create or replace view bookings_with_names_and_amount as select
 		on "b".booking_id  = "br".booking_id
 	left join "room" "r"
 		on "br".room_number  = "r".room_number and "br".branch_id  = "r".branch_id
-	group by "b".booking_id,"cu".user_id  ;
+	group by "b".booking_id,"cu".user_id,"br".branch_id  ;
 
 --Insert food variants
 create or replace PROCEDURE set_food_variants(f_id uuid, food_variants JSON)

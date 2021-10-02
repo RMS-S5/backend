@@ -13,7 +13,10 @@ import {body, inspectBuilder} from "../../../utils/inspect";
 const addBranch: Handler = async (req, res) => {
     const { r } = res;
 
+    const branchId = UUID();
+
     const branchData = {
+        branchId,
         branchName: req.body.branchName,
     };
 
