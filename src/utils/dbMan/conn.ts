@@ -16,7 +16,7 @@ const knex_config: Config = {
         database: process.env.PG_DB,
         user: process.env.PG_USER,
         password: process.env.PG_PASS,
-        ssl: process.env.DATABASE_URL ? true : false
+        ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
     },
     ...knexSnakeCaseMappers()
 };
