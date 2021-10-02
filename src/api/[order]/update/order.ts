@@ -33,18 +33,6 @@ const updateOrder: Handler = async (req, res) => {
 
   var message = {};
   switch (orderStatus) {
-    case model.order.orderStatus.preparing:
-      message = {
-        notification: {
-          title: "Update about your order",
-          body: `Your order status is ${orderStatus}`,
-        },
-        data: {
-          orderStatus: orderStatus,
-        },
-        topic: "order-customer",
-      };
-      break;
     case model.order.orderStatus.prepared:
       message = {
         notification: {
@@ -86,10 +74,22 @@ const updateOrder: Handler = async (req, res) => {
       break;
   }
 
+  const message_customer = {
+    notification: {
+      title: "Update about your order",
+      body: `Your order status is ${orderStatus}`,
+    },
+    data: {
+      orderStatus: orderStatus,
+    },
+    topic: "order-customer",
+  };
+
   try {
     if (Object.keys(message).length != 0) {
       const fireBaseAdmin = FireBaseService.getInstance();
       await FireBaseService.sendMessageToTopics(fireBaseAdmin, message);
+      await FireBaseService.sendMessageToTopics(fireBaseAdmin, message_customer);
     }
   } catch (error) {
     console.log(error);
