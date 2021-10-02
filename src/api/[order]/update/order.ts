@@ -29,19 +29,17 @@ const updateOrder: Handler = async (req, res) => {
     orderData = { ...tempData, kitchenStaffId: req.user.userId };
   }
 
-  console.log(orderId);
-
   var message = {};
   switch (orderStatus) {
     case model.order.orderStatus.prepared:
       message = {
         notification: {
-          title: "New Orders",
-          body: `New prepared orders are added.`,
+          title: "New Order",
+          body: `New prepared order is added.`,
         },
         data: {
           orderStatus: orderStatus,
-          type : "staff"
+          type: "staff",
         },
         topic: "order-waiter",
       };
@@ -49,12 +47,12 @@ const updateOrder: Handler = async (req, res) => {
     case model.order.orderStatus.placed:
       message = {
         notification: {
-          title: "New Orders",
-          body: `New orders are placed.`,
+          title: "New Order",
+          body: `New orders is placed.`,
         },
         data: {
           orderStatus: orderStatus,
-          type : "staff"
+          type: "staff",
         },
         topic: "order-kitchen-staff",
       };
@@ -67,7 +65,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         data: {
           orderStatus: orderStatus,
-          type : "staff"
+          type: "staff",
         },
         condition:
           "'order-kitchen-staff' in topics || 'order-waiter' in topics",
@@ -84,16 +82,21 @@ const updateOrder: Handler = async (req, res) => {
     },
     data: {
       orderStatus: orderStatus,
-      type : "customer"
+      type: "customer",
     },
     topic: "order-customer",
   };
 
   try {
+    const fireBaseAdmin = FireBaseService.getInstance();
     if (Object.keys(message).length != 0) {
-      const fireBaseAdmin = FireBaseService.getInstance();
       await FireBaseService.sendMessageToTopics(fireBaseAdmin, message);
-      await FireBaseService.sendMessageToTopics(fireBaseAdmin, message_customer);
+    }
+    if (Object.keys(message_customer).length != 0) {
+      await FireBaseService.sendMessageToTopics(
+        fireBaseAdmin,
+        message_customer
+      );
     }
   } catch (error) {
     console.log(error);
