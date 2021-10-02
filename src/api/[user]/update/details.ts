@@ -7,18 +7,16 @@ import model, {MErr} from "../../../model";
  * Validate Request
  */
 const inspector = inspectBuilder(
-    body("firstName").optional().isString().withMessage("firstName is required"),
-    body("lastName").optional().isString().withMessage("lastName is is required"),
-    body("email").optional().isEmail().withMessage("email is required"),
-    body("telephone").optional().isMobilePhone("any").withMessage("telephone is required"),
-    param("userId").optional().isUUID().withMessage("invalid user id")
+    body("firstName").optional(),
+    body("lastName").optional(),
+    body("mobileNumber").optional(),
 )
 
 /**
  * :: STEP 2
- * Update user data
+ * Update customer profile
  */
-const updateUserData: Handler = async (req, res) => {
+const updateUserProfile: Handler = async (req, res) => {
     const {r} = res;
 
     // Setup Data
@@ -27,27 +25,76 @@ const updateUserData: Handler = async (req, res) => {
     const userData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        email: req.body.email,
-        telephone: req.body.telephone,
+        mobileNumber : req.body.mobileNumber
     };
 
-    // Sync model to database
-    const [{code}] = await model.user.update_UserDetails(userId, userData)
+    const customerData = {
+    }
+    const staffData = {
+    }
 
-    if (code === MErr.NO_ERROR) {
+    let code;
+    // Sync model to database
+    if (req.user.accountType == model.user.accountTypes.customer) {
+        [{ code }] = await model.user.update_CustomerAccount(userId, userData, customerData);    
+    } else {
+        [{ code }] = await model.user.update_StaffAccount({userId}, userData, staffData);    
+    }
+    
+
+    if (code === MErr.NOT_FOUND) {
+        r.status.NOT_FOUND()
+            .message("User not found")
+            .send();
+        return;
+    }else if (code === MErr.NO_ERROR) {
         r.status.OK()
             .message("Success")
             .send();
         return;
     }
+    r.pb.ISE();
+};
 
-    if (code === MErr.DUPLICATE_ENTRY) {
-        r.status.BAD_REQ()
-            .message("email address is associated with another account.")
-            .send()
+/**
+ * :: STEP 2
+ * Update staff profile
+ */
+ const updateStaffProfile: Handler = async (req, res) => {
+    const {r} = res;
+
+    // Setup Data
+    const userId = req.params.userId || req.user.userId
+
+    const userData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        mobileNumber : req.body.mobileNumber
+    };
+
+    const staffData = {
+        
+     }
+     
+     const filter = {
+         userId,
+         branchId : req.user?.branchId
+     }
+
+    // Sync model to database
+    const [{ code }] = await model.user.update_StaffAccount(filter, userData, staffData);
+
+    if (code === MErr.NOT_FOUND) {
+        r.status.NOT_FOUND()
+            .message("User not found")
+            .send();
+        return;
+    }else if (code === MErr.NO_ERROR) {
+        r.status.OK()
+            .message("Success")
+            .send();
         return;
     }
-
     r.pb.ISE();
 };
 
@@ -55,4 +102,10 @@ const updateUserData: Handler = async (req, res) => {
 /**
  * Request Handler Chain
  */
-export default [inspector, <EHandler>updateUserData]
+
+
+const updateProfile = {
+    userProfile : [inspector,<EHandler> <EHandler> updateUserProfile],
+    staffMember : [inspector, <EHandler> updateStaffProfile],
+}
+export default updateProfile;

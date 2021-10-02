@@ -18,5 +18,10 @@ rBranch.get(
   getAvailabeRoomsHandler.getAvailabeRooms
 );
 rBranch.get("/get-all-branches-customer", getAllBrachesCustomer);
+rBranch.get(
+  "/branch-tables",
+  auth.staffMember,
+  getTableHandler.getBranchTables
+);
 
 export default rBranch;

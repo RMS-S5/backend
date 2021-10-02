@@ -13,6 +13,9 @@ delete from food_variant;
 delete from food_item ;
 delete from category ;
 
+delete from room ;
+delete from room_type ;
+
 -- Insert user types
 insert into account_type values 
 	('Customer'),
@@ -71,23 +74,23 @@ begin
 		(branchId1, 'Horana'),
 		(branchId2, 'Maharagam');
 	
-	insert into user_account("user_id", "first_name", "last_name", "email", "account_type", "password") values
-	(userId1, 'John', 'Doe', 'johndoe@gmail.com', 'Customer' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId2, 'Darshana', 'Fernando', 'darshana@gmail.com','Kitchen Staff', '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m' ),
-	(userId3, 'Nuwan', 'Pranandu', 'nuwan@gmail.com',  'Waiter' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId4, 'Nagitha', 'Jayasekara', 'nagitha@gmail.com',  'Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId5, 'Dumindu', 'Silva', 'dumindu@gmail.com',  'Branch Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
-	(userId6, 'Harsha', 'Perera', 'harsha@gmail.com',  'Receptionist' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m');
+	insert into user_account("user_id", "first_name", "last_name", "email","mobile_number" ,"account_type", "password") values
+	(userId1, 'John', 'Doe', 'johndoe@gmail.com', 0774531987,'Customer' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId2, 'Darshana', 'Fernando', 'darshana@gmail.com',0745879632,'Kitchen Staff', '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m' ),
+	(userId3, 'Nuwan', 'Pranandu', 'nuwan@gmail.com',  0775826478,'Waiter' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId4, 'Nagitha', 'Jayasekara', 'nagitha@gmail.com',  0758641985,'Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId5, 'Dumindu', 'Silva', 'dumindu@gmail.com',  0724685129,'Branch Manager' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m'),
+	(userId6, 'Harsha', 'Perera', 'harsha@gmail.com',  0786421596,'Receptionist' , '$2b$10$WKtfDvEY5/FVdOb81yKjAO5MLcgeEazC5gdPal70uybfjhxRtOm0m');
 
-	insert into customer("user_id", "mobile_number") values
-		(userId1, 0784539687);
+	insert into customer("user_id") values
+		(userId1);
 	
-	insert into staff("user_id", "branch_id", "mobile_number", "nic") values
-		(userId2 , branchId1 , 0746597284, '197854628887V'),
-		(userId3 , branchId1 , 0776597225, '199954628887V'),
-		(userId4 , branchId1 , 0786597236, '199754628887V'),
-		(userId5 , branchId1 , 0756597251, '200154628887V'),
-		(userId6 , branchId1 , 0783597222, '200154628257V');
+	insert into staff("user_id", "branch_id",  "nic") values
+		(userId2 , branchId1 ,  '197854628887V'),
+		(userId3 , branchId1 ,  '199954628887V'),
+		(userId4 , null, '199754628887V'),
+		(userId5 , branchId1 ,  '200154628887V'),
+		(userId6 , branchId1 , '200154628257V');
 
 	insert into category("category_id", "category_name" , "description") values
 		(category1, 'Kottu', 'Delicious Kottu'),
@@ -98,13 +101,27 @@ begin
 	
 	insert into food_item("food_item_id", "name", "category_id", "description", "image_url", "price")
 		values
-		(foodItem1 , 'Chicken Kottu', category1, 'Delicious Chicken Kottu','https://picsum.photos/id/231/300/200', 350.00 ),
-		(foodItem2 , 'Cheese Kottu', category1, 'Delicious Cheese Kottu','https://picsum.photos/id/232/300/200', 500.00 ),
-		(foodItem3 , 'Egg Kottu', category1, 'Delicious Egg Kottu','https://picsum.photos/id/233/300/200', 250.00 ),
-		(foodItem4 , 'Dolphin Kottu', category1, 'Delicious Dolphin Kottu','https://picsum.photos/id/234/300/200', 250.00 ),
-		(foodItem5 , 'Chicken Pizza', category4, 'Delicious Chicken Pizza','https://picsum.photos/id/235/300/200', 700.00 ),
-		(foodItem6 , 'Cheese Pizza', category4, 'Delicious Cheese Pizza','https://picsum.photos/id/236/300/200', 750.00 ),
-		(foodItem7 , 'Veggie Pizza', category4, 'Delicious Veggie Pizza','https://picsum.photos/id/237/300/200', 600.00 );
+		(foodItem1 , 'Chicken Kottu', category1, 
+		'Delicious Chicken Kottu',
+		'https://static.wikia.nocookie.net/recipes/images/6/62/800px-Chicken_Kotthu_-_Food_1.jpg/revision/latest?cb=20170428083112',
+		350.00 ),
+		(foodItem2 , 'Cheese Kottu', category1, 'Delicious Cheese Kottu',
+		'https://dynamicrestaurant.lk/wp-content/uploads/elementor/thumbs/CHEESE-KOTTU-p1m049yia94tcbw3t1dlvy39sshiytisbqievg0794.png', 
+		500.00 ),
+		(foodItem3 , 'Egg Kottu', category1, 'Delicious Egg Kottu',
+		'https://shophere.lk/wp-content/uploads/2020/04/ek.jpg', 
+		250.00 ),
+		(foodItem4 , 'Dolphin Kottu', category1,'Delicious Dolphin Kottu',
+		'https://s3-ap-southeast-1.amazonaws.com/pankadu-lk/42/69818447827757984.jpg', 250.00 ),
+		(foodItem5 , 'Chicken Pizza', category4, 'Delicious Chicken Pizza',
+		'https://static.toiimg.com/thumb/53339084.cms?width=1200&height=900',
+		700.00 ),
+		(foodItem6 , 'Cheese Pizza', category4, 'Delicious Cheese Pizza',
+		'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/cheesy-pepperoni-pizza-royalty-free-image-938742222-1558126849.jpg',
+		750.00 ),
+		(foodItem7 , 'Veggie Pizza', category4, 'Delicious Veggie Pizza',
+		'https://www.twopeasandtheirpod.com/wp-content/uploads/2021/03/Veggie-Pizza-8-500x375.jpg',
+		600.00 );
 	
 	call set_food_variants(foodItem1, '[{"variant_name" : "Small", "price" : 350.00}, {"variant_name" : "Medium", "price" : 450.00}]');
 	call set_food_variants(foodItem2, '[{"variant_name" : "Small", "price" : 500.00}, {"variant_name" : "Medium", "price" : 650.00}]');

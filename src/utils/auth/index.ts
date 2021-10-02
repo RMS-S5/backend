@@ -17,6 +17,14 @@ const inspectAuthHeader = inspectBuilder(
         .isJWT().withMessage("authorization token is invalid")
 )
 
+const inspectAuthHeaderAuthorNotAuth = inspectBuilder(
+    header("authorization")
+        .customSanitizer((value) => {
+            return (String(value) || "").split(" ")[1]
+        })
+        
+)
+
 /**
  * :: STEP 2
  * @param req
@@ -24,7 +32,7 @@ const inspectAuthHeader = inspectBuilder(
  * @param next
  */
 const parsePayload: Handler = (req, res, next) => {
-    const {r} = res;
+    const { r } = res;
 
     const token = req.headers["authorization"] || '';
 
@@ -36,15 +44,40 @@ const parsePayload: Handler = (req, res, next) => {
             .send();
         return;
     } else if (error === "ERROR") {
-        r.status.UN_AUTH()
-            .message("Authentication token is invalid")
-            .send();
+        next();
         return;
     }
 
     req.user = payload;
     next();
 };
+
+// const parsePayloadFromBothAuthorNotAuth: Handler = (req, res, next) => {
+//     const {r} = res;
+
+//     if (req.headers["authorization"] == null || req.headers["authorization"] == "") {
+//         next();
+//         return;
+//     }
+//     const token = req.headers["authorization"] || '';
+    
+//     const [error, payload] = TokenMan.verifyAccessToken(token);
+//     if (error === "EXPIRED") {
+//         r.status.UN_AUTH()
+//             .data({expired: true})
+//             .message("Authentication token is expired")
+//             .send();
+//         return;
+//     } else if (error === "ERROR") {
+//         r.status.UN_AUTH()
+//             .message("Authentication token is invalid")
+//             .send();
+//         return;
+//     }
+
+//     req.user = payload;
+//     next();
+// };
 
 
 /**
@@ -76,6 +109,7 @@ const staffMembers = [model.user.accountTypes.kitchenStaff, model.user.accountTy
 const ip = [inspectAuthHeader, <EHandler>parsePayload]
 export default {
     any: [...ip],
+    authOrNoAuth :[inspectAuthHeaderAuthorNotAuth, <EHandler>parsePayload],
     manager:[...ip, <EHandler>filter(model.user.accountTypes.manager)],
     branchManager:[...ip, <EHandler>filter(model.user.accountTypes.branchManager)],
     customer:[...ip, <EHandler>filter(model.user.accountTypes.customer)],

@@ -58,6 +58,7 @@ CREATE TABLE "user_account"(
 	first_name VARCHAR(100),
 	last_name VARCHAR(100),
 	email VARCHAR(100),
+	mobile_number VARCHAR(15),
 	account_type VARCHAR(100),
 	"password" VARCHAR(100),
 	active BOOLEAN default true,
@@ -68,7 +69,6 @@ CREATE TABLE "user_account"(
 -- Customer
 CREATE TABLE "customer"(
 	user_id UUID PRIMARY KEY,
-	mobile_number VARCHAR(20),
 	account_level SMALLINT,
 	active BOOLEAN default true,
 	CONSTRAINT fk_c_user_id_constraint FOREIGN KEY (user_id) REFERENCES "user_account"("user_id") ON UPDATE CASCADE
@@ -128,7 +128,6 @@ CREATE TABLE "staff"(
 --	"role" VARCHAR(100),
 	branch_id UUID,
 	birthday TIMESTAMP,
-	mobile_number VARCHAR(15),
 	nic VARCHAR(15),
 	"status" VARCHAR(50) DEFAULT 'Employed' CHECK ("status" in ('Employed', 'Available', 'Unavailable', 'Resigned')),
 	active BOOLEAN DEFAULT true,
@@ -137,9 +136,8 @@ CREATE TABLE "staff"(
 	CONSTRAINT fk_s_branch_id_constraint FOREIGN KEY (branch_id) REFERENCES "branch"("branch_id") ON UPDATE CASCADE
 );
 
-create view user_full_data as select
+create or replace view user_full_data as select
 	"user_account".*,
-	customer.mobile_number ,
 	staff.branch_id,
 	staff.nic,
 	staff.birthday,

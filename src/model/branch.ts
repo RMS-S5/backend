@@ -38,16 +38,15 @@ export abstract class BranchModel {
       { single: true, required: true }
     );
   }
+
+  static get_Tables(query: any): Promise<[MError, any]> {
+    const q = cleanQuery(query, ["branchId"]);
+    return runQuery<any>((knex) => knex(this.TB_table).where(q).select());
+  }
+
   static getAllBrachesCustomer(): Promise<[MError, any[]]> {
     return runQuery<any[]>((knex) =>
       knex(this.TB_branch).where("active", true)
     );
   }
-
-  // static get_Cart(query : any): Promise<[MError,Cart]> {
-  //     const q = cleanQuery(query, ['cartId', 'customerId'])
-  //     return runQuery<Cart>(
-  //         (knex) => knex(this.TB_cart)
-  //             .where(q).select(), {single : true, required : true});
-  // }
 }

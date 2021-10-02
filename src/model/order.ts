@@ -21,7 +21,8 @@ export abstract class OrderModel {
   /**
    * Creators
    */
-  static add_Order(orderId: string, orderData : any , cartItems : any) {
+  static add_Order(orderId: string, orderData: any, cartItems: any) {
+    console.log(cartItems);
     return runTrx(async trx =>  {
       await trx(this.TB_order).insert(orderData);
       return trx.raw(`call set_order_items(?,?)`, [orderId, cartItems])
@@ -32,9 +33,10 @@ export abstract class OrderModel {
   /**
    * Update
    */
-  static update_Order(orderId : string, orderData : any) {
+  static update_Order(orderId: string, orderData: any) {
+    const data = cleanQuery(orderData, ['orderStatus', 'price', 'waiterId', 'kitchenStaffId']);
   return runQuery(
-      knex => knex(this.TB_order).update(orderData).where({orderId})
+      knex => knex(this.TB_order).update(data).where({orderId})
   )
   }
 

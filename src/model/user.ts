@@ -1,6 +1,7 @@
 import {runQuery, runTrx, TransactionBuilder} from "../utils/dbMan";
 import {MError} from "../utils/dbMan/merror";
 import {UserAccount, Customer, Staff} from "./types";
+import { cleanQuery } from './../utils/dbMan/resolver';
 
 /**
  * Transaction Pieces
@@ -55,13 +56,36 @@ export abstract class UserModel {
      * Update
      * TODO: update functions not set
      */
-    static update_UserDetails(userId: string, data: any) {
-        return runQuery(
-            knex => knex(this.TB_userAccount).update(data).where({userId})
-        )
-    }
+    static update_StaffAccount(filter: any, accountD: any, staffD: any) {
+        const filterData = cleanQuery(filter);
+        const accountData = cleanQuery(accountD);
+        const staffData = cleanQuery(staffD);
+        return runTrx(async trx => {
+            if (Object.keys(accountData).length != 0) { 
+                await trx(this.TB_userAccount).update(accountData).where({userId :filterData['userId']});
+            }
+            if (Object.keys(staffData).length != 0) {
+                await trx(this.TB_staff).update(staffData).where(filterData);
+            }
+                return trx(this.TB_staff);
+        });
+    };
 
-    static update_LocalAccount(userId: string, data: any) {
+    static update_CustomerAccount(userId: string, accountD: any, customerD: any) {
+        const accountData = cleanQuery(accountD);
+        const customerData = cleanQuery(customerD);
+        return runTrx(async trx =>  {
+            if (Object.keys(accountData).length != 0) {
+                await trx(this.TB_userAccount).update(accountData).where({userId});
+            }
+            if (Object.keys(customerData).length != 0) {
+                await trx(this.TB_customer).update(customerData).where({ userId });
+            }
+                return trx(this.TB_customer);
+        });
+    };
+
+    static update_UserAccount(userId: string, data: any) {
         return runQuery(
             knex => knex(this.TB_userAccount).update(data).where({userId})
         )
