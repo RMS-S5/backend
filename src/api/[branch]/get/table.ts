@@ -48,6 +48,22 @@ const getBranchTables: Handler = async (req, res) => {
         .send();
 };
 
+const getBranches: Handler = async (req, res) => {
+    const {r} = res;
+
+    const [error, branchData] = await model.branch.get_Branches();
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(branchData)
+        .message("Success")
+        .send();
+};
+
 
 /**
  * Export Handler
@@ -55,5 +71,6 @@ const getBranchTables: Handler = async (req, res) => {
 const getTableHandler = {
     getTableByVerificationCode : [verificationCodeInspector, <EHandler> getTableByVerificationCode],
     getBranchTables : [ <EHandler> getBranchTables],
+    getBranches : [ <EHandler> getBranches],
 }
 export default getTableHandler;

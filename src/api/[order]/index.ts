@@ -25,8 +25,9 @@ rOrder.post('/add-order',auth.authOrNoAuth, addOrder);
 rOrder.get('/active-orders',auth.staffMember, getOrdersHandler.getActiveOrders);
 // rOrder.get('/served-orders',auth.waiter, getOrdersHandler.getAllServedOrders);
 rOrder.get('/table-order', getOrdersHandler.getTableOrder);
-rOrder.get('/:orderId', auth.staffMember,getOrdersHandler.getOrderById);
-rOrder.get('/orders-monthly-completed',getOrdersHandler.getMonthlyCompletedOrders);
+rOrder.get('/orders-monthly-completed', getOrdersHandler.getMonthlyCompletedOrders);
+rOrder.get('/get-order/:orderId', auth.staffMember,getOrdersHandler.getOrderById);
+
 
 
 export default rOrder
