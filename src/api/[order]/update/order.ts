@@ -41,6 +41,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         data: {
           orderStatus: orderStatus,
+          type : "staff"
         },
         topic: "order-waiter",
       };
@@ -53,6 +54,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         data: {
           orderStatus: orderStatus,
+          type : "staff"
         },
         topic: "order-kitchen-staff",
       };
@@ -65,6 +67,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         data: {
           orderStatus: orderStatus,
+          type : "staff"
         },
         condition:
           "'order-kitchen-staff' in topics || 'order-waiter' in topics",
@@ -81,6 +84,7 @@ const updateOrder: Handler = async (req, res) => {
     },
     data: {
       orderStatus: orderStatus,
+      type : "customer"
     },
     topic: "order-customer",
   };
