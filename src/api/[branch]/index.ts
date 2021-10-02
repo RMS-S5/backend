@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import auth from "../../utils/auth";
 
 import getTableHandler from "./get/table";
@@ -31,4 +31,3 @@ rBranch.put('/remove-branch/:branchId', removeBranch);
 rBranch.put('/remove-table/:tableNumber', removeTable);
 
 export default rBranch;
-
