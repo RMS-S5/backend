@@ -1,9 +1,12 @@
-import {Router} from "express";
+import { Router } from "express";
 import auth from "../../utils/auth"
 
 import userLogin from "./login/users"
 import registerCustomer from "./register/register_customer";
+import registerStaffMember from "./register/register_staff_member";
 import get_details from "./get_details";
+import getStaffMembers from "./get/staff_members";
+import getAccountTypes from "./get/account_types"
 import updateUser from "./update/details";
 import updatePassword from "./update/password";
 import deleteStaffMember from "./update/delete_staff_member";
@@ -16,12 +19,19 @@ rUser.get('/details', auth.any, get_details)
  * Login
  */
 //All the relevant details are sent when login no need to fetch details again
-rUser.post('/login/user', userLogin); 
+rUser.post('/login/user', userLogin);
 
 /**
  * Register
  */
 rUser.post("/register/customer", registerCustomer)
+rUser.post("/register/staff-member", registerStaffMember)
+
+/**
+ * Getters
+ */
+ rUser.get("/staff-members", getStaffMembers)
+ rUser.get("/account-types", getAccountTypes)
 
 /**
  * Update

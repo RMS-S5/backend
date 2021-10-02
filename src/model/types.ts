@@ -81,6 +81,10 @@ export interface Table {
     active?: boolean
 }
 
+export interface Branch {
+    branchName: string,
+}
+
 /**
  * Room Model
  */
