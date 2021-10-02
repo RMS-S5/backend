@@ -94,6 +94,10 @@ export abstract class OrderModel {
         .where('placedTime', '<', monthEnd));
   }
 
+  static get_Orders(): Promise<[MError, any[]]> {
+    return runQuery<any[]>((knex) => knex(this.VIEW_ordersWithNames));
+  }
+
 
 
 

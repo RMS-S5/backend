@@ -9,6 +9,8 @@ import rCart from "./[cart]";
 import rOrder from "./[order]";
 import rBranch from "./[branch]";
 import rRoom from "./[rooms]";
+import rCustomerReport from "./[customer_reports]";
+import rBooking from "./[booking]";
 
 export const rApi = Router();
 
@@ -26,6 +28,8 @@ rApi.use("/order", rOrder);
 rApi.use("/branch", rBranch);
 rApi.use("/meta", rMeta);
 rApi.use("/room", rRoom);
+rApi.use("/customer-report", rCustomerReport);
+rApi.use("/booking", rBooking);
 
 // Router
 export default rApi

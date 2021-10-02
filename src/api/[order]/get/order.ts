@@ -98,9 +98,24 @@ const getMonthlyCompletedOrders: Handler = async (req, res) => {
     const {r} = res;
 
     let branchId = "";//req.user?.branchId; //todo:if manager dont filter else filter by branchId
-    console.log("##################################")
 
     const [error, ordersData] = await model.order.get_MonthlyCompletedOrders({branchId : branchId, orderStatus: "Served"});
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(ordersData)
+        .message("Success")
+        .send();
+};
+
+const getAllOrders: Handler = async (req, res) => {
+    const {r} = res;
+
+    const [error, ordersData] = await model.order.get_Orders();
 
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
@@ -123,5 +138,6 @@ const getOrdersHandler = {
     getOrderById : [ <EHandler>getOrderById],
     getTableOrder : [tableOrderInspector,  <EHandler>getTableOrder],
     getMonthlyCompletedOrders : [<EHandler>getMonthlyCompletedOrders],
+    getAllOrders : [<EHandler>getAllOrders],
 }
 export default getOrdersHandler;
