@@ -35,6 +35,7 @@ export abstract class BookingModel {
             "booking.arrival",
             "booking.departure",
             "booking.amount",
+            "booking.status",
             "booked_room.roomNumber",
             "branch.branch_name"
           )
@@ -51,6 +52,32 @@ export abstract class BookingModel {
       { required: true }
     );
   }
+  static getBookingsforRE(): Promise<[MError, Booking]> {
+    return runQuery<Booking>((knex) =>
+      knex
+        .select(
+          "booking.bookingId",
+          "booking.arrival",
+          "booking.departure",
+          "booking.amount",
+          "booking.status",
+          "booked_room.roomNumber",
+          "branch.branch_name"
+        )
+        .from(this.TB_booking)
+        .leftOuterJoin(
+          "booked_room",
+          "booking.booking_id",
+          "booked_room.booking_id"
+        )
+        .leftOuterJoin("branch", "booked_room.branch_id", "branch.branch_id")
+        .where("booking.status", "Accepted")
+        .orWhere("booking.status", "Lodged")
+        // .groupBy("booking.booking_id", "booked_room.booking_idf")
+        .select()
+    );
+  }
+
   static allAvailableRoomsByBranch(
     branchId: string
   ): Promise<[MError, Booking]> {
@@ -97,6 +124,18 @@ export abstract class BookingModel {
     });
   }
 
+  static updateBookingStatus(
+    bookingId: string,
+    Updatedstatus: string
+  ): Promise<[MError, Booking]> {
+    return runQuery<Booking>(
+      (knex) =>
+        knex(this.TB_booking)
+          .where({ bookingId })
+          .update("status", Updatedstatus),
+      { required: true }
+    );
+  }
   // static get_Cart(query : any): Promise<[MError,Cart]> {
   //     const q = cleanQuery(query, ['cartId', 'customerId'])
   //     return runQuery<Cart>(
