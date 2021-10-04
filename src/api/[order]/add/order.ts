@@ -27,18 +27,21 @@ const inspector = inspectBuilder(
     .withMessage("Branch Id should not be empty."),
   body("cartItems")
     .exists({ checkNull: true })
-    .withMessage("Cart Items are required")
+    .withMessage("Cart Items are required"),
+    body("fcmToken")
+    .optional()
 );
 
 const addOrder: Handler = async (req, res) => {
   const { r } = res;
   const orderId = UUID();
-  const { totalAmount, tableNumber, branchId, cartItems } = req.body;
+  const { totalAmount, tableNumber, branchId, cartItems, fcmToken } = req.body;
   let orderData = {
     orderId,
     totalAmount,
     tableNumber,
     branchId,
+    fcmToken,
     placedTime: new Date(),
     orderStatus: model.order.orderStatus.placed,
   };

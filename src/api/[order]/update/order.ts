@@ -14,13 +14,14 @@ const inspector = inspectBuilder(
     .optional()
     .isNumeric()
     .withMessage("Total amount should be a number"),
-  body("orderStatus").optional()
+  body("orderStatus").optional(),
+  body("fcmToken").optional()
 );
 
 const updateOrder: Handler = async (req, res) => {
   const { r } = res;
   const orderId = req.params.orderId;
-  const { price, orderStatus } = req.body;
+  const { price, orderStatus , fcmToken} = req.body;
   var tempData = { price, orderStatus };
   var orderData;
   if (req.user.accountType == model.user.accountTypes.waiter) {
@@ -56,6 +57,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         topic: "order-kitchen-staff",
       };
+      
       break;
     case model.order.orderStatus.waiterAssigned:
       message = {
@@ -67,6 +69,7 @@ const updateOrder: Handler = async (req, res) => {
           orderStatus: orderStatus,
           type: "staff",
         },
+        // topic: "order-kitchen-staff",
         condition:
           "'order-kitchen-staff' in topics || 'order-waiter' in topics",
       };
@@ -74,7 +77,6 @@ const updateOrder: Handler = async (req, res) => {
     default:
       break;
   }
-
   const message_customer = {
     notification: {
       title: "Update about your order",
@@ -84,7 +86,7 @@ const updateOrder: Handler = async (req, res) => {
       orderStatus: orderStatus,
       type: "customer",
     },
-    topic: "order-customer",
+    token: fcmToken,
   };
 
   try {
@@ -93,7 +95,7 @@ const updateOrder: Handler = async (req, res) => {
       await FireBaseService.sendMessageToTopics(fireBaseAdmin, message);
     }
     if (Object.keys(message_customer).length != 0) {
-      await FireBaseService.sendMessageToTopics(
+      await FireBaseService.sendMessageToSingleDevice(
         fireBaseAdmin,
         message_customer
       );

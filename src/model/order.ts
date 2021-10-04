@@ -22,7 +22,6 @@ export abstract class OrderModel {
    * Creators
    */
   static add_Order(orderId: string, orderData: any, cartItems: any) {
-    console.log(cartItems);
     return runTrx(async trx =>  {
       await trx(this.TB_order).insert(orderData);
       return trx.raw(`call set_order_items(?,?)`, [orderId, cartItems])
@@ -64,8 +63,6 @@ export abstract class OrderModel {
   //       knex.raw(`select * from latest_table_order(?, ?)`, [tableNumber, branchId]));
   // }
   static get_TableOrder(tableNumber : any, branchId : any): Promise<[MError, any]> {
-    // const q = cleanQuery(query, ["tableNumber, branchId"])
-    console.log(parseInt(tableNumber), branchId);
     return runTrx<any>(
       (trx) =>
         trx.raw(`select * from latest_table_order(?, ?)`, [parseInt(tableNumber), branchId]),
