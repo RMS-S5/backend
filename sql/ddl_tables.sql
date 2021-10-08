@@ -257,6 +257,7 @@ CREATE TABLE "order"(
 	table_number INTEGER,
 	branch_id UUID,
 	order_status VARCHAR(100),
+	fcm_token VARCHAR(150),
 	placed_time TIMESTAMP,
 	waiter_id UUID,
 	kitchen_staff_id UUID,
@@ -321,8 +322,7 @@ create or replace view orders_with_names as select
 -- Room
 CREATE TABLE "room_type"(
 	room_type VARCHAR(100) PRIMARY KEY,
-	"description" VARCHAR(250),
-	active BOOLEAN default true
+	"description" VARCHAR(250)
 );
 
 CREATE TABLE "room"(
@@ -443,7 +443,8 @@ begin
 		"orders_with_cart_items"."active" as "active",
 		"cart_items" as "cartItems" 
 	 from "orders_with_cart_items"
-	where "orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
+	where "order_status" != 'Closed' and
+	"orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
 	where "order"."table_number" = _tn and "order"."branch_id" = _bn);
 end;$$
 
