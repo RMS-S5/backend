@@ -69,7 +69,7 @@ export abstract class OrderModel {
       );
   }
 
-  static get_OrderByOrderId(orderId : string): Promise<[MError, any[]]> {
+  static get_OrderByOrderId(orderId : string): Promise<[MError, any]> {
     return runQuery<any[]>((knex) =>
         knex(this.VIEW_orderWithCartItems)
             .where({orderId}), {single : true, required : true});

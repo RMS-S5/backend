@@ -77,24 +77,31 @@ const updateOrder: Handler = async (req, res) => {
     default:
       break;
   }
-  const message_customer = {
-    notification: {
-      title: "Update about your order",
-      body: `Your order status is ${orderStatus}`,
-    },
-    data: {
-      orderStatus: orderStatus,
-      type: "customer",
-    },
-    token: fcmToken,
-  };
+  
+  
+  
 
   try {
     const fireBaseAdmin = FireBaseService.getInstance();
     if (Object.keys(message).length != 0) {
       await FireBaseService.sendMessageToTopics(fireBaseAdmin, message);
     }
-    if (Object.keys(message_customer).length != 0) {
+    const [err, res] = await model.order.get_OrderByOrderId(orderId);
+    const fcmToken: any = res?.fcmToken;
+
+    if (fcmToken != null) {
+      const message_customer = {
+        notification: {
+          title: "Update about your order",
+          body: `Your order status is ${orderStatus}`,
+        },
+        data: {
+          orderStatus: orderStatus,
+          type: "customer",
+        },
+        token: fcmToken,
+      };
+      
       await FireBaseService.sendMessageToSingleDevice(
         fireBaseAdmin,
         message_customer
@@ -102,6 +109,9 @@ const updateOrder: Handler = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    r.status.ERROR()
+      .message("Notification sending error")
+      .send();
     return;
   }
 
