@@ -78,8 +78,15 @@ const updateOrder: Handler = async (req, res) => {
       break;
   }
   
-  
-  
+
+  const [error, response] = await model.order.update_Order(orderId, orderData);
+  if (error.code == MErr.NOT_FOUND) {
+    r.status.NOT_FOUND().message("Not found").send();
+    return;
+  } else if (error.code !== MErr.NO_ERROR) {
+    r.pb.ISE();
+    return;
+  }
 
   try {
     const fireBaseAdmin = FireBaseService.getInstance();
@@ -112,15 +119,6 @@ const updateOrder: Handler = async (req, res) => {
     r.status.ERROR()
       .message("Notification sending error")
       .send();
-    return;
-  }
-
-  const [error, response] = await model.order.update_Order(orderId, orderData);
-  if (error.code == MErr.NOT_FOUND) {
-    r.status.NOT_FOUND().message("Not found").send();
-    return;
-  } else if (error.code !== MErr.NO_ERROR) {
-    r.pb.ISE();
     return;
   }
 

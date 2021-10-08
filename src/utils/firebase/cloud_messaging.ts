@@ -1,5 +1,6 @@
 
-var serviceAccount = require("../../../google-credentials.json");
+require("dotenv").config();
+var serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS || "../../../google-credentials.json");
 
 export default abstract class FireBaseService {
   private static  _admin = require("firebase-admin");
