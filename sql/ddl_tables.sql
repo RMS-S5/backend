@@ -8,14 +8,12 @@ drop procedure if exists set_food_variants ;
 drop function if exists latest_table_order;
 
 -- Drop existing tables
-drop view if exists "bookings_with_names_and_amount";
 DROP TABLE IF EXISTS "booked_room";
 DROP TABLE IF EXISTS "booking";
 
 DROP TABLE IF EXISTS "room";
 DROP TABLE IF EXISTS "room_type";
 
-drop view if exists "orders_with_names";
 drop view if exists "orders_with_cart_items";
 DROP TABLE IF EXISTS "order_food_item";
 DROP TABLE IF EXISTS "order";
@@ -30,7 +28,6 @@ DROP TABLE IF EXISTS "food_variant";
 DROP TABLE IF EXISTS "food_item";
 DROP TABLE IF EXISTS "category";
 
-drop view if exists "staff_full_data";
 drop view if exists "user_full_data";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "staff_role";
@@ -153,18 +150,6 @@ from user_account
 	left join branch 
 	on "staff".branch_id= "branch".branch_id;
 
-create or replace view staff_full_data as select
-	"user_account".*,
-	staff.branch_id,
-	staff.nic,
-	staff.birthday,
-	branch.branch_name 
-from user_account
-	inner join staff
-	on  user_account.user_id = staff.user_id
-	left join branch 
-	on "staff".branch_id= "branch".branch_id;
-
 -- Food item
 CREATE TABLE "category"(
 	category_id UUID PRIMARY KEY,
@@ -257,7 +242,7 @@ CREATE TABLE "order"(
 	table_number INTEGER,
 	branch_id UUID,
 	order_status VARCHAR(100),
-	fcm_token VARCHAR(150),
+	fcm_token VARCHAR(250),
 	placed_time TIMESTAMP,
 	waiter_id UUID,
 	kitchen_staff_id UUID,
@@ -278,6 +263,7 @@ CREATE TABLE "order_food_item"(
 	CONSTRAINT fk_ofi_cart_item_id_constraint FOREIGN KEY (cart_item_id) REFERENCES "cart_item"("cart_item_id") ON UPDATE CASCADE
 );
 
+drop view orders_with_cart_items;
 --view orders with cart items
 create or replace view orders_with_cart_items as select
 	"order".*,
@@ -300,24 +286,6 @@ create or replace view orders_with_cart_items as select
 	left join cart_items_detailed
 		on "order_food_item".cart_item_id = cart_items_detailed.cart_item_id
 	group by "order".order_id ;
-
---view orders with customer, waiter, kitchen staff, branch name
-create or replace view orders_with_names as select
-	"o".*,
-	concat("cu".first_name, ' ', "cu".last_name) AS customer_name,
-	concat("wu".first_name, ' ', "wu".last_name) AS waiter_name,
-	concat("ku".first_name, ' ', "ku".last_name) AS kitchen_staff_name,
-	"b".branch_name AS branch_name
-	from "order" "o"
-	left join "user_account" "cu"
-		on "o".customer_id  = "cu".user_id
-	left join "user_account" "wu"
-		on "o".waiter_id  = "wu".user_id
-	left join "user_account" "ku"
-		on "o".kitchen_staff_id  = "ku".user_id
-	left join "branch" "b"
-		on "o".branch_id  = "b".branch_id;
-	
 
 -- Room
 CREATE TABLE "room_type"(
@@ -359,20 +327,6 @@ CREATE TABLE "booked_room"(
 	CONSTRAINT fk_br_rn_bi_constraint FOREIGN KEY (room_number, branch_id) REFERENCES "room"("room_number", "branch_id") ON UPDATE CASCADE
 );
 
---view bookings with customer name and total amount
-create or replace view bookings_with_names_and_amount as select
-	"b".*,
-	concat("cu".first_name, ' ', "cu".last_name) AS customer_name,
-	sum("r".price) AS total_amount,
-	"br".branch_id AS branch_id
-	from "booking" "b"
-	left join "user_account" "cu"
-		on "b".customer_id  = "cu".user_id
-	left join "booked_room" "br"
-		on "b".booking_id  = "br".booking_id
-	left join "room" "r"
-		on "br".room_number  = "r".room_number and "br".branch_id  = "r".branch_id
-	group by "b".booking_id,"cu".user_id,"br".branch_id  ;
 
 --Insert food variants
 create or replace PROCEDURE set_food_variants(f_id uuid, food_variants JSON)
