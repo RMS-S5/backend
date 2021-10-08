@@ -44,7 +44,9 @@ const parsePayload: Handler = (req, res, next) => {
             .send();
         return;
     } else if (error === "ERROR") {
-        next();
+        r.status.UN_AUTH()
+            .message("Authentication token is invalid")
+            .send();
         return;
     }
 
@@ -52,32 +54,30 @@ const parsePayload: Handler = (req, res, next) => {
     next();
 };
 
-// const parsePayloadFromBothAuthorNotAuth: Handler = (req, res, next) => {
-//     const {r} = res;
+const parsePayloadFromBothAuthorNotAuth: Handler = (req, res, next) => {
+    const {r} = res;
 
-//     if (req.headers["authorization"] == null || req.headers["authorization"] == "") {
-//         next();
-//         return;
-//     }
-//     const token = req.headers["authorization"] || '';
+    if (req.headers["authorization"] == null || req.headers["authorization"] == "") {
+        next();
+        return;
+    }
+    const token = req.headers["authorization"] || '';
     
-//     const [error, payload] = TokenMan.verifyAccessToken(token);
-//     if (error === "EXPIRED") {
-//         r.status.UN_AUTH()
-//             .data({expired: true})
-//             .message("Authentication token is expired")
-//             .send();
-//         return;
-//     } else if (error === "ERROR") {
-//         r.status.UN_AUTH()
-//             .message("Authentication token is invalid")
-//             .send();
-//         return;
-//     }
+    const [error, payload] = TokenMan.verifyAccessToken(token);
+    if (error === "EXPIRED") {
+        r.status.UN_AUTH()
+            .data({expired: true})
+            .message("Authentication token is expired")
+            .send();
+        return;
+    } else if (error === "ERROR") {
+        next();
+        return;
+    }
 
-//     req.user = payload;
-//     next();
-// };
+    req.user = payload;
+    next();
+};
 
 
 /**
@@ -109,7 +109,7 @@ const staffMembers = [model.user.accountTypes.kitchenStaff, model.user.accountTy
 const ip = [inspectAuthHeader, <EHandler>parsePayload]
 export default {
     any: [...ip],
-    authOrNoAuth :[inspectAuthHeaderAuthorNotAuth, <EHandler>parsePayload],
+    authOrNoAuth :[inspectAuthHeaderAuthorNotAuth, <EHandler>parsePayloadFromBothAuthorNotAuth],
     manager:[...ip, <EHandler>filter(model.user.accountTypes.manager)],
     branchManager:[...ip, <EHandler>filter(model.user.accountTypes.branchManager)],
     customer:[...ip, <EHandler>filter(model.user.accountTypes.customer)],

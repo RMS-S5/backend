@@ -33,8 +33,7 @@ const getTableByVerificationCode: Handler = async (req, res) => {
 
 const getBranchTables: Handler = async (req, res) => {
     const {r} = res;
-    const { branchId } = req.user;
-
+    let branchId = "3bd28d6b-0d76-450e-8d40-2f6eed0a07d7"; //req.user.branchId //todo:remove hardcoded value, validate
     const [error, tableData] = await model.branch.get_Tables({branchId});
 
     if (error.code !== MErr.NO_ERROR) {
@@ -48,6 +47,22 @@ const getBranchTables: Handler = async (req, res) => {
         .send();
 };
 
+const getBranches: Handler = async (req, res) => {
+    const {r} = res;
+
+    const [error, branchData] = await model.branch.get_Branches();
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(branchData)
+        .message("Success")
+        .send();
+};
+
 
 /**
  * Export Handler
@@ -55,5 +70,6 @@ const getBranchTables: Handler = async (req, res) => {
 const getTableHandler = {
     getTableByVerificationCode : [verificationCodeInspector, <EHandler> getTableByVerificationCode],
     getBranchTables : [ <EHandler> getBranchTables],
+    getBranches : [ <EHandler> getBranches],
 }
 export default getTableHandler;
