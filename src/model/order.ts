@@ -57,12 +57,6 @@ export abstract class OrderModel {
     return runQuery<any[]>((knex) => knex(this.VIEW_orderWithCartItems).where(q));
   }
 
-  // static get_TableOrder(tableNumber : number, branchId : string): Promise<[MError, any]> {
-  //   // const q = cleanQuery(query, ["tableNumber, branchId"])
-  //   return runQuery<any>(
-  //     (knex) =>
-  //       knex.raw(`select * from latest_table_order(?, ?)`, [tableNumber, branchId]));
-  // }
   static get_TableOrder(tableNumber : any, branchId : any): Promise<[MError, any]> {
     return runTrx<any>(
       (trx) =>
@@ -70,7 +64,7 @@ export abstract class OrderModel {
     );
   }
 
-  static get_OrderByOrderId(orderId: string): Promise<[MError, any[]]> {
+  static get_OrderByOrderId(orderId : string): Promise<[MError, any]> {
     return runQuery<any[]>((knex) =>
       knex(this.VIEW_orderWithCartItems)
         .where({ orderId }), { single: true, required: true });
