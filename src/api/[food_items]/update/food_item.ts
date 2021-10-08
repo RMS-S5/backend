@@ -33,6 +33,7 @@ const updateFoodItem: Handler = async (req, res) => {
         data = temp;
     }
 
+    console.log("JSON.stringify(foodVariants) update:", JSON.stringify(foodVariants))
     const [error, response] =
         await model.foodItem.update_FoodItem(foodItemId, data, JSON.stringify(foodVariants));
     if (error.code == MErr.NOT_FOUND) {
