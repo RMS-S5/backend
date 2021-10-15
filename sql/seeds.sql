@@ -33,6 +33,7 @@ insert into order_status values
 	('Waiter Assigned'),
 	('Rejected'),
 	('Served'),
+	('Paid')
 	('Closed');
 
 

@@ -263,7 +263,6 @@ CREATE TABLE "order_food_item"(
 	CONSTRAINT fk_ofi_cart_item_id_constraint FOREIGN KEY (cart_item_id) REFERENCES "cart_item"("cart_item_id") ON UPDATE CASCADE
 );
 
-drop view orders_with_cart_items;
 --view orders with cart items
 create or replace view orders_with_cart_items as select
 	"order".*,
@@ -357,6 +356,21 @@ AS $pn$
 		loop
 			insert into order_food_item values(o_id, _order_item);
 			update cart_item set active = false where cart_item_id = _order_item;
+		END loop ;
+	END ;
+$pn$;
+
+
+--change order status of multiple orders
+create or replace PROCEDURE set_order_status(order_s varchar, order_ids JSON)
+LANGUAGE plpgsql
+AS $pn$
+	DECLARE
+		_order_id uuid; 
+	begin
+		FOR _order_id IN SELECT * FROM (SELECT json_array_elements_text(order_ids)) ci
+		loop
+			update "order" set "order_status" = order_s where order_id = _order_id;
 		END loop ;
 	END ;
 $pn$;

@@ -3,6 +3,7 @@ import model, { MErr } from "../../../model";
 import { v4 as UUID } from "uuid";
 import { body, inspectBuilder, param } from "../../../utils/inspect";
 import FireBaseService from "../../../utils/firebase/cloud_messaging";
+import { MErrorCode } from "../../../utils/dbMan/merror";
 
 /**
  * Validate Request
@@ -18,10 +19,15 @@ const inspector = inspectBuilder(
   body("fcmToken").optional()
 );
 
+const orderStatusInspector = inspectBuilder(
+  body("orderStatus").exists().withMessage("Order status is required"),
+  body("orderIds").exists().withMessage("Order ids are required")
+);
+
 const updateOrder: Handler = async (req, res) => {
   const { r } = res;
   const orderId = req.params.orderId;
-  const { price, orderStatus , fcmToken} = req.body;
+  const { price, orderStatus, fcmToken } = req.body;
   var tempData = { price, orderStatus };
   var orderData;
   if (req.user.accountType == model.user.accountTypes.waiter) {
@@ -57,7 +63,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         topic: "order-kitchen-staff",
       };
-      
+
       break;
     case model.order.orderStatus.waiterAssigned:
       message = {
@@ -77,7 +83,6 @@ const updateOrder: Handler = async (req, res) => {
     default:
       break;
   }
-  
 
   const [error, response] = await model.order.update_Order(orderId, orderData);
   if (error.code == MErr.NOT_FOUND) {
@@ -108,7 +113,7 @@ const updateOrder: Handler = async (req, res) => {
         },
         token: fcmToken,
       };
-      
+
       await FireBaseService.sendMessageToSingleDevice(
         fireBaseAdmin,
         message_customer
@@ -116,13 +121,31 @@ const updateOrder: Handler = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    r.status.ERROR()
-      .message("Notification sending error")
-      .send();
+    r.status.ERROR().message("Notification sending error").send();
     return;
   }
 
   r.status.OK().message("Success").send();
 };
 
-export default [inspector, <EHandler>updateOrder];
+const updateOrdersStatus: Handler = async (req, res) => {
+  const { r } = res;
+  const { orderStatus, orderIds } = req.body;
+
+  const [error, response] = await model.order.update_OrdersStatus(
+    orderStatus,
+    orderIds
+  );
+  if (error.code == MErr.NO_ERROR) {
+    r.status.OK().message("Success").send();
+    return;
+  } else {
+    r.pb.ISE();
+  }
+};
+
+const updateOrderData = {
+  order: [inspector, <EHandler>updateOrder],
+  ordersStatus: [orderStatusInspector, <EHandler>updateOrdersStatus],
+};
+export default updateOrderData;
