@@ -3,6 +3,7 @@
 -- ###############################################
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --drop 
+drop procedure if exists set_order_status;
 drop procedure if exists set_order_items ;
 drop procedure if exists set_food_variants ;
 drop function if exists latest_table_order;
