@@ -20,7 +20,7 @@ const rBranch = Router();
  * Getters
  */
 rBranch.get("/table-by-verification/:verificationCode", getTableHandler.getTableByVerificationCode)
-rBranch.get("/branch-tables", getTableHandler.getBranchTables)
+rBranch.get("/branch-tables", auth.staffMember, getTableHandler.getBranchTables)
 rBranch.get("/branches", getTableHandler.getBranches)
 
 
