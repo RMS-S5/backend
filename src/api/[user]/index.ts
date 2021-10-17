@@ -10,6 +10,7 @@ import getAccountTypes from "./get/account_types"
 import updateUser from "./update/details";
 import updatePassword from "./update/password";
 import deleteStaffMember from "./update/delete_staff_member";
+import reset_password from './update/reset_password';
 
 const rUser = Router();
 
@@ -49,4 +50,12 @@ rUser.put('/update-password/:userId', auth.any, updatePassword.updatePasswordByU
 // Manager -> All staff members (Remove branch id if exists for manager in database)
 rUser.delete('/remove-staff/:userId', auth.management, deleteStaffMember);
 
+/**
+ * Reset password
+ */
+rUser.put('/request-reset-password', reset_password.sendResetPasswordEmail);
+rUser.get('/reset-password/:userId', reset_password.resetPassword);
+
 export default rUser
+
+
