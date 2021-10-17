@@ -87,13 +87,13 @@ const resetPassword: Handler = async (req, res, next) => {
     You can reset the password using this password.`;
 
        try {
-      await sendEmail(emailAddress, "Reset password!", "",message);
+      // await sendEmail(emailAddress, "Reset password!", "",message);
     } catch (error) {
       r.status.ERROR().message("Email sending error").send();
       return;
       console.log(error);
     }
-    res.render('reset_password.html');
+    res.render('reset_password');
     return;
   } else {
     r.pb.ISE();
