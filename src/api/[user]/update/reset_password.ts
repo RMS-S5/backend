@@ -93,7 +93,7 @@ const resetPassword: Handler = async (req, res, next) => {
       return;
       console.log(error);
     }
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '../../../../views/reset_password.html');
     return;
   } else {
     r.pb.ISE();
