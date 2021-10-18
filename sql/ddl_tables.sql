@@ -158,6 +158,7 @@ create or replace view staff_full_data as select
 	staff.branch_id,
 	staff.nic,
 	staff.birthday,
+	staff.status,
 	branch.branch_name 
 from user_account
 	inner join staff

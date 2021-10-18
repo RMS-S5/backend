@@ -13,21 +13,21 @@ const rBranch = Router();
 /**
  * Post
  */
- rBranch.post('/add-branch', addBranch);
- rBranch.post('/add-table', addTable);
+ rBranch.post('/add-branch', auth.manager, addBranch);
+ rBranch.post('/add-table', auth.branchManager, addTable);
 
 /**
  * Getters
  */
 rBranch.get("/table-by-verification/:verificationCode", getTableHandler.getTableByVerificationCode)
-rBranch.get("/branch-tables", getTableHandler.getBranchTables)
-rBranch.get("/branches", getTableHandler.getBranches)
+rBranch.get("/branch-tables", auth.branchManager, getTableHandler.getBranchTables)
+rBranch.get("/branches", auth.management, getTableHandler.getBranches)
 
 
 /**
 * Delete
 */
-rBranch.put('/remove-branch/:branchId', removeBranch);
-rBranch.put('/remove-table/:tableNumber', removeTable);
+rBranch.put('/remove-branch/:branchId', auth.manager, removeBranch);
+rBranch.put('/remove-table/:tableNumber', auth.branchManager, removeTable);
 
 export default rBranch;

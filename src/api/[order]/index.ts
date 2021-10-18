@@ -22,11 +22,11 @@ rOrder.put('/order/:orderId', auth.staffMember, updateOrder);
 /**
  * Getters
  */
-rOrder.get('/orders', getOrdersHandler.getAllOrders);
+rOrder.get('/orders', auth.management, getOrdersHandler.getAllOrders);
 rOrder.get('/active-orders', auth.staffMember, getOrdersHandler.getActiveOrders);
 // rOrder.get('/served-orders',auth.waiter, getOrdersHandler.getAllServedOrders);
 rOrder.get('/table-order', getOrdersHandler.getTableOrder);
-rOrder.get('/orders-monthly-completed', getOrdersHandler.getMonthlyCompletedOrders);
+rOrder.get('/orders-monthly-completed', auth.management, getOrdersHandler.getMonthlyCompletedOrders);
 rOrder.get('/get-order/:orderId', auth.staffMember, getOrdersHandler.getOrderById);
 
 

@@ -19,7 +19,7 @@ import {body, inspectBuilder} from "../../../utils/inspect";
 const addRoom: Handler = async (req, res) => {
     const { r } = res;
 
-    let branchId = "3d1ea012-8882-4460-a675-d1111d2bcac0"; //req.user.branchId //todo:remove hardcoded value, validate
+    let branchId = req.user.branchId?req.user.branchId:"";
     //console.log(req.body);
     const roomData = {
         roomNumber: req.body.roomNumber,

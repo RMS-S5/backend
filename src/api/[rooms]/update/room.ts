@@ -19,7 +19,7 @@ const updateRoom: Handler = async (req, res) => {
     const { r } = res;
     const { roomNumber } = req.params;
 
-    let branchId = "3d1ea012-8882-4460-a675-d1111d2bcac0"; //req.user.branchId //todo:remove hardcoded value, validate
+    let branchId = req.user.branchId?req.user.branchId:"";
 
     const roomData = {
         capacity: req.body.capacity,

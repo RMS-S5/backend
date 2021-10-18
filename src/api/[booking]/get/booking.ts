@@ -8,9 +8,16 @@ import {inspectBuilder,query} from "../../../utils/inspect";
 const getMonthlyCompletedBookings: Handler = async (req, res) => {
     const {r} = res;
 
-    let branchId = "";//req.user?.branchId; //todo:if manager dont filter else filter by branchId
 
-    const [error, bookingsData] = await model.booking.get_MonthlyCompletedBookings({branchId : branchId, status: "Completed"});
+    let query = {}
+    if (req.user.accountType === model.user.accountTypes.branchManager) {
+        query = {...query, branchId: req.user.branchId, status: "Completed"}
+    }
+    else{
+        query = {...query, status: "Completed"}
+    }
+
+    const [error, bookingsData] = await model.booking.get_MonthlyCompletedBookings(query);
 
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();

@@ -34,7 +34,7 @@ export abstract class BookingModel {
    */
 
   static get_MonthlyCompletedBookings(query: any): Promise<[MError, any[]]> {
-    const q = cleanQuery(query, ["orderStatus, branchId"]);
+    const q = cleanQuery(query, ["status, branchId"]); //todo:debug clean query
     let today = new Date();
     let thisYear = today.getFullYear();
     let thisMonth = today.getMonth();
@@ -43,7 +43,7 @@ export abstract class BookingModel {
     let monthEnd = new Date(thisYear, thisMonth + 1, 0, 23, 59, 59);
     return runQuery<any[]>((knex) =>
       knex(this.VIEW_bookingsWithNamesAndAmount)
-        .where(q)
+        .where(query)
         .where('placedTime', '>=', monthStart)
         .where('placedTime', '<', monthEnd));
   }

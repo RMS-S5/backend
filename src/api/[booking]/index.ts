@@ -11,15 +11,15 @@ const rBooking = Router();
 /**
  * Update
  */
-rBooking.put('/accept-booking/:bookingId', updateOrdersHandler.acceptBooking);
-rBooking.put('/reject-booking/:bookingId', updateOrdersHandler.rejectBooking);
+rBooking.put('/accept-booking/:bookingId', auth.branchManager, updateOrdersHandler.acceptBooking);
+rBooking.put('/reject-booking/:bookingId', auth.branchManager, updateOrdersHandler.rejectBooking);
 
 
 /**
  * Getters
  */
-rBooking.get('/bookings', getBookingsHandler.getAllBookings);
-rBooking.get('/bookings-monthly-completed', getBookingsHandler.getMonthlyCompletedBookings);
+rBooking.get('/bookings', auth.branchManager, getBookingsHandler.getAllBookings);
+rBooking.get('/bookings-monthly-completed', auth.management, getBookingsHandler.getMonthlyCompletedBookings);
 
 
 

@@ -80,7 +80,7 @@ const updateUserProfile: Handler = async (req, res) => {
          userId,
          branchId : req.user?.branchId
      }
-
+     console.log(req.body)
     // Sync model to database
     const [{ code }] = await model.user.update_StaffAccount(filter, userData, staffData);
 

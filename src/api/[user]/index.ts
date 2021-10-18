@@ -31,14 +31,14 @@ rUser.post('/login/user', userLogin);
 /**
  * Register
  */
-rUser.post("/register/customer", registerCustomer)
-rUser.post("/register/staff-member", registerStaffMember)
+rUser.post("/register/customer",  registerCustomer)
+rUser.post("/register/staff-member", auth.management, registerStaffMember)
 
 /**
  * Getters
  */
- rUser.get("/staff-members", getStaffMembers)
- rUser.get("/account-types", getAccountTypes)
+ rUser.get("/staff-members", auth.management, getStaffMembers)
+ rUser.get("/account-types", auth.management, getAccountTypes)
 
 /**
  * Update
