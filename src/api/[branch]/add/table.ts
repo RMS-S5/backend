@@ -14,7 +14,7 @@ const inspector = inspectBuilder(
 const addTable: Handler = async (req, res) => {
     const { r } = res;
 
-    let branchId = "3bd28d6b-0d76-450e-8d40-2f6eed0a07d7"; //req.user.branchId //todo:remove hardcoded value, validate
+    let branchId = req.user.branchId?req.user.branchId:""; 
 
     const tableData = {
         tableNumber: req.body.tableNumber,

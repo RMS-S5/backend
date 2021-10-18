@@ -14,7 +14,7 @@ const removeTable: Handler = async (req, res) => {
     const { r } = res;
     const { tableNumber } = req.params;
 
-    let branchId = "8d44ea94-0c49-4242-8e9b-c17acd9aff2b"; //req.user.branchId //todo:remove hardcoded value, validate
+    let branchId = req.user.branchId?req.user.branchId:"";
     console.log("removeTable called#")
     const [error, response] = await model.branch.remove_Table(parseInt(tableNumber), branchId);
     if (error.code == MErr.NOT_FOUND) {

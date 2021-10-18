@@ -99,9 +99,15 @@ const getOrderById: Handler = async (req, res) => {
 const getMonthlyCompletedOrders: Handler = async (req, res) => {
     const {r} = res;
 
-    let branchId = "";//req.user?.branchId; //todo:if manager dont filter else filter by branchId
+    let query = {}
+    if (req.user.accountType === model.user.accountTypes.branchManager) {
+        query = {...query, branchId: req.user.branchId, orderStatus: "Served"}
+    }
+    else{
+        query = {...query, orderStatus: "Served"}
+    }
 
-    const [error, ordersData] = await model.order.get_MonthlyCompletedOrders({branchId : branchId, orderStatus: "Served"});
+    const [error, ordersData] = await model.order.get_MonthlyCompletedOrders(query);
 
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();

@@ -10,7 +10,7 @@ const rRoom = Router();
 /**
  * Getters
  */
-rRoom.get('/customer-reports', customerReports);
+rRoom.get('/customer-reports', auth.manager, customerReports);
 
 
 

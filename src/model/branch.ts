@@ -46,7 +46,7 @@ export abstract class BranchModel {
         const q = cleanQuery(query, ['branchId'])
         return runQuery<any>(
             (knex) => knex(this.TB_table)
-                .where(q).select());
+                .where(q).where({ active: true }).select());
     }
 
     static get_Branches(): Promise<[MError, any]> {

@@ -31,7 +31,7 @@ const addFoodItem: Handler = async (req, res) => {
         data = temp;
     }
 
-    console.log("JSON.stringify(foodVariants) add:", JSON.stringify(foodVariants))
+    // console.log("JSON.stringify(foodVariants) add:", JSON.stringify(foodVariants))
 
     const [error, response] =
         await model.foodItem.add_FoodItem(foodItemId, data, JSON.stringify(foodVariants));

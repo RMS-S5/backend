@@ -22,20 +22,20 @@ rFoodItem.get('/categories-all', getCategories);
 /**
  * Add
  */
-rFoodItem.post('/add-food-item', addFoodItem);
-rFoodItem.post('/add-category', addCategory);
+rFoodItem.post('/add-food-item', auth.branchManager, addFoodItem);
+rFoodItem.post('/add-category', auth.manager, addCategory);
 
 /**
  * Update
  */
-rFoodItem.put('/update-food-item/:foodItemId', updateFoodItem);
-rFoodItem.put('/update-category/:categoryId', updateCategory);
+rFoodItem.put('/update-food-item/:foodItemId', auth.branchManager, updateFoodItem);
+rFoodItem.put('/update-category/:categoryId', auth.manager, updateCategory);
 
 /**
  * Delete
  */
-rFoodItem.delete('/remove-food-item/:foodItemId', removeFoodItem);
-rFoodItem.delete('/remove-category/:categoryId', removeCategory);
+rFoodItem.delete('/remove-food-item/:foodItemId', auth.branchManager, removeFoodItem);
+rFoodItem.delete('/remove-category/:categoryId', auth.manager, removeCategory);
 
 
 export default rFoodItem;

@@ -106,7 +106,8 @@ export abstract class OrderModel {
   }
 
   static get_MonthlyCompletedOrders(query: any): Promise<[MError, any[]]> {
-    const q = cleanQuery(query, ["orderStatus, branchId"]);
+    const q = cleanQuery(query, ["orderStatus, branchId"]); //todo: debug cleanQuery output
+    console.log("query:", q)
     let today = new Date();
     let thisYear = today.getFullYear();
     let thisMonth = today.getMonth();
@@ -115,10 +116,9 @@ export abstract class OrderModel {
     let monthEnd = new Date(thisYear, thisMonth + 1, 0, 23, 59, 59);
     return runQuery<any[]>((knex) =>
       knex(this.VIEW_ordersWithNames)
-        .where(q)
-        .where("placedTime", ">=", monthStart)
-        .where("placedTime", "<", monthEnd)
-    );
+        .where(query)
+        .where('placedTime', '>=', monthStart)
+        .where('placedTime', '<', monthEnd));
   }
 
   static get_Orders(): Promise<[MError, any[]]> {

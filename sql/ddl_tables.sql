@@ -151,6 +151,19 @@ from user_account
 	left join branch 
 	on "staff".branch_id= "branch".branch_id;
 
+create or replace view staff_full_data as select
+	"user_account".*,
+	staff.branch_id,
+	staff.nic,
+	staff.birthday,
+	staff.status,
+	branch.branch_name 
+from user_account
+	inner join staff
+	on  user_account.user_id = staff.user_id
+	left join branch 
+	on "staff".branch_id= "branch".branch_id;
+
 -- Food item
 CREATE TABLE "category"(
 	category_id UUID PRIMARY KEY,
