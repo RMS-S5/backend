@@ -33,7 +33,7 @@ const getTableByVerificationCode: Handler = async (req, res) => {
 
 const getBranchTables: Handler = async (req, res) => {
     const {r} = res;
-    let branchId = req.user.branchId?req.user.branchId:"";
+    let branchId = req.user.branchId
     const [error, tableData] = await model.branch.get_Tables({branchId});
 
     if (error.code !== MErr.NO_ERROR) {

@@ -3,19 +3,18 @@
 -- ###############################################
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --drop 
+drop procedure if exists set_order_status;
 drop procedure if exists set_order_items ;
 drop procedure if exists set_food_variants ;
 drop function if exists latest_table_order;
 
 -- Drop existing tables
-drop view if exists "bookings_with_names_and_amount";
 DROP TABLE IF EXISTS "booked_room";
 DROP TABLE IF EXISTS "booking";
 
 DROP TABLE IF EXISTS "room";
 DROP TABLE IF EXISTS "room_type";
 
-drop view if exists "orders_with_names";
 drop view if exists "orders_with_cart_items";
 DROP TABLE IF EXISTS "order_food_item";
 DROP TABLE IF EXISTS "order";
@@ -30,7 +29,6 @@ DROP TABLE IF EXISTS "food_variant";
 DROP TABLE IF EXISTS "food_item";
 DROP TABLE IF EXISTS "category";
 
-drop view if exists "staff_full_data";
 drop view if exists "user_full_data";
 DROP TABLE IF EXISTS "staff";
 DROP TABLE IF EXISTS "staff_role";
@@ -258,6 +256,7 @@ CREATE TABLE "order"(
 	table_number INTEGER,
 	branch_id UUID,
 	order_status VARCHAR(100),
+	fcm_token VARCHAR(250),
 	placed_time TIMESTAMP,
 	waiter_id UUID,
 	kitchen_staff_id UUID,
@@ -301,29 +300,10 @@ create or replace view orders_with_cart_items as select
 		on "order_food_item".cart_item_id = cart_items_detailed.cart_item_id
 	group by "order".order_id ;
 
---view orders with customer, waiter, kitchen staff, branch name
-create or replace view orders_with_names as select
-	"o".*,
-	concat("cu".first_name, ' ', "cu".last_name) AS customer_name,
-	concat("wu".first_name, ' ', "wu".last_name) AS waiter_name,
-	concat("ku".first_name, ' ', "ku".last_name) AS kitchen_staff_name,
-	"b".branch_name AS branch_name
-	from "order" "o"
-	left join "user_account" "cu"
-		on "o".customer_id  = "cu".user_id
-	left join "user_account" "wu"
-		on "o".waiter_id  = "wu".user_id
-	left join "user_account" "ku"
-		on "o".kitchen_staff_id  = "ku".user_id
-	left join "branch" "b"
-		on "o".branch_id  = "b".branch_id;
-	
-
 -- Room
 CREATE TABLE "room_type"(
 	room_type VARCHAR(100) PRIMARY KEY,
-	"description" VARCHAR(250),
-	active BOOLEAN default true
+	"description" VARCHAR(250)
 );
 
 CREATE TABLE "room"(
@@ -360,20 +340,6 @@ CREATE TABLE "booked_room"(
 	CONSTRAINT fk_br_rn_bi_constraint FOREIGN KEY (room_number, branch_id) REFERENCES "room"("room_number", "branch_id") ON UPDATE CASCADE
 );
 
---view bookings with customer name and total amount
-create or replace view bookings_with_names_and_amount as select
-	"b".*,
-	concat("cu".first_name, ' ', "cu".last_name) AS customer_name,
-	sum("r".price) AS total_amount,
-	"br".branch_id AS branch_id
-	from "booking" "b"
-	left join "user_account" "cu"
-		on "b".customer_id  = "cu".user_id
-	left join "booked_room" "br"
-		on "b".booking_id  = "br".booking_id
-	left join "room" "r"
-		on "br".room_number  = "r".room_number and "br".branch_id  = "r".branch_id
-	group by "b".booking_id,"cu".user_id,"br".branch_id  ;
 
 --Insert food variants
 create or replace PROCEDURE set_food_variants(f_id uuid, food_variants JSON)
@@ -404,6 +370,21 @@ AS $pn$
 		loop
 			insert into order_food_item values(o_id, _order_item);
 			update cart_item set active = false where cart_item_id = _order_item;
+		END loop ;
+	END ;
+$pn$;
+
+
+--change order status of multiple orders
+create or replace PROCEDURE set_order_status(order_s varchar, order_ids JSON)
+LANGUAGE plpgsql
+AS $pn$
+	DECLARE
+		_order_id uuid; 
+	begin
+		FOR _order_id IN SELECT * FROM (SELECT json_array_elements_text(order_ids)) ci
+		loop
+			update "order" set "order_status" = order_s where order_id = _order_id;
 		END loop ;
 	END ;
 $pn$;
@@ -444,7 +425,8 @@ begin
 		"orders_with_cart_items"."active" as "active",
 		"cart_items" as "cartItems" 
 	 from "orders_with_cart_items"
-	where "orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
+	where "order_status" != 'Closed' and
+	"orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
 	where "order"."table_number" = _tn and "order"."branch_id" = _bn);
 end;$$
 
