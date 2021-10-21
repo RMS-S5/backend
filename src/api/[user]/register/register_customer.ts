@@ -19,7 +19,6 @@ const inspector = inspectBuilder(
     .isMobilePhone("any")
     .withMessage("Mobile Number is required")
 );
-console.log("Hello");
 /**
  * :: STEP 2
  * Create a new [user] user
@@ -43,6 +42,7 @@ const registerCustomer: Handler = async (req, res) => {
   const userAccountData = {
     userId,
     email,
+    mobileNumber,
     password: await encrypt_password(password),
     firstName,
     lastName,
@@ -50,7 +50,6 @@ const registerCustomer: Handler = async (req, res) => {
   };
   const customerData = {
     userId,
-    mobileNumber,
   };
 
   // Sync model to database

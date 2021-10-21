@@ -16,7 +16,6 @@ import rReport from "./[report]";
 import rQuestion from "./[question]";
 
 export const rApi = Router();
-console.log("come to this");
 // Specific middlewares for /api routes
 rApi.use(rBuilder);
 

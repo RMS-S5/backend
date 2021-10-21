@@ -20,4 +20,5 @@ app.set("views", path.join(__dirname, "../views"));
 app.use('/api', rApi)
 app.use('/file', rFile)
 
-app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
+module.exports =  server;
