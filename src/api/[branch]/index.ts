@@ -13,8 +13,8 @@ rBranch.get(
   "/get-table-by-verification/:verificationCode",
   getTableHandler.getTableByVerificationCode
 );
-rBranch.get(
-  "/get-available-rooms-by-branch/:branchId",
+rBranch.post(
+  "/get-available-rooms-by-branch/",
   getAvailabeRoomsHandler.getAvailabeRooms
 );
 rBranch.get("/get-all-branches-customer", getAllBrachesCustomer);

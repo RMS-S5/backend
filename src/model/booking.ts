@@ -78,16 +78,42 @@ export abstract class BookingModel {
     );
   }
 
+  // static allAvailableRoomsByBranch(
+  //   branchId: string
+  // ): Promise<[MError, Booking]> {
+  //   return runQuery<Booking>(
+  //     (knex) =>
+  //       knex
+  //         .select("*")
+  //         .from(this.TB_room)
+  //         .leftJoin("room_type", "room.room_type", "room_type.room_type")
+  //         .where({ branchId: branchId, "room.active": false }),
+  //     { required: true }
+  //   );
+  // }
   static allAvailableRoomsByBranch(
-    branchId: string
+    branchId: string,
+    arrival: string,
+    departure: string
   ): Promise<[MError, Booking]> {
     return runQuery<Booking>(
       (knex) =>
         knex
           .select("*")
           .from(this.TB_room)
-          .leftJoin("room_type", "room.room_type", "room_type.room_type")
-          .where({ branchId: branchId, "room.active": false }),
+          .leftOuterJoin("branch", "room.branch_id", "branch.branch_id")
+          .whereNotIn(
+            "room_number",
+            knex
+              .select("room_number")
+              .from("room")
+              .joinRaw("natural join booked_room")
+              .joinRaw("natural join booking")
+              .where("departure", ">=", arrival)
+            // .orWhereNot("branchId", branchId)
+            //.orWhere("arrival", "<", departure)
+          ),
+
       { required: true }
     );
   }
