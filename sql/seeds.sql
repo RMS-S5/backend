@@ -1,13 +1,15 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-delete from customer;
-delete from staff;
-delete from user_account;
-delete from account_type;
 
+delete from order_food_item;
 delete from "order";
 delete from order_status;
 delete from cart_item;
 delete from "cart";
+
+delete from customer;
+delete from staff;
+delete from user_account;
+delete from account_type;
 
 delete from food_variant;
 delete from food_item ;
@@ -66,6 +68,28 @@ declare
 	cart1 uuid := uuid_generate_v4();
 
 	cartItem1 uuid := uuid_generate_v4();
+
+	order1 uuid  := uuid_generate_v4();
+	order2 uuid  := uuid_generate_v4();
+	order3 uuid  := uuid_generate_v4();
+	order4 uuid  := uuid_generate_v4();
+	order5 uuid  := uuid_generate_v4();
+	order6 uuid  := uuid_generate_v4();
+	order7 uuid  := uuid_generate_v4();
+	order8 uuid  := uuid_generate_v4();
+	order9 uuid  := uuid_generate_v4();
+	order10 uuid  := uuid_generate_v4();
+	order11 uuid  := uuid_generate_v4();
+	order12 uuid  := uuid_generate_v4();
+	order13 uuid  := uuid_generate_v4();
+	order14 uuid  := uuid_generate_v4();
+	order15 uuid  := uuid_generate_v4();
+	order16 uuid  := uuid_generate_v4();
+	order17 uuid  := uuid_generate_v4();
+	order18 uuid  := uuid_generate_v4();
+	order19 uuid  := uuid_generate_v4();
+	order20 uuid  := uuid_generate_v4();
+	
 
 	branchId1 uuid := uuid_generate_v4();
 	branchId2 uuid := uuid_generate_v4();
@@ -154,60 +178,54 @@ begin
 		('1', branchId2, '2', 'Deluxe', '42000'),
 		('2', branchId2, '3', 'Suite', '32000');
 
-	insert into "order" ("order_id", "customer_id", "total_amount", "table_number", "branch_id", "order_status", "placed_time", "waiter_id", "kitchen_staff_id") values
-		(order1, userId1, 20000, 1, branchId1, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
-		(order2, userId1, 3000, 1, branchId1, 'Served', '2021-10-11 08:00:00.000', userId3, userId2),
-		(order3, userId1, 4000, 1, branchId1, 'Served', '2021-10-16 08:00:00.000', userId3, userId2),
-		(order4, userId1, 23000, 1, branchId1, 'Served', '2021-10-21 08:00:00.000', userId3, userId2),
-		(order5, userId1, 2200, 1, branchId1, 'Served', '2021-10-26 08:00:00.000', userId3, userId2),
-		(order6, userId1, 20100, 1, branchId1, 'Served', '2021-10-27 08:00:00.000', userId3, userId2),
-		(order7, userId1, 5000, 1, branchId1, 'Served', '2021-10-11 04:00:00.000', userId3, userId2),
-		(order8, userId1, 6000, 1, branchId1, 'Served', '2021-10-11 12:00:00.000', userId3, userId2),
-		(order9, userId1, 7000, 1, branchId1, 'Served', '2021-10-11 20:00:00.000', userId3, userId2),
-		(order10, userId1, 24000, 1, branchId1, 'Served', '2021-10-11 23:00:00.000', userId3, userId2),
-		(order11, userId1, 20000, 1, branchId2, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
-		(order12, userId1, 3000, 1, branchId2, 'Served', '2021-10-11 08:00:00.000', userId3, userId2),
-		(order13, userId1, 4000, 1, branchId2, 'Served', '2021-10-16 08:00:00.000', userId3, userId2),
-		(order14, userId1, 23000, 1, branchId2, 'Served', '2021-10-21 08:00:00.000', userId3, userId2),
-		(order15, userId1, 2200, 1, branchId2, 'Served', '2021-10-26 08:00:00.000', userId3, userId2),
-		(order16, userId1, 20100, 1, branchId2, 'Served', '2021-10-27 08:00:00.000', userId3, userId2),
-		(order17, userId1, 5000, 1, branchId2, 'Served', '2021-10-11 04:00:00.000', userId3, userId2),
-		(order18, userId1, 6000, 1, branchId2, 'Served', '2021-10-11 12:00:00.000', userId3, userId2),
-		(order19, userId1, 7000, 1, branchId2, 'Served', '2021-10-03 20:00:00.000', userId3, userId2),
-		(order20, userId1, 24000, 1, branchId2, 'Served', '2021-10-03 23:00:00.000', userId3, userId2);
+--	insert into "order" ("order_id", "customer_id", "total_amount", "table_number", "branch_id", "order_status", "placed_time", "waiter_id", "kitchen_staff_id") values
+--		(order1, userId1, 20000, 1, branchId1, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
+--		(order2, userId1, 3000, 1, branchId1, 'Served', '2021-10-11 08:00:00.000', userId3, userId2),
+--		(order3, userId1, 4000, 1, branchId1, 'Served', '2021-10-16 08:00:00.000', userId3, userId2),
+--		(order4, userId1, 23000, 1, branchId1, 'Served', '2021-10-21 08:00:00.000', userId3, userId2),
+--		(order5, userId1, 2200, 1, branchId1, 'Served', '2021-10-26 08:00:00.000', userId3, userId2),
+--		(order6, userId1, 20100, 1, branchId1, 'Served', '2021-10-27 08:00:00.000', userId3, userId2),
+--		(order7, userId1, 5000, 1, branchId1, 'Served', '2021-10-11 04:00:00.000', userId3, userId2),
+--		(order8, userId1, 6000, 1, branchId1, 'Served', '2021-10-11 12:00:00.000', userId3, userId2),
+--		(order9, userId1, 7000, 1, branchId1, 'Served', '2021-10-11 20:00:00.000', userId3, userId2),
+--		(order10, userId1, 24000, 1, branchId1, 'Served', '2021-10-11 23:00:00.000', userId3, userId2),
+--		(order11, userId1, 20000, 1, branchId2, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
+--		(order12, userId1, 3000, 1, branchId2, 'Served', '2021-10-11 08:00:00.000', userId3, userId2),
+--		(order13, userId1, 4000, 1, branchId2, 'Served', '2021-10-16 08:00:00.000', userId3, userId2),
+--		(order14, userId1, 23000, 1, branchId2, 'Served', '2021-10-21 08:00:00.000', userId3, userId2),
+--		(order15, userId1, 2200, 1, branchId2, 'Served', '2021-10-26 08:00:00.000', userId3, userId2),
+--		(order16, userId1, 20100, 1, branchId2, 'Served', '2021-10-27 08:00:00.000', userId3, userId2),
+--		(order17, userId1, 5000, 1, branchId2, 'Served', '2021-10-11 04:00:00.000', userId3, userId2),
+--		(order18, userId1, 6000, 1, branchId2, 'Served', '2021-10-11 12:00:00.000', userId3, userId2),
+--		(order19, userId1, 7000, 1, branchId2, 'Served', '2021-10-03 20:00:00.000', userId3, userId2),
+--		(order20, userId1, 24000, 1, branchId2, 'Served', '2021-10-03 23:00:00.000', userId3, userId2);
 
-	insert into "booking" ("booking_id", "customer_id", "arrival", "departure", "placed_time", "status") values
-		(booking21, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
-		(booking22, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
-		(booking23, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Accepted'),
-		(booking24, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Lodged'),
-		(booking1, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Completed'),
-		(booking2, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 08:00:00.000', 'Completed'),
-		(booking3, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-16 08:00:00.000', 'Completed'),
-		(booking4, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-21 08:00:00.000', 'Completed'),
-		(booking5, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-26 08:00:00.000', 'Completed'),
-		(booking6, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-27 08:00:00.000', 'Completed'),
-		(booking7, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 04:00:00.000', 'Completed'),
-		(booking8, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 12:00:00.000', 'Completed'),
-		(booking9, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 20:00:00.000', 'Completed'),
-		(booking10, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 23:00:00.000', 'Completed'),
-		(booking11, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Completed'),
-		(booking12, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 08:00:00.000', 'Completed'),
-		(booking13, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-16 08:00:00.000', 'Completed'),
-		(booking14, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-21 08:00:00.000', 'Completed'),
-		(booking15, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-26 08:00:00.000', 'Completed'),
-		(booking16, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-27 08:00:00.000', 'Completed'),
-		(booking17, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 04:00:00.000', 'Completed'),
-		(booking18, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 12:00:00.000', 'Completed'),
-		(booking19, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 20:00:00.000', 'Completed'),
-		(booking20, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 23:00:00.000', 'Completed');
+--	insert into "booking" ("booking_id", "customer_id", "arrival", "departure", "placed_time", "status") values
+--		(booking21, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
+--		(booking22, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Placed'),
+--		(booking23, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Accepted'),
+--		(booking24, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Lodged'),
+--		(booking1, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Completed'),
+--		(booking2, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 08:00:00.000', 'Completed'),
+--		(booking3, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-16 08:00:00.000', 'Completed'),
+--		(booking4, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-21 08:00:00.000', 'Completed'),
+--		(booking5, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-26 08:00:00.000', 'Completed'),
+--		(booking6, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-27 08:00:00.000', 'Completed'),
+--		(booking7, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 04:00:00.000', 'Completed'),
+--		(booking8, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 12:00:00.000', 'Completed'),
+--		(booking9, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 20:00:00.000', 'Completed'),
+--		(booking10, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 23:00:00.000', 'Completed'),
+--		(booking11, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', 'Completed'),
+--		(booking12, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-11 08:00:00.000', 'Completed'),
+--		(booking13, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-16 08:00:00.000', 'Completed'),
+--		(booking14, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-21 08:00:00.000', 'Completed'),
+--		(booking15, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-26 08:00:00.000', 'Completed'),
+--		(booking16, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-27 08:00:00.000', 'Completed'),
+--		(booking17, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 04:00:00.000', 'Completed'),
+--		(booking18, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 12:00:00.000', 'Completed'),
+--		(booking19, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 20:00:00.000', 'Completed'),
+--		(booking20, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 23:00:00.000', 'Completed');
 		
 end $$;
 
-
-
-
-
-	
-	
 
