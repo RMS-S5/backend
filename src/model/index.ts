@@ -6,6 +6,7 @@ import {BranchModel} from "./branch";
 import {RoomModel} from "./room";
 import {CustomerReportModel} from "./customer_report";
 import {BookingModel} from "./booking";
+import { ReportModel } from "./report";
 
 export {MErr} from "../utils/dbMan";
 export const model = {
@@ -16,7 +17,8 @@ export const model = {
     branch : BranchModel,
     room : RoomModel,
     customerReport : CustomerReportModel,
-    booking : BookingModel,
+    booking: BookingModel,
+    report : ReportModel,
 };
 
 export default model;
