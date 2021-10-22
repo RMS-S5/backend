@@ -1,5 +1,8 @@
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
+import { TokenMan } from "../../utils/tokenMan";
+import { v4 as UUID } from "uuid";
+
 let app: any;
 
 jest.setTimeout(60000);
@@ -98,10 +101,47 @@ describe("api/user functions", () => {
         mobileNumber : 774531987,
       };
       const res = await request(app).post("/api/user/register/customer").send(data);
+      
+
+
+      expect(res.status).toBe(400);
+    });
+  });
+
+
+  describe("api/user/details", () => {
+    const payload = {
+      userId: "d93f66c4-5417-4b2e-a22a-34216439f521",
+      email: "johndoe@gmail.com",
+      accountType: "Customer",
+      firstName : "John"
+    }
+    
+    beforeEach(() => {
+      app = require("../../main");
+      
+    });
+  
+    afterEach(() => {
+      app.close();
+    });
+
+    it("give 200 when user is found", async () => {
+      const accessToken = TokenMan.getAccessToken(payload);
+      const res = await request(app).get("/api/user/details")
+        .auth(accessToken, { type: 'bearer' });
 
       expect(res.status).toBe(200);
     });
 
-    
+    it("give 500 when token is not contains correct data", async () => {
+      const { userId, ...temp } = payload;
+      const data = {userId : UUID(), ...temp};
+      const accessToken = TokenMan.getAccessToken(payload);
+      const res = await request(app).get("/api/user/details")
+        .auth(accessToken, { type: 'bearer' });
+
+      expect(res.status).toBe(200);
+    });
   });
 });
