@@ -10,6 +10,8 @@ import rOrder from "./[order]";
 import rBranch from "./[branch]";
 import rBooking from "./[booking]";
 import rRoom from "./[rooms]";
+import rCustomerReport from "./[customer_reports]";
+//import rBooking from "./[booking]";
 import rReport from "./[report]";
 import rQuestion from "./[question]";
 
@@ -30,6 +32,9 @@ rApi.use("/branch", rBranch);
 rApi.use("/meta", rMeta);
 rApi.use("/booking", rBooking);
 rApi.use("/room", rRoom);
+rApi.use("/customer-report", rCustomerReport);
+rApi.use("/booking", rBooking);
+
 rApi.use("/report", rReport);
 rApi.use("/question", rQuestion);
 // Router

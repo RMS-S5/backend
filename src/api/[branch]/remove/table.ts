@@ -4,28 +4,28 @@ import {v4 as UUID} from "uuid";
 import { param, inspectBuilder } from "../../../utils/inspect";
 
 const inspector = inspectBuilder(
-    param('roomNumber').exists().withMessage('Room number is required'),
+    param('tableNumber').exists().withMessage('Table number is required'),
 )
 
 /**
- * Remove room
+ * Remove table
  */
-const removeRoom: Handler = async (req, res) => {
+const removeTable: Handler = async (req, res) => {
     const { r } = res;
-    const { roomNumber } = req.params;
+    const { tableNumber } = req.params;
 
     let branchId = req.user.branchId?req.user.branchId:"";
-    console.log("removeRoom called#")
-    const [error, response] = await model.room.remove_Room(parseInt(roomNumber), branchId);
+    console.log("removeTable called#")
+    const [error, response] = await model.branch.remove_Table(parseInt(tableNumber), branchId);
     if (error.code == MErr.NOT_FOUND) {
-        r.status.NOT_FOUND().message("Room not found").send();
+        r.status.NOT_FOUND().message("Table not found").send();
     } else if (error.code != MErr.NO_ERROR) {
         r.pb.ISE();
     }
     r.status.OK()
-        .message("Room removed successfully")
+        .message("Table removed successfully")
         .send();
     
 }
 
-export default [inspector,<EHandler> removeRoom];
+export default [inspector,<EHandler> removeTable];

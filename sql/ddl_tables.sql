@@ -3,6 +3,7 @@
 -- ###############################################
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --drop 
+drop procedure if exists set_order_status;
 drop procedure if exists set_order_items ;
 drop procedure if exists set_food_variants ;
 drop function if exists latest_table_order;
@@ -150,6 +151,19 @@ from user_account
 	left join branch 
 	on "staff".branch_id= "branch".branch_id;
 
+create or replace view staff_full_data as select
+	"user_account".*,
+	staff.branch_id,
+	staff.nic,
+	staff.birthday,
+	staff.status,
+	branch.branch_name 
+from user_account
+	inner join staff
+	on  user_account.user_id = staff.user_id
+	left join branch 
+	on "staff".branch_id= "branch".branch_id;
+
 -- Food item
 CREATE TABLE "category"(
 	category_id UUID PRIMARY KEY,
@@ -242,6 +256,7 @@ CREATE TABLE "order"(
 	table_number INTEGER,
 	branch_id UUID,
 	order_status VARCHAR(100),
+	fcm_token VARCHAR(250),
 	placed_time TIMESTAMP,
 	waiter_id UUID,
 	kitchen_staff_id UUID,
@@ -288,8 +303,7 @@ create or replace view orders_with_cart_items as select
 -- Room
 CREATE TABLE "room_type"(
 	room_type VARCHAR(100) PRIMARY KEY,
-	"description" VARCHAR(250),
-	active BOOLEAN default true
+	"description" VARCHAR(250)
 );
 
 CREATE TABLE "room"(
@@ -361,6 +375,21 @@ AS $pn$
 $pn$;
 
 
+--change order status of multiple orders
+create or replace PROCEDURE set_order_status(order_s varchar, order_ids JSON)
+LANGUAGE plpgsql
+AS $pn$
+	DECLARE
+		_order_id uuid; 
+	begin
+		FOR _order_id IN SELECT * FROM (SELECT json_array_elements_text(order_ids)) ci
+		loop
+			update "order" set "order_status" = order_s where order_id = _order_id;
+		END loop ;
+	END ;
+$pn$;
+
+
 --get latest table order
 create or replace function latest_table_order (
 	_tn INT,
@@ -396,7 +425,8 @@ begin
 		"orders_with_cart_items"."active" as "active",
 		"cart_items" as "cartItems" 
 	 from "orders_with_cart_items"
-	where "orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
+	where "order_status" != 'Closed' and
+	"orders_with_cart_items"."placed_time" = (select max("order"."placed_time") from "order"
 	where "order"."table_number" = _tn and "order"."branch_id" = _bn);
 end;$$
 

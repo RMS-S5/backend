@@ -2,6 +2,7 @@ import {EHandler, Handler} from "../../../utils/types";
 import model, {MErr} from "../../../model";
 import {MErrorCode} from "../../../utils/dbMan/merror";
 import {inspectBuilder,query} from "../../../utils/inspect";
+import table from "../../[branch]/add/table";
 
 
 const tableOrderInspector = inspectBuilder(
@@ -50,20 +51,21 @@ const getActiveOrders: Handler = async (req, res) => {
  * @returns 
  */
 
-const getTableOrder: Handler = async (req, res) => {
+const getTableOrders: Handler = async (req, res) => {
     const { r } = res;
-
-    const branchId = req.query.branchId;
-    const tableNumber = req.query.tableNumber;
-
-    const [error, ordersData] = await model.order.get_TableOrder( tableNumber, branchId);
+    console.log(req.query);
+    const { branchId, tableNumber } = req.query;
+    const [error, ordersData] = await model.order.get_TableOrders({
+        branchId,
+        tableNumber
+    });
     if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
     }
 
     r.status.OK()
-        .data(ordersData['rows'][0] || {})
+        .data(ordersData)
         .message("Success")
         .send();
 };
@@ -94,6 +96,46 @@ const getOrderById: Handler = async (req, res) => {
         .send();
 };
 
+const getMonthlyCompletedOrders: Handler = async (req, res) => {
+    const {r} = res;
+
+    let query = {}
+    if (req.user.accountType === model.user.accountTypes.branchManager) {
+        query = {...query, branchId: req.user.branchId, orderStatus: "Served"}
+    }
+    else{
+        query = {...query, orderStatus: "Served"}
+    }
+
+    const [error, ordersData] = await model.order.get_MonthlyCompletedOrders(query);
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(ordersData)
+        .message("Success")
+        .send();
+};
+
+const getAllOrders: Handler = async (req, res) => {
+    const {r} = res;
+
+    const [error, ordersData] = await model.order.get_Orders();
+
+    if (error.code !== MErr.NO_ERROR) {
+        r.pb.ISE();
+        return;
+    }
+
+    r.status.OK()
+        .data(ordersData)
+        .message("Success")
+        .send();
+};
+
 
 /**
  * Export Handler
@@ -102,6 +144,8 @@ const getOrdersHandler = {
     getActiveOrders : [<EHandler>getActiveOrders],
     // getAllServedOrders : [ <EHandler>getAllServedOrders],
     getOrderById : [ <EHandler>getOrderById],
-    getTableOrder : [tableOrderInspector,  <EHandler>getTableOrder]
+    getTableOrders : [tableOrderInspector,  <EHandler>getTableOrders],
+    getMonthlyCompletedOrders : [<EHandler>getMonthlyCompletedOrders],
+    getAllOrders : [<EHandler>getAllOrders],
 }
 export default getOrdersHandler;

@@ -67,40 +67,43 @@ const updateUserProfile: Handler = async (req, res) => {
  * :: STEP 2
  * Update staff profile
  */
-const updateStaffProfile: Handler = async (req, res) => {
-  const { r } = res;
 
-  // Setup Data
-  const userId = req.params.userId || req.user.userId;
+ const updateStaffProfile: Handler = async (req, res) => {
+    const {r} = res;
 
-  const userData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    mobileNumber: req.body.mobileNumber,
-  };
+    // Setup Data
+    const userId = req.params.userId || req.user.userId
 
-  const staffData = {};
+    const userData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        mobileNumber : req.body.mobileNumber
+    };
 
-  const filter = {
-    userId,
-    branchId: req.user?.branchId,
-  };
+    const staffData = {
+        
+     }
+     
+     const filter = {
+         userId,
+         branchId : req.user?.branchId
+     }
+     console.log(req.body)
+    // Sync model to database
+    const [{ code }] = await model.user.update_StaffAccount(filter, userData, staffData);
 
-  // Sync model to database
-  const [{ code }] = await model.user.update_StaffAccount(
-    filter,
-    userData,
-    staffData
-  );
-
-  if (code === MErr.NOT_FOUND) {
-    r.status.NOT_FOUND().message("User not found").send();
-    return;
-  } else if (code === MErr.NO_ERROR) {
-    r.status.OK().message("Success").send();
-    return;
-  }
-  r.pb.ISE();
+    if (code === MErr.NOT_FOUND) {
+        r.status.NOT_FOUND()
+            .message("User not found")
+            .send();
+        return;
+    }else if (code === MErr.NO_ERROR) {
+        r.status.OK()
+            .message("Success")
+            .send();
+        return;
+    }
+    r.pb.ISE();
 };
 
 /**

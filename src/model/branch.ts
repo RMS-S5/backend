@@ -1,52 +1,77 @@
-import {
-  cleanQuery,
-  runQuery,
-  runTrx,
-  TransactionBuilder,
-} from "../utils/dbMan";
+import { cleanQuery, runQuery, runTrx, TransactionBuilder } from "../utils/dbMan";
 import { MError } from "../utils/dbMan/merror";
-import { Table } from "./types";
+import { Table, Branch } from "./types";
 
 export abstract class BranchModel {
-  private static TB_table = "table";
-  private static TB_branch = "branch";
-  private static VIEW_tableBranch = "table_branch";
+    private static TB_table = "table";
+    private static TB_branch = "branch";
+    private static VIEW_tableBranch = "table_branch";
 
-  /**
-   * Creators
-   */
 
-  /**
-   * Update
-   */
-  static update_Table(tableNumber: number, branchId: string, tableData: any) {
-    return runQuery((knex) =>
-      knex(this.TB_table).update(tableData).where({ tableNumber, branchId })
-    );
-  }
+    /**
+  * Creators
+  */
+    static add_Branch(branchData: Branch) {
+        return runQuery(
+            knex => knex(this.TB_branch).insert(branchData)
+        )
+    }
+    static add_Table(tableData: Table) {
+        return runQuery(
+            knex => knex(this.TB_table).insert(tableData)
+        )
+    }
 
-  /**
-   * Getters
-   */
 
-  static get_TableByVerificationCode(
-    verificationCode: string
-  ): Promise<[MError, Table]> {
-    return runQuery<Table>(
-      (knex) =>
-        knex(this.VIEW_tableBranch).where({ verificationCode }).select(),
-      { single: true, required: true }
-    );
-  }
+    /**
+     * Update
+     */
+    static update_Table(tableNumber: number, branchId: string, tableData: any) {
+        return runQuery(
+            knex => knex(this.TB_table).update(tableData).where({ tableNumber, branchId })
+        )
+    }
 
-  static get_Tables(query: any): Promise<[MError, any]> {
-    const q = cleanQuery(query, ["branchId"]);
-    return runQuery<any>((knex) => knex(this.TB_table).where(q).select());
-  }
+    /**
+     * Getters
+     */
 
-  static getAllBrachesCustomer(): Promise<[MError, any[]]> {
-    return runQuery<any[]>((knex) =>
-      knex(this.TB_branch).where("active", true)
-    );
-  }
+    static get_TableByVerificationCode(verificationCode: string): Promise<[MError, Table]> {
+        return runQuery<Table>(
+            (knex) => knex(this.VIEW_tableBranch)
+                .where({ verificationCode }).select(), { single: true, required: true });
+    }
+
+    static get_Tables(query: any): Promise<[MError, any]> {
+        const q = cleanQuery(query, ['branchId'])
+        return runQuery<any>(
+            (knex) => knex(this.TB_table)
+                .where(q).where({ active: true }).select());
+    }
+
+    static get_Branches(): Promise<[MError, any]> {
+        return runQuery<any>(
+            (knex) => knex(this.TB_branch)
+                .where({ active: true }).select());
+    }
+
+    /**
+    * Remove 
+    */
+    static remove_Table(tableNumber: number, branchId: string) {
+        return runQuery(
+            knex => knex(this.TB_table).update({ active: false }).where({ tableNumber, branchId })
+        )
+    }
+
+    static remove_Branch(branchId: string) {
+        return runQuery(
+            knex => knex(this.TB_branch).update({ active: false }).where({ branchId })
+        )
+    }
+
+
+
+
+
 }
