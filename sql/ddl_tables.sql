@@ -92,7 +92,7 @@ CREATE TABLE "customer_report"(
 	"description" VARCHAR(250),
 	customer_name VARCHAR(100),
 	active BOOLEAN default true,
-	CONSTRAINT fk_crp_user_id_constraint FOREIGN KEY (user_id) REFERENCES "customer"("user_id") ON UPDATE CASCADE
+	CONSTRAINT fk_crp_user_id_constraint FOREIGN KEY (user_id) REFERENCES "user_account"("user_id") ON UPDATE CASCADE
 );
 
 
