@@ -1,13 +1,15 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-delete from customer;
-delete from staff;
-delete from user_account;
-delete from account_type;
 
+delete from order_food_item;
 delete from "order";
 delete from order_status;
 delete from cart_item;
 delete from "cart";
+
+delete from customer;
+delete from staff;
+delete from user_account;
+delete from account_type;
 
 delete from food_variant;
 delete from food_item ;
@@ -66,6 +68,52 @@ declare
 	cart1 uuid := uuid_generate_v4();
 
 	cartItem1 uuid := uuid_generate_v4();
+
+	order1 uuid  := uuid_generate_v4();
+	order2 uuid  := uuid_generate_v4();
+	order3 uuid  := uuid_generate_v4();
+	order4 uuid  := uuid_generate_v4();
+	order5 uuid  := uuid_generate_v4();
+	order6 uuid  := uuid_generate_v4();
+	order7 uuid  := uuid_generate_v4();
+	order8 uuid  := uuid_generate_v4();
+	order9 uuid  := uuid_generate_v4();
+	order10 uuid  := uuid_generate_v4();
+	order11 uuid  := uuid_generate_v4();
+	order12 uuid  := uuid_generate_v4();
+	order13 uuid  := uuid_generate_v4();
+	order14 uuid  := uuid_generate_v4();
+	order15 uuid  := uuid_generate_v4();
+	order16 uuid  := uuid_generate_v4();
+	order17 uuid  := uuid_generate_v4();
+	order18 uuid  := uuid_generate_v4();
+	order19 uuid  := uuid_generate_v4();
+	order20 uuid  := uuid_generate_v4();
+	
+	booking1 uuid := uuid_generate_v4();
+	booking2 uuid := uuid_generate_v4();
+	booking3 uuid := uuid_generate_v4();
+	booking4 uuid := uuid_generate_v4();
+	booking5 uuid := uuid_generate_v4();
+	booking6 uuid := uuid_generate_v4();
+	booking7 uuid := uuid_generate_v4();
+	booking8 uuid := uuid_generate_v4();
+	booking9 uuid := uuid_generate_v4();
+	booking10 uuid := uuid_generate_v4();
+	booking11 uuid := uuid_generate_v4();
+	booking12 uuid := uuid_generate_v4();
+	booking13 uuid := uuid_generate_v4();
+	booking14 uuid := uuid_generate_v4();
+	booking15 uuid := uuid_generate_v4();
+	booking16 uuid := uuid_generate_v4();
+	booking17 uuid := uuid_generate_v4();
+	booking18 uuid := uuid_generate_v4();
+	booking19 uuid := uuid_generate_v4();
+	booking20 uuid := uuid_generate_v4();
+	booking21 uuid := uuid_generate_v4();
+	booking22 uuid := uuid_generate_v4();
+	booking23 uuid := uuid_generate_v4();
+	booking24 uuid := uuid_generate_v4();
 
 	branchId1 uuid := uuid_generate_v4();
 	branchId2 uuid := uuid_generate_v4();
@@ -140,7 +188,15 @@ begin
 		(branchId1, 5, uuid_generate_v4()),
 		(branchId1, 6, uuid_generate_v4()),
 		(branchId1, 7, uuid_generate_v4()),
-		(branchId1, 8, uuid_generate_v4());
+		(branchId1, 8, uuid_generate_v4()),
+		(branchId2, 1, uuid_generate_v4()),
+		(branchId2, 2, uuid_generate_v4()),
+		(branchId2, 3, uuid_generate_v4()),
+		(branchId2, 4, uuid_generate_v4()),
+		(branchId2, 5, uuid_generate_v4()),
+		(branchId2, 6, uuid_generate_v4()),
+		(branchId2, 7, uuid_generate_v4()),
+		(branchId2, 8, uuid_generate_v4());
 
 	insert into "room_type" ("room_type", "description") values
 		('Suite', 'Suite Room'),
@@ -152,7 +208,8 @@ begin
 		('2', branchId1, '3', 'Suite', '32000'),
 		('3', branchId1, '1', 'Vip', '20000'),
 		('1', branchId2, '2', 'Deluxe', '42000'),
-		('2', branchId2, '3', 'Suite', '32000');
+		('2', branchId2, '3', 'Suite', '32000'),
+		('3', branchId2, '4', 'Suite', '52000');
 
 	insert into "order" ("order_id", "customer_id", "total_amount", "table_number", "branch_id", "order_status", "placed_time", "waiter_id", "kitchen_staff_id") values
 		(order1, userId1, 20000, 1, branchId1, 'Served', '2021-10-01 08:00:00.000', userId3, userId2),
@@ -201,13 +258,44 @@ begin
 		(booking18, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 12:00:00.000', 'Completed'),
 		(booking19, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 20:00:00.000', 'Completed'),
 		(booking20, userId1, '2021-10-01 08:00:00.000', '2021-10-01 08:00:00.000', '2021-10-03 23:00:00.000', 'Completed');
-		
+
+insert into "booked_room" ("booking_id", "branch_id", "room_number") values
+		(booking1, branchId1, '1'),
+		(booking1, branchId1, '2'),
+		(booking1, branchId1, '3'),
+		(booking2, branchId1, '1'),
+		(booking2, branchId1, '2'),
+		(booking3, branchId1, '3'),
+		(booking4, branchId1, '1'),
+		(booking5, branchId1, '2'),
+		(booking6, branchId1, '3'),
+		(booking6, branchId1, '1'),
+		(booking6, branchId1, '2'),
+		(booking7, branchId1, '3'),
+		(booking7, branchId1, '1'),
+		(booking8, branchId1, '2'),
+		(booking8, branchId1, '3'),
+		(booking9, branchId1, '1'),
+		(booking10, branchId1, '2'),
+		(booking10, branchId1, '3'),
+		(booking11, branchId2, '1'),
+		(booking11, branchId2, '2'),
+		(booking11, branchId2, '3'),
+		(booking12, branchId2, '1'),
+		(booking12, branchId2, '2'),
+		(booking13, branchId2, '3'),
+		(booking14, branchId2, '1'),
+		(booking15, branchId2, '2'),
+		(booking16, branchId2, '3'),
+		(booking16, branchId2, '1'),
+		(booking16, branchId2, '2'),
+		(booking17, branchId2, '3'),
+		(booking17, branchId2, '1'),
+		(booking18, branchId2, '2'),
+		(booking18, branchId2, '3'),
+		(booking19, branchId2, '1'),
+		(booking20, branchId2, '2'),
+		(booking20, branchId2, '3');	
 end $$;
 
-
-
-
-
-	
-	
 
