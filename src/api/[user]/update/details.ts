@@ -25,16 +25,14 @@ const updateUserProfile: Handler = async (req, res) => {
   const userData = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    mobileNumber: req.body.mobileNumber,
   };
-
-  console.log(userData);
-  console.log(req.body);
 
   const customerData = {
-    mobileNumber: req.body.mobileNumber,
+    
   };
   const staffData = {
-    mobileNumber: req.body.mobileNumber,
+  
   };
 
   let code;

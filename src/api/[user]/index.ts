@@ -45,8 +45,7 @@ rUser.post("/register/staff-member", auth.management, registerStaffMember)
  * Update
  */
 rUser.put(
-  "/update-user-profile/:userId",
-  //auth.any,
+  "/update-user-profile",
   updateUser.userProfile
 );
 // Branch Manager or Manager can edit staff users -> branch managers can edit only his branch people
@@ -57,8 +56,7 @@ rUser.put(
 );
 
 rUser.put(
-  "/update-password/:userId",
-  //auth.any,
+  "/update-password",
   updatePassword.updatePasswordByUserId
 );
 
