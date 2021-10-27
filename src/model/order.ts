@@ -94,7 +94,8 @@ export abstract class OrderModel {
     return runQuery<any[]>((knex) =>
       knex(this.VIEW_orderWithCartItems)
         .where(q)
-        // .andWhereNot({ orderStatus: this.orderStatus.closed })
+        .andWhereNot({ orderStatus: this.orderStatus.rejected })
+        .andWhereNot({ orderStatus: this.orderStatus.closed })
     );
   }
 
