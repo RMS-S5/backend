@@ -4,7 +4,6 @@ import { inspectBuilder, param } from "../../../utils/inspect";
 import { MErrorCode } from "../../../utils/dbMan/merror";
 
 const updateBookingStatus: Handler = async (req, res) => {
-  console.log("booking");
   const { r } = res;
   const { updatedStatus, bookingId } = req.body;
   const [error, bookingData] = await model.booking.updateBookingStatus(

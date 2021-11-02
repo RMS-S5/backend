@@ -4,7 +4,6 @@ import { inspectBuilder, param } from "../../../utils/inspect";
 import { MErrorCode } from "../../../utils/dbMan/merror";
 
 const getBookingsforRE: Handler = async (req, res) => {
-  console.log("booking");
   const { r } = res;
 
   const [error, bookingData] = await model.booking.getBookingsforRE();

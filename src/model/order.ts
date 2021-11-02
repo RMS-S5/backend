@@ -108,7 +108,7 @@ export abstract class OrderModel {
 
   static get_MonthlyCompletedOrders(query: any): Promise<[MError, any[]]> {
     const q = cleanQuery(query, ["orderStatus, branchId"]); //todo: debug cleanQuery output
-    console.log("query:", q)
+   
     let today = new Date();
     let thisYear = today.getFullYear();
     let thisMonth = today.getMonth();

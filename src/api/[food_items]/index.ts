@@ -28,7 +28,8 @@ rFoodItem.post('/add-category', auth.manager, addCategory);
 /**
  * Update
  */
-rFoodItem.put('/update-food-item/:foodItemId', auth.branchManager, updateFoodItem);
+// rFoodItem.put('/update-food-item/:foodItemId', auth.branchManager, updateFoodItem);
+rFoodItem.put('/update-food-item/:foodItemId', updateFoodItem);
 rFoodItem.put('/update-category/:categoryId', auth.manager, updateCategory);
 
 /**

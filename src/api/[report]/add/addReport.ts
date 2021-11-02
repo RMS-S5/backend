@@ -4,7 +4,6 @@ import { v4 as UUID } from "uuid";
 
 const addReportHandler: Handler = async (req, res) => {
   const { r } = res;
-  console.log(req);
   let customer_report_id = UUID();
   let { userId, mobileNumber, description, customerName } = req.body;
   let reportData = {

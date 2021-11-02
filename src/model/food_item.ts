@@ -51,13 +51,14 @@ export abstract class FoodItemModel {
    * Update 
    * @returns 
    */
-  static update_FoodItem(foodItemId: string, foodData : any, foodVariantData : any) {
+  static update_FoodItem(foodItemId: string, foodData: any, foodVariantData: any) {
+    const fData = cleanQuery(foodData);
     return runTrx(
       async trx => {
-        if (Object.keys(foodData).length != 0) {
+        if (typeof foodData != 'undefined' && Object.keys(foodData).length != 0) {
           await trx(this.TB_foodItem).update(foodData).where({ foodItemId })
         }
-        if (Object.keys(foodVariantData).length != 0) {
+        if (typeof foodVariantData != 'undefined' && Object.keys(foodVariantData).length != 0) {
           await trx.raw(`call set_food_variants(?,?)`, [foodItemId, foodVariantData]);
         }
                 return trx(this.TB_foodItem);

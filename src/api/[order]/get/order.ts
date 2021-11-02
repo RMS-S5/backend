@@ -53,7 +53,6 @@ const getActiveOrders: Handler = async (req, res) => {
 
 const getTableOrders: Handler = async (req, res) => {
     const { r } = res;
-    console.log(req.query);
     const { branchId, tableNumber } = req.query;
     const [error, ordersData] = await model.order.get_TableOrders({
         branchId,

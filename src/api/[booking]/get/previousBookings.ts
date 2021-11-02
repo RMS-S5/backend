@@ -7,7 +7,6 @@ const previousBookingsInspector = inspectBuilder(
   param("customerId").exists().withMessage("Customer Id should not be empty")
 );
 const getPreviousBookings: Handler = async (req, res) => {
-  console.log("booking");
   const { r } = res;
   const { customerId } = req.params;
 

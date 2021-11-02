@@ -4,7 +4,6 @@ import { v4 as UUID } from "uuid";
 
 const askQuestionHandler: Handler = async (req, res) => {
   const { r } = res;
-  console.log("question body", req.body.question);
 
   //   let customer_report_id = UUID();
   //   let { userId, mobileNumber, description, customerName } = req.body;

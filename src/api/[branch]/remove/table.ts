@@ -15,7 +15,6 @@ const removeTable: Handler = async (req, res) => {
     const { tableNumber } = req.params;
 
     let branchId = req.user.branchId?req.user.branchId:"";
-    console.log("removeTable called#")
     const [error, response] = await model.branch.remove_Table(parseInt(tableNumber), branchId);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND().message("Table not found").send();

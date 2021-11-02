@@ -15,7 +15,6 @@ const addRatingHandler: Handler = async (req, res) => {
     customer_review_id: customer_review_id,
     active: true,
   };
-  console.log(reportData);
 
   const [error, response] = await model.report.addRatingReview(reportData);
   if (error.code !== MErr.NO_ERROR) {

@@ -50,7 +50,6 @@ const addOrder: Handler = async (req, res) => {
     // @ts-ignore
     orderData = { ...orderData, customerId: req.user?.userId };
   }
-  console.log(orderData);
   const [error, response] = await model.order.add_Order(
     orderId,
     orderData,

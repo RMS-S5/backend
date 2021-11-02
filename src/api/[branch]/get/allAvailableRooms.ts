@@ -6,7 +6,6 @@ import { MErrorCode } from "../../../utils/dbMan/merror";
 const allAvailableRoomsByBranch: Handler = async (req, res) => {
   const { r } = res;
   const { branchId, arrival, departure } = req.body;
-  console.log(req.body);
   const [error, roomData] = await model.booking.allAvailableRoomsByBranch(
     branchId,
     arrival,

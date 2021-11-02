@@ -4,7 +4,6 @@ import { v4 as UUID } from "uuid";
 
 const addNewBooking: Handler = async (req, res) => {
   const { r } = res;
-  console.log(req);
   // let cartData ;
 
   // if(req.user?.userId != null){
@@ -46,8 +45,6 @@ const addNewBooking: Handler = async (req, res) => {
   roomNumbers.forEach((room: number) => {
     roomData.push({ bookingId, branchId, roomNumber: room, active: true });
   });
-  console.log(bookingData);
-  console.log(roomData);
   const [error, response] = await model.booking.addNewBooking(
     bookingData,
     roomData

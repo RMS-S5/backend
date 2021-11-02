@@ -28,7 +28,7 @@ const updateFoodItem: Handler = async (req, res) => {
     // Check files
     let data;
     if((<any>req.file)){
-        data = { ...temp, image : (<any>req.file).key}
+        data = { ...temp, imageUrl : (<any>req.file).key}
     }else{
         data = temp;
     }
@@ -38,7 +38,7 @@ const updateFoodItem: Handler = async (req, res) => {
         await model.foodItem.update_FoodItem(foodItemId, data, JSON.stringify(foodVariants));
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND()
-            .message("Category is not found")
+            .message("Food item is not found")
             .send();
         return;
     }else if (error.code !== MErr.NO_ERROR) {

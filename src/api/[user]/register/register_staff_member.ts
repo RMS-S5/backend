@@ -72,10 +72,7 @@ const registerStaffMember: Handler = async (req, res) => {
         branchId,
         birthday,
         nic,
-    }
-
-    console.log("userAccountData:", userAccountData)
-    console.log("staffMemberData:", staffMemberData)
+    };
 
     // Sync model to database
     const [{ code, constraint }] = await model.user.add_StaffMemberAccount(
