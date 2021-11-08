@@ -18,7 +18,7 @@ export const model = {
     room : RoomModel,
     customerReport : CustomerReportModel,
     booking: BookingModel,
-    report : ReportModel
+    report : ReportModel,
 };
 
 export default model;

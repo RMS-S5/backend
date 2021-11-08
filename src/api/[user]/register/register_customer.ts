@@ -32,7 +32,6 @@ const inspector = inspectBuilder(
  *  message
  */
 const registerCustomer: Handler = async (req, res) => {
-  console.log("Hello");
   const { r } = res;
 
   // Setup Data
@@ -46,6 +45,7 @@ const registerCustomer: Handler = async (req, res) => {
     password: await encrypt_password(password),
     firstName,
     lastName,
+    mobileNumber,
     accountType: model.user.accountTypes.customer,
   };
   const customerData = {
