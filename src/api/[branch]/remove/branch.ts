@@ -18,8 +18,10 @@ const removeBranch: Handler = async (req, res) => {
     const [error, response] = await model.branch.remove_Branch(branchId);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND().message("Branch not found").send();
+        return;
     } else if (error.code != MErr.NO_ERROR) {
         r.pb.ISE();
+        return;
     }
     r.status.OK()
         .message("Branch removed successfully")

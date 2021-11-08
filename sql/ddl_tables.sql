@@ -323,7 +323,8 @@ create or replace view orders_with_names as select
 -- Room
 CREATE TABLE "room_type"(
 	room_type VARCHAR(100) PRIMARY KEY,
-	"description" VARCHAR(250)
+	"description" VARCHAR(250),
+	active BOOLEAN default true
 );
 
 CREATE TABLE "room"(
