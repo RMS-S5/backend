@@ -3,10 +3,10 @@ import model, { MErr } from "../../../model";
 import { inspectBuilder, param } from "../../../utils/inspect";
 import { MErrorCode } from "../../../utils/dbMan/merror";
 
-const getAllBranchesCustomer: Handler = async (req, res) => {
+const getAllBrachesCustomer: Handler = async (req, res) => {
   const { r } = res;
 
-  const [error, branchData] = await model.branch.get_Branches();
+  const [error, branchData] = await model.branch.getAllBrachesCustomer();
   if (error.code !== MErr.NO_ERROR) {
     r.pb.ISE();
     return;
@@ -19,4 +19,4 @@ const getAllBranchesCustomer: Handler = async (req, res) => {
  * Export Handler
  */
 
-export default [<EHandler>getAllBranchesCustomer];
+export default [<EHandler>getAllBrachesCustomer];
