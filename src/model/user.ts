@@ -63,7 +63,6 @@ export abstract class UserModel {
 
     /**
      * Update
-     * TODO: update functions not set
      */
     static update_StaffAccount(filter: any, accountD: any, staffD: any) {
         const filterData = cleanQuery(filter);
