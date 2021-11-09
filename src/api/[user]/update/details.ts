@@ -37,7 +37,7 @@ const updateUserProfile: Handler = async (req, res) => {
 
   let code;
   // Sync model to database
-  if (req.body.accountType === "Customer") {
+  if (req.user.accountType === model.user.accountTypes.customer) {
     [{ code }] = await model.user.update_CustomerAccount(
       userId,
       userData,
