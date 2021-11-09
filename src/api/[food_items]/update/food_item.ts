@@ -25,6 +25,8 @@ const updateFoodItem: Handler = async (req, res) => {
     const { price, name, categoryId, description,foodVariants } = req.body;
     const temp = { price, name, categoryId, description };
 
+    console.log("req.body: ",req.body)
+    console.log("req.file: ",req.file)
     // Check files
     let data;
     if((<any>req.file)){
@@ -33,7 +35,9 @@ const updateFoodItem: Handler = async (req, res) => {
         data = temp;
     }
 
-    // console.log("JSON.stringify(foodVariants) update:", JSON.stringify(foodVariants))
+    
+
+    console.log("JSON.stringify(foodVariants) update:", JSON.stringify(foodVariants))
     const [error, response] =
         await model.foodItem.update_FoodItem(foodItemId, data, JSON.stringify(foodVariants));
     if (error.code == MErr.NOT_FOUND) {
