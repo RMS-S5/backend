@@ -19,8 +19,10 @@ const removeCartItem: Handler = async (req, res) => {
     const [error, response] = await model.cart.delete_CartItem(cartItemId);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND().message("Cart item not found").send();
+        return;
     } else if (error.code != MErr.NO_ERROR) {
         r.pb.ISE();
+        return;
     }
     r.status.OK()
         .data('cartItemId')
