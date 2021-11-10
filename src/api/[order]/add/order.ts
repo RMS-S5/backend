@@ -32,6 +32,12 @@ const inspector = inspectBuilder(
     .optional()
 );
 
+/**
+ * 
+ * @param req Add order 
+ * @param res 
+ * @returns 
+ */
 const addOrder: Handler = async (req, res) => {
   const { r } = res;
   const orderId = UUID();
@@ -67,6 +73,9 @@ const addOrder: Handler = async (req, res) => {
     return;
   }
 
+  /**
+   * Send cloud message
+   */
   const message = {
     notification: {
       title: "New Order",
