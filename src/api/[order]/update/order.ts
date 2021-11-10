@@ -107,7 +107,7 @@ const updateOrder: Handler = async (req, res) => {
     const [err, res] = await model.order.get_OrderByOrderId(orderId);
     const fcmToken: any = res?.fcmToken;
 
-    if (fcmToken != null) {
+    if (fcmToken != null && fcmToken != "") {
       const message_customer = {
         notification: {
           title: "Update about your order",

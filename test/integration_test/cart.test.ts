@@ -2,13 +2,14 @@ const request = require("supertest");
 const jwt = require("jsonwebtoken");
 import { TokenMan } from "../../src/utils/tokenMan";
 import { v4 as UUID } from "uuid";
+require("dotenv").config();
 
 let app: any;
 
 jest.setTimeout(60000);
 
 describe("api/cart functions", () => {
-  const customerAccessToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkOTNmNjZjNC01NDE3LTRiMmUtYTIyYS0zNDIxNjQzOWY1MjEiLCJlbWFpbCI6ImpvaG5kb2VAZ21haWwuY29tIiwiYWNjb3VudFR5cGUiOiJDdXN0b21lciIsImJyYW5jaElkIjpudWxsLCJmaXJzdE5hbWUiOiJKb2huIiwiaWF0IjoxNjM2NTIxMjczLCJleHAiOjE2MzY2MDc2NzN9.3JyhzhsvqyELhfyPQlcqsK5I4bCVaMPzWlyLE58JXGY`;
+  const customerAccessToken = process.env.CUSTOMER_TOKEN;
   const cartItemIdS = UUID();
 
   describe("api/cart/add-cart -> Add cart ", () => {
