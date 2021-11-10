@@ -23,7 +23,7 @@ const addBranch: Handler = async (req, res) => {
 
     const [error, response] = await model.branch.add_Branch(branchData);
     if (error.code !== MErr.NO_ERROR) {
-        r.pb.ISE(); //todo: react to possible errors
+        r.pb.ISE(); 
         return;
     }
 

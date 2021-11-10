@@ -28,7 +28,7 @@ const addFoodItem: Handler = async (req, res) => {
     console.log("foodVariants: ", foodVariants)
     
 
-    // refine foodVariants //todo: check for array
+    // refine foodVariants 
     var tempFoodVariants = foodVariants.map(JSON.parse)
 
     // Check files

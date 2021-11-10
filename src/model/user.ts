@@ -20,7 +20,7 @@ export abstract class UserModel {
     private static TB_staff = "staff";
     private static TB_accountType = "account_type";
     private static VIEW_userFullData = "userFullData";
-    private static VIEW_staffFullFata = "staff_full_data"; //todo:clarify
+    private static VIEW_staffFullFata = "staff_full_data"; 
 
     static $add_UserData(userData: UserAccount): TransactionBuilder {
         return async trx => {
