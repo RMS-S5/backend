@@ -36,7 +36,7 @@ const getActiveOrders: Handler = async (req, res) => {
 };
 
 /**
- * Table order
+ * Get Table order
  * @param req 
  * @param res 
  * @returns 
@@ -86,6 +86,12 @@ const getOrderById: Handler = async (req, res) => {
         .send();
 };
 
+/**
+ * Get monthly completed orders
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 const getMonthlyCompletedOrders: Handler = async (req, res) => {
     const {r} = res;
 
@@ -110,6 +116,12 @@ const getMonthlyCompletedOrders: Handler = async (req, res) => {
         .send();
 };
 
+/**
+ * 
+ * @param req Get all orders
+ * @param res 
+ * @returns 
+ */
 const getAllOrders: Handler = async (req, res) => {
     const {r} = res;
 
