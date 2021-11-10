@@ -102,14 +102,6 @@ export abstract class UserModel {
     /**
      * Getters
      */
-    // static async get_AdminAccount(username: string): Promise<[MError, AdminAccount]> {
-    //     return runQuery<AdminAccount>(
-    //         knex => knex(this.TB_adminAccount).where({username}),
-    //         {
-    //             single: true
-    //         }
-    //     )
-    // }
     static get_StaffMembers(query: any): Promise<[MError, any[]]> {
         return runQuery<any[]>((knex) => knex(this.VIEW_staffFullFata).where({ ...query, active: true }));
     }

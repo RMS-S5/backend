@@ -16,6 +16,12 @@ const inspector = inspectBuilder(
     body("cartId").exists().withMessage("Cart id is required"),
 )
 
+/**
+ * Add food variant to cart
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 const addCartItem: Handler = async (req, res) => {
     const {r} = res;
     const cartItemId = UUID();

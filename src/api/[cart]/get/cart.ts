@@ -3,7 +3,9 @@ import model, {MErr} from "../../../model";
 import {inspectBuilder, param} from "../../../utils/inspect";
 import {MErrorCode} from "../../../utils/dbMan/merror";
 
-
+/**
+ * Validate Request
+ */
 const cartIdInspector = inspectBuilder(
     param("cartId").exists().withMessage("Cart id should not be empty")
 )
@@ -11,6 +13,12 @@ const customerIdInspector = inspectBuilder(
     param("customerId").exists().withMessage("Customer id should not be empty")
 )
 
+/**
+ * Get cart by given cart id
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 const getCartByCartId: Handler = async (req, res) => {
     const {r} = res;
     const cartId = req.params.cartId;
@@ -32,6 +40,9 @@ const getCartByCartId: Handler = async (req, res) => {
         .send();
 };
 
+/**
+ * Get cart by customer id
+ */
 const getCartByCustomerId: Handler = async (req, res) => {
     const {r} = res;
     const customerId = req.params.customerId;

@@ -2,6 +2,12 @@ import {EHandler, Handler} from "../../../utils/types";
 import model, {MErr} from "../../../model";
 import {v4 as UUID} from "uuid";
 
+/**
+ * Add a cart or return customer cart
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 const addCart: Handler = async (req, res) => {
     const {r} = res;
     const cartId = UUID();
