@@ -134,6 +134,12 @@ const updateOrder: Handler = async (req, res) => {
   r.status.OK().message("Success").send();
 };
 
+/**
+ * Update only order status
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 const updateOrdersStatus: Handler = async (req, res) => {
   const { r } = res;
   const { orderStatus, orderIds } = req.body;
@@ -150,6 +156,9 @@ const updateOrdersStatus: Handler = async (req, res) => {
   }
 };
 
+/**
+ * Export handlers
+ */
 const updateOrderData = {
   order: [inspector, <EHandler>updateOrder],
   ordersStatus: [orderStatusInspector, <EHandler>updateOrdersStatus],

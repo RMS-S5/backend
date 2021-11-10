@@ -100,4 +100,7 @@ const addOrder: Handler = async (req, res) => {
   r.status.OK().data({ orderId }).message("Success").send();
 };
 
+/**
+ * Export handler chain
+ */
 export default [inspector, <EHandler>addOrder];

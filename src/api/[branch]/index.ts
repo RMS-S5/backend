@@ -34,7 +34,7 @@ rBranch.get(
   "/branch-tables",
   auth.staffMember,
   getTableHandler.getBranchTables
-); //todo: include auth.branchManager
+); 
 rBranch.get("/branches", auth.management, getTableHandler.getBranches);
 
 /**

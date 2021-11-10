@@ -32,7 +32,7 @@ const addRoom: Handler = async (req, res) => {
 
     const [error, response] = await model.room.add_Room(roomData);
     if (error.code !== MErr.NO_ERROR) {
-        r.pb.ISE(); //todo: react to possible errors
+        r.pb.ISE(); 
         return;
     }
 

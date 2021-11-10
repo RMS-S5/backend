@@ -20,7 +20,7 @@ export abstract class UserModel {
     private static TB_staff = "staff";
     private static TB_accountType = "account_type";
     private static VIEW_userFullData = "userFullData";
-    private static VIEW_staffFullFata = "staff_full_data"; //todo:clarify
+    private static VIEW_staffFullFata = "staff_full_data"; 
 
     static $add_UserData(userData: UserAccount): TransactionBuilder {
         return async trx => {
@@ -102,14 +102,6 @@ export abstract class UserModel {
     /**
      * Getters
      */
-    // static async get_AdminAccount(username: string): Promise<[MError, AdminAccount]> {
-    //     return runQuery<AdminAccount>(
-    //         knex => knex(this.TB_adminAccount).where({username}),
-    //         {
-    //             single: true
-    //         }
-    //     )
-    // }
     static get_StaffMembers(query: any): Promise<[MError, any[]]> {
         return runQuery<any[]>((knex) => knex(this.VIEW_staffFullFata).where({ ...query, active: true }));
     }

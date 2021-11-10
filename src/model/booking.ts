@@ -38,7 +38,7 @@ export abstract class BookingModel {
    */
 
   static get_MonthlyCompletedBookings(query: any): Promise<[MError, any[]]> {
-    const q = cleanQuery(query, ["status, branchId"]); //todo:debug clean query
+    const q = cleanQuery(query, ["status, branchId"]); 
     let today = new Date();
     let thisYear = today.getFullYear();
     let thisMonth = today.getMonth();
