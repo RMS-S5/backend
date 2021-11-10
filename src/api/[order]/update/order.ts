@@ -24,6 +24,9 @@ const orderStatusInspector = inspectBuilder(
   body("orderIds").exists().withMessage("Order ids are required")
 );
 
+/**
+ * Update order
+ */
 const updateOrder: Handler = async (req, res) => {
   const { r } = res;
   const orderId = req.params.orderId;
@@ -93,6 +96,9 @@ const updateOrder: Handler = async (req, res) => {
     return;
   }
 
+  /**
+   * Send cloud message about order update.
+   */
   try {
     const fireBaseAdmin = FireBaseService.getInstance();
     if (Object.keys(message).length != 0) {
