@@ -97,10 +97,10 @@ const getMonthlyCompletedOrders: Handler = async (req, res) => {
 
     let query = {}
     if (req.user.accountType === model.user.accountTypes.branchManager) {
-        query = {...query, branchId: req.user.branchId, orderStatus: "Served"}
+        query = {...query, branchId: req.user.branchId, orderStatus: "Closed"}
     }
     else{
-        query = {...query, orderStatus: "Served"}
+        query = {...query, orderStatus: "Closed"}
     }
 
     const [error, ordersData] = await model.order.get_MonthlyCompletedOrders(query);
