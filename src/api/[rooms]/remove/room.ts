@@ -18,8 +18,10 @@ const removeRoom: Handler = async (req, res) => {
     const [error, response] = await model.room.remove_Room(parseInt(roomNumber), branchId);
     if (error.code == MErr.NOT_FOUND) {
         r.status.NOT_FOUND().message("Room not found").send();
+        return
     } else if (error.code != MErr.NO_ERROR) {
         r.pb.ISE();
+        return
     }
     r.status.OK()
         .message("Room removed successfully")
