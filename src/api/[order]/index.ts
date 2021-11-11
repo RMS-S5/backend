@@ -25,7 +25,6 @@ rOrder.put('/orders-status', updateOrder.ordersStatus);
  */
 rOrder.get('/orders', auth.management, getOrdersHandler.getAllOrders);
 rOrder.get('/active-orders', auth.staffMember, getOrdersHandler.getActiveOrders);
-// rOrder.get('/served-orders',auth.waiter, getOrdersHandler.getAllServedOrders);
 rOrder.get('/table-orders', getOrdersHandler.getTableOrders);
 rOrder.get('/orders-monthly-completed', auth.management, getOrdersHandler.getMonthlyCompletedOrders);
 rOrder.get('/get-order/:orderId', auth.staffMember, getOrdersHandler.getOrderById);
