@@ -15,11 +15,14 @@ const addTable: Handler = async (req, res) => {
     const { r } = res;
 
     let branchId = req.user.branchId?req.user.branchId:""; 
+    
 
     const tableData = {
         tableNumber: req.body.tableNumber,
         branchId,
     };
+    console.log("req.user: ", req.user)
+    console.log("tableNumber: ",req.body.tableNumber, ", branchId:", branchId)
 
     const [error, response] = await model.branch.add_Table(tableData);
     if (error.code == MErr.DUPLICATE_ENTRY) {
