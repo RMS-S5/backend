@@ -20,7 +20,7 @@ const addRoom: Handler = async (req, res) => {
     const { r } = res;
 
     let branchId = req.user.branchId?req.user.branchId:"";
-    //console.log(req.body);
+
     const roomData = {
         roomNumber: req.body.roomNumber,
         branchId,

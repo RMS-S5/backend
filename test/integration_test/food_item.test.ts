@@ -50,23 +50,6 @@ describe("api/food-item", () => {
 
       expect(res.status).toBe(400);
     });
-
-    // it("should give 200 status when a branch is added", async () => {
-    //   const accessToken = TokenMan.getAccessToken(payloads.branchManagerPayload);
-    //   const data = {
-    //     name: "test name",
-    //     categoryId: "0c9a2626-7016-4128-8168-cf233287475c",
-    //     description: "yummy",
-    //     price: "200",
-    //     foodVariants: ["{'variant_name':'t1','price':300}", "{'variant_name':'t2','price':400}"]
-
-    //   };
-    //   const res = await request(app).post("/api/food-item/add-food-item")
-    //     .auth(accessToken, { type: 'bearer' })
-    //     .send(data);
-
-    //   expect(res.status).toBe(200);
-    // });
   });
 
   describe("api/food-item/remove-food-item", () => {
@@ -92,7 +75,7 @@ describe("api/food-item", () => {
 
     it("should give 200 status when a food item is removed", async () => {
       const accessToken = TokenMan.getAccessToken(payloads.branchManagerPayload);
-      const foodItemId = "edae10bf-197f-4459-8c55-fb647765b5b5" 
+      const foodItemId = "54fcccfe-5240-444b-9261-0d5a26ddcd72" 
       const path = "/api/food-item/remove-food-item/" + foodItemId;
 
       const res = await request(app).delete(path)
