@@ -21,6 +21,7 @@ const deleteFoodItem: Handler = async (req, res) => {
         r.status.NOT_FOUND()
             .message('Not found')
             .send();
+        return
     }else if (error.code !== MErr.NO_ERROR) {
         r.pb.ISE();
         return;
