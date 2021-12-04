@@ -17,7 +17,7 @@ rFile.get('/*', s3Proxy({
     overrideCacheControl: 'max-age=100000',
     // defaultKey: 'index.html'
 }));
-
+//test
 // rFile.get('/', (_, res) => res.send('File module is not configured!'))
 
 // Router
