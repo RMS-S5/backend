@@ -22,7 +22,7 @@ rRoom.post('/add-room-type', auth.manager, addRoomType);
  * Getters
  */
 rRoom.get('/rooms', auth.branchManager, getRooms);
-rRoom.get('/room-types', auth.management, getRoomTypes);
+rRoom.get('/room-types', getRoomTypes);
 
 /**
  * Update
